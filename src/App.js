@@ -6,6 +6,7 @@ import Footer from './components/layout/Footer';
 
 import Packages from './components/packages/Package';
 import Cars from './components/cars/Cars';
+import Drivers from './components/drivers/Drivers';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Content name="Vlad">
         <Packages></Packages>
         <Cars></Cars>
+        <Drivers></Drivers>
       </Content>
       <Footer />
     </div>

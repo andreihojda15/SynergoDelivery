@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default class Package extends Component {
+class Packages extends Component {
   constructor(props) {
     super(props);
 
@@ -57,3 +57,5 @@ export default class Package extends Component {
     );
   }
 }
+
+export default Packages;

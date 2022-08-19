@@ -54,7 +54,7 @@ class Cars extends React.Component {
     };
     const x = this.state.divcontainer;
     const carList = this.state.cars.map((car) => (
-      <h2>
+      <h2 key={car.id}>
         The {car.brand} {car.model} automobile it runs on {car.fuel} and it has
         a power of {car.power} hp{" "}
       </h2>

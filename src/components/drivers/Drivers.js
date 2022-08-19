@@ -1,4 +1,3 @@
-import { IncomingMessage } from "http";
 import React from "react";
 
 class Drivers extends React.Component {
@@ -15,7 +14,7 @@ class Drivers extends React.Component {
             { info: "mihai.popescu@asdmail.com" },
             { info: "zona Girocului" },
             { info: "TM01ASD" },
-          ]
+          ],
         },
         {
           name: "Jack Sparrow",
@@ -24,7 +23,7 @@ class Drivers extends React.Component {
             { info: "jack.sparrow@asdmail.com" },
             { info: "zona Aradului" },
             { info: "TM02ASD" },
-          ]
+          ],
         },
         {
           name: "Ion Ion",
@@ -33,7 +32,7 @@ class Drivers extends React.Component {
             { info: "ion.ion@asdmail.com" },
             { info: "zona Soarelui" },
             { info: "TM03ASD" },
-          ]
+          ],
         },
         {
           name: "Ilie Papadie",
@@ -42,7 +41,7 @@ class Drivers extends React.Component {
             { info: "ilie.papadie@asdmail.com" },
             { info: "zona Brancoveanu" },
             { info: "TM04ASD" },
-          ]
+          ],
         },
         {
           name: "Tomy Motan",
@@ -51,7 +50,7 @@ class Drivers extends React.Component {
             { info: "tomy.motan@asdmail.com" },
             { info: "Mosnita Noua" },
             { info: "TM05ASD" },
-          ]
+          ],
         },
         {
           name: "Gigi Negru",
@@ -60,7 +59,7 @@ class Drivers extends React.Component {
             { info: "gigi.negru@asdmail.com" },
             { info: "zona Sagului" },
             { info: "TM06ASD" },
-          ]
+          ],
         },
         {
           name: "Adrian Avram",
@@ -69,7 +68,7 @@ class Drivers extends React.Component {
             { info: "adrian.avram@asdmail.com" },
             { info: "zona UMT" },
             { info: "TM07ASD" },
-          ]
+          ],
         },
         {
           name: "Dan Georgescu",
@@ -78,7 +77,7 @@ class Drivers extends React.Component {
             { info: "mihai.popescu@asdmail.com" },
             { info: "Dumbravita" },
             { info: "TM08ASD" },
-          ]
+          ],
         },
         {
           name: "Octavian Marinescu",
@@ -87,7 +86,7 @@ class Drivers extends React.Component {
             { info: "octavian.marinescu@asdmail.com" },
             { info: "zona Centru" },
             { info: "TM09ASD" },
-          ]
+          ],
         },
         {
           name: "Grigore Savu",
@@ -96,31 +95,29 @@ class Drivers extends React.Component {
             { info: "grigore.savu@asdmail.com" },
             { info: "Ghiroda" },
             { info: "TM10ASD" },
-          ]
+          ],
         },
       ],
-    }
+    };
   }
 
   render() {
     return (
       <div>
         <h1>Our drivers:</h1>
-        {
-          this.state.drivers.map((item) =>
-            <div>
-              <h3>{item.name}</h3>
-              <ul>
-                {item.details.map((sub) =>
-                  <li>
-                    {sub.info}
-                  </li>
-                )}
-              </ul>
-            </div>
-          )
-        }
+        {this.state.drivers.map((item) => (
+          <div>
+            <h3>{item.name}</h3>
+            <ul>
+              {item.details.map((sub) => (
+                <li>{sub.info}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-    )
+    );
   }
 }
+
+export default Drivers;

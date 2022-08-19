@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import './style/bootstrap.scss';
 import Welcome1 from './components/demo/Welcome1';
 import Welcome2 from './components/demo/Welcome2';
 

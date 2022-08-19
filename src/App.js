@@ -1,13 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
-import Welcome1 from './components/demo/Welcome1';
-import Welcome2 from './components/demo/Welcome2';
+//import Welcome1 from './components/demo/Welcome1';
+//import Welcome2 from './components/demo/Welcome2';
+import Header from './components/layout/Header';
+import Content from './components/layout/Content';
+import Footer from './components/layout/Footer';
+
 
 function App() {
+  /*
   const onLoad = () => {
     console.log(`loaded`);
   }
-
+*/
   return (
     <div className="App">
       <header className="App-header">
@@ -23,12 +28,12 @@ function App() {
         >
           Learn React
         </a>
-
+        
+        
         <div>
-          <Welcome1 name="Sara" age={36} onLoad={onLoad}>
-            <p>This is a child.</p>
-          </Welcome1>
-          <Welcome2 name="Michael"></Welcome2>
+          <Header></Header>
+          <Content name="Vlad"></Content>
+          <Footer></Footer>
         </div>
       </header>
     </div>
@@ -36,3 +41,12 @@ function App() {
 }
 
 export default App;
+
+/*
+<div>
+  <Welcome1 name="Sara" age={36} onLoad={onLoad}>
+    <p>This is a child.</p>
+    </Welcome1>
+  <Welcome2 name="Michael"></Welcome2>
+</div>
+*/

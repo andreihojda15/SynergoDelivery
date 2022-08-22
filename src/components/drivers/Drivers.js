@@ -1,4 +1,5 @@
 import React from "react";
+import { Table } from 'react-bootstrap'
 
 class Drivers extends React.Component {
   constructor(props) {
@@ -9,93 +10,73 @@ class Drivers extends React.Component {
       drivers: [
         {
           name: "Mihai Popescu",
-          details: [
-            { info: "0773546223" },
-            { info: "mihai.popescu@asdmail.com" },
-            { info: "zona Girocului" },
-            { info: "TM01ASD" },
-          ],
+          mobile: "0773546223",
+          email: "mihai.popescu@asdmail.com",
+          area: "zona Girocului",
+          car: "TM01ASD",
         },
         {
           name: "Jack Sparrow",
-          details: [
-            { info: "0774387543" },
-            { info: "jack.sparrow@asdmail.com" },
-            { info: "zona Aradului" },
-            { info: "TM02ASD" },
-          ],
+          mobile: "0774387543",
+          email: "jack.sparrow@asdmail.com",
+          area: "zona Aradului",
+          car: "TM02ASD",
         },
         {
           name: "Ion Ion",
-          details: [
-            { info: "0773555876" },
-            { info: "ion.ion@asdmail.com" },
-            { info: "zona Soarelui" },
-            { info: "TM03ASD" },
-          ],
+          mobile: "0773555876",
+          email: "ion.ion@asdmail.com",
+          area: "zona Soarelui",
+          car: "TM03ASD",
         },
         {
           name: "Ilie Papadie",
-          details: [
-            { info: "0773434666" },
-            { info: "ilie.papadie@asdmail.com" },
-            { info: "zona Brancoveanu" },
-            { info: "TM04ASD" },
-          ],
+          mobile: "0773434666",
+          email: "ilie.papadie@asdmail.com",
+          area: "zona Brancoveanu",
+          car: "TM04ASD",
         },
         {
           name: "Tomy Motan",
-          details: [
-            { info: "0773433985" },
-            { info: "tomy.motan@asdmail.com" },
-            { info: "Mosnita Noua" },
-            { info: "TM05ASD" },
-          ],
+          mobile: "0773433985",
+          email: "tomy.motan@asdmail.com",
+          area: "Mosnita Noua",
+          car: "TM05ASD",
         },
         {
           name: "Gigi Negru",
-          details: [
-            { info: "0773322546" },
-            { info: "gigi.negru@asdmail.com" },
-            { info: "zona Sagului" },
-            { info: "TM06ASD" },
-          ],
+          mobile: "0773322546",
+          email: "gigi.negru@asdmail.com",
+          area: "zona Sagului",
+          car: "TM06ASD"
         },
         {
           name: "Adrian Avram",
-          details: [
-            { info: "0773775634" },
-            { info: "adrian.avram@asdmail.com" },
-            { info: "zona UMT" },
-            { info: "TM07ASD" },
-          ],
+          mobile: "0773775634",
+          email: "adrian.avram@asdmail.com",
+          area: "zona UMT",
+          car: "TM07ASD"
         },
         {
           name: "Dan Georgescu",
-          details: [
-            { info: "0773999444" },
-            { info: "mihai.popescu@asdmail.com" },
-            { info: "Dumbravita" },
-            { info: "TM08ASD" },
-          ],
+          mobile: "0773999444",
+          email: "mihai.popescu@asdmail.com",
+          area: "Dumbravita",
+          car: "TM08ASD",
         },
         {
           name: "Octavian Marinescu",
-          details: [
-            { info: "0773664488" },
-            { info: "octavian.marinescu@asdmail.com" },
-            { info: "zona Centru" },
-            { info: "TM09ASD" },
-          ],
+          mobile: "0773664488",
+          email: "octavian.marinescu@asdmail.com",
+          area: "zona Centru",
+          car: "TM09ASD",
         },
         {
           name: "Grigore Savu",
-          details: [
-            { info: "0773338644" },
-            { info: "grigore.savu@asdmail.com" },
-            { info: "Ghiroda" },
-            { info: "TM10ASD" },
-          ],
+          mobile: "0773338644",
+          email: "grigore.savu@asdmail.com",
+          area: "Ghiroda",
+          car: "TM10ASD",
         },
       ],
     };
@@ -103,19 +84,32 @@ class Drivers extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>Our drivers:</h1>
-        {this.state.drivers.map((item) => (
-          <div>
-            <h3>{item.name}</h3>
-            <ul>
-              {item.details.map((sub) => (
-                <li>{sub.info}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th>Area of delivery</th>
+              <th>Car number</th>
+            </tr>
+            </thead>
+            <tbody>
+            { 
+              this.state.drivers.map((item, i) => 
+                <tr key={i}>
+                  <td>{i+1}</td>
+                  <td>{item.name}</td>
+                  <td>{item.mobile}</td>
+                  <td>{item.email}</td>
+                  <td>{item.area}</td>
+                  <td>{item.car}</td>
+                </tr>
+              )
+            }
+          </tbody>
+        </Table>
     );
   }
 }

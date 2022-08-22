@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Content name="Vlad">
+      <Content>
         <Packages></Packages>
         <Cars></Cars>
         <Drivers></Drivers>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Table, Stack } from "react-bootstrap";
 
 class Packages extends Component {
   constructor(props) {
@@ -47,18 +48,37 @@ class Packages extends Component {
 
   render() {
     return (
-      <div>
-        {this.state.packages.map((p) => {
-          return (
-            <div key={p.guid}>
-              <p>Destination: {p.destination}</p>
-              <p>AWB: {p.awb}</p>
-              <p>Date: {p.date}</p>
-              <p>Recipient: {p.recipient}</p>
-            </div>
-          );
-        })}
-      </div>
+      <>
+        <Stack direction="horizontal" gap={4}>
+          <h2>Cars</h2>
+          <h2>Drivers</h2>
+          <h2>Packages</h2>
+        </Stack>
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Destination</th>
+              <th>AWB</th>
+              <th>Date</th>
+              <th>Recipient</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.packages.map((p, i) => {
+              return (
+                <tr key={p.guid}>
+                  <td>{i + 1}</td>
+                  <td>{p.destination}</td>
+                  <td>{p.awb}</td>
+                  <td>{p.date}</td>
+                  <td>{p.recipient}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </>
     );
   }
 }

@@ -1,11 +1,10 @@
 import React from "react";
-
+import "./ContentStyle.css";
 class Content extends React.Component {
   render() {
-    return (<>
-      <p>Some content made by {this.props.name}</p>
+    return (<div className="cnt">
       {this.props.children}
-    </>);
+    </div>);
   }
 }
 

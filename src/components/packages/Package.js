@@ -20,6 +20,19 @@ import { Table, Stack } from "react-bootstrap";
  *      sent (deliveryDate = undefined, carId = undefined)
  *      in delivery (deliveryDate = undefined, carId set)
  *      delivered (deliveryDate set, carId = undefined)
+ * 
+ * Table columns
+ *  #
+ *  AWB
+ *  Sender
+ *  Sender Phone
+ *  Departure Address
+ *  Departure Date
+ *  Recipient Name
+ *  Recipient Phone
+ *  Recipient Address
+ *  Package Status
+ *  Assigned to a Car - Yes / No
  */
 
 class Packages extends Component {

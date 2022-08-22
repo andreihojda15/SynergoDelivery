@@ -7,6 +7,12 @@ import { Table } from 'react-bootstrap'
  *  name
  *  phoneNumber
  *  carId // car guid, can be undefined => status: busy / available
+ * 
+ *  Table columns
+ *  #
+ *  Name
+ *  Phone number
+ *  Status
  */
 
 class Drivers extends React.Component {

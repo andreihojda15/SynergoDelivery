@@ -9,6 +9,13 @@ import Table from 'react-bootstrap/Table';
  *  status // available, not available
  *  packageIds // array of package guids
  *  driverId // driver guid
+ * 
+ *  Table columns
+ *  #
+ *  Registration number
+ *  Status
+ *  Number of Packages
+ *  Assigned to a Driver - Yes / No
  */
 
 class Cars extends React.Component {

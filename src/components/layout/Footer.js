@@ -1,12 +1,12 @@
 import React from "react";
 import packageJson from "../../../package.json";
-
+import "./FooterStyle.css";
 class Footer extends React.Component {
   render() {
     return (
-      <div>
+      <div className="footer">
         <p>Version : {packageJson.version}</p>
-        <p>copyright 2022 SynergoDelivery</p>
+        <p>@2022 Copyright SynergoDelivery</p>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-import { useSSRSafeId } from "@react-aria/ssr";
+
 import React from "react";
 import Table from 'react-bootstrap/Table';
 
@@ -72,6 +72,7 @@ class Cars extends React.Component {
       <Table striped bordered hover variant="dark">
       <thead>
         <tr>
+          <th>#</th>
           <th>Brand</th>
           <th>Model</th>
           <th>Fuel</th>
@@ -80,9 +81,10 @@ class Cars extends React.Component {
       </thead>
       <tbody>
         {
-          this.state.cars.map((car) =>
+          this.state.cars.map((car,i) =>
           
             <tr key={car.guid}>
+              <td>{i+1}</td>
              <td>{car.brand}</td>
              <td>{car.model}</td>
              <td>{car.fuel}</td>

@@ -1,6 +1,27 @@
 import React, { Component } from "react";
 import { Table, Stack } from "react-bootstrap";
 
+/**
+ * Package model:
+ *  guid
+ *  senderName
+ *  senderPhoneNumber
+ *  departureAddress
+ *  departureDate
+ *  awb
+ *  deliveryAddress
+ *  deliveryDate // can be undefined
+ *  recipientName
+ *  recipientPhoneNumber
+ *  carId // can be undefined
+ * 
+ * Derived properties:
+ *   => package status:
+ *      sent (deliveryDate = undefined, carId = undefined)
+ *      in delivery (deliveryDate = undefined, carId set)
+ *      delivered (deliveryDate set, carId = undefined)
+ */
+
 class Packages extends Component {
   constructor(props) {
     super(props);

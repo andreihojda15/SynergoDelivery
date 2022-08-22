@@ -1,6 +1,14 @@
 import React from "react";
 import { Table } from 'react-bootstrap'
 
+/**
+ * Driver model:
+ *  guid
+ *  name
+ *  phoneNumber
+ *  carId // car guid, can be undefined => status: busy / available
+ */
+
 class Drivers extends React.Component {
   constructor(props) {
     super(props);

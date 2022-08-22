@@ -2,6 +2,15 @@
 import React from "react";
 import Table from 'react-bootstrap/Table';
 
+/**
+ * Car model:
+ *  guid
+ *  registrationNumber
+ *  status // available, not available
+ *  packageIds // array of package guids
+ *  driverId // driver guid
+ */
+
 class Cars extends React.Component {
   constructor() {
     super();

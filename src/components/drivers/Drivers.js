@@ -102,7 +102,7 @@ class Drivers extends React.Component {
               <td>{i + 1}</td>
               <td>{item.name}</td>
               <td>{item.phoneNumber}</td>
-              <td>{item.carId ? "Available" : "Busy"}</td>
+              <td>{item.carId ? "Busy" : "Available"}</td>
             </tr>
           ))}
         </tbody>

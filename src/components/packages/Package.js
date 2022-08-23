@@ -117,7 +117,7 @@ class Packages extends Component {
           assignedToCar: undefined,
         },
         {
-          guid: "3731ba01-57b5-4742-a64d-0de061b382be",
+          guid: "3731ba01-57b5-4742-a64d-0de061b382b0",
           senderName: "Phillipa Skinner",
           senderPhoneNumber: "+1 223-343-0977",
           departureAdress: "2819 Blane Street",
@@ -132,7 +132,7 @@ class Packages extends Component {
           assignedToCar: undefined,
         },
         {
-          guid: "3731ba01-57b5-4742-a64d-0de061b382be",
+          guid: "3731ba01-57b5-4742-a64d-0de061b382b1",
           senderName: "Alfred Lin",
           senderPhoneNumber: "+1 309-690-4682",
           departureAdress: "4089 Powder House Road",
@@ -147,7 +147,7 @@ class Packages extends Component {
           assignedToCar: undefined,
         },
         {
-          guid: "3731ba01-57b5-4742-a64d-0de061b382be",
+          guid: "3731ba01-57b5-4742-a64d-0de061b382b2",
           senderName: "Otto Lovell",
           senderPhoneNumber: "+1 214-849-2375",
           departureAdress: "506 Alexander Drive",

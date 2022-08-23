@@ -96,7 +96,7 @@ class Cars extends React.Component {
         </thead>
         <tbody>
           {this.state.cars.map((car, i) => (
-            <tr key={car.car_guid}>
+            <tr key={car.guid}>
               <td>{i + 1}</td>
               <td>{car.registrationNumber}</td>
               <td>{car.status}</td>

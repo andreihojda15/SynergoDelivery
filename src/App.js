@@ -20,15 +20,15 @@ function App() {
             <Route path="/" element={<Navigate to="/packages" replace />} />
             <Route path="/packages/*" element={<Packages />} />
             {/* <Route path="/packages" element={<Packages />}>
-              <Route path=":packageId" element={<PackageDetails />} />
-            </Route> */}
+                <Route path=":packageId" element={<PackageDetails />} />
+              </Route> */}
             <Route path="/cars" element={<Cars />} />
             <Route path="/drivers" element={<Drivers />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Content>
+        <Footer />
       </BrowserRouter>
-      <Footer />
     </div>
   );
 }

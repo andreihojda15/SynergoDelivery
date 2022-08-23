@@ -1,6 +1,5 @@
-
 import React from "react";
-import Table from 'react-bootstrap/Table';
+import Table from "react-bootstrap/Table";
 
 /**
  * Car model:
@@ -9,7 +8,7 @@ import Table from 'react-bootstrap/Table';
  *  status // available, not available
  *  packageIds // array of package guids
  *  driverId // driver guid
- * 
+ *
  *  Table columns
  *  #
  *  Registration number
@@ -25,93 +24,91 @@ class Cars extends React.Component {
       cars: [
         {
           guid: "d1c51f3b-f13f-407f-b6e2-46c5bbc747ad",
-          brand: "Audi",
-          model: "A4",
-          fuel: "diesel",
-          power: 150,
+          registrationNumber: "TM02XYZ",
+          status: "Available",
+          packageIds: ["b39b0daa-82af-4617-bf30-49bd915fa46f","f184efc5-7281-473e-baff-044600955b71"],
+          driverId: "813a7c01-ea18-4962-b152-71efcb5c2b05",
         },
         {
           guid: "62ee4afa-b261-4f0a-9581-386cf9e0c4c0",
-          brand: "BMW",
-          model: "X1",
-          fuel: "hydrogen",
-          power: 143,
+          registrationNumber: "TM99PWR",
+          status: "Not Available",
+          packageIds: [],
+          driverId: undefined,
         },
         {
           guid: "c1f0c515-4862-434c-91bb-b477504f5161",
-          brand: "Mercedes-Benz",
-          model: "CLA200",
-          fuel: "compressed natural gas",
-          power: 136,
+          registrationNumber: "TM78KUL",
+          status: "Available",
+          packageIds: ["6ce585e6-9a7b-41ba-aa7a-57988914e82f"],
+          driverId: "eb3aebe1-e3ee-4524-b87b-d62fd7f3ba71",
         },
         {
           guid: "0e063045-c96a-4d34-8cc5-4ca2223616dc",
-          brand: "Volkswagen",
-          model: "Scirocco",
-          fuel: "ethanol",
-          power: 140,
+          registrationNumber: "TM54LLO",
+          status: "Available",
+          packageIds: ["60de2190-26d6-4ac4-a8ed-359e028dc3e8"],
+          driverId: "5f93d951-1dc6-4632-86dd-7b6b3fc51191",
         },
         {
           guid: "49ce9298-161a-4a04-82c0-31640f05dc31",
-          brand: "Pagani",
-          model: "Huayra",
-          fuel: "petrol",
-          power: 537,
+          registrationNumber: "TM12BIV",
+          status: "Available",
+          packageIds: ["3731ba01-57b5-4742-a64d-0de061b382be"],
+          driverId: "7f71a066-74b6-43c8-bda3-8a6fe4fc1ed9",
         },
         {
           guid: "be37bda1-0b19-43da-b874-ac359926737c",
-          brand: "Cadillac",
-          model: "XT4",
-          fuel: "gasoline",
-          power: 128,
+          registrationNumber: "TM65JON",
+          status: "Not Available",
+          packageIds: [],
+          driverId: undefined,
         },
         {
           guid: "80575920-8b09-42be-90ae-e7000e9c0384",
-          brand: "Tesla",
-          model: "S 70",
-          fuel: "electric",
-          power: 245,
+          registrationNumber: "TM33HEY",
+          status: "Not Available",
+          packageIds: [],
+          driverId: undefined,
         },
         {
           guid: "bad6d196-a0f1-47bb-8e95-69ace085bcee",
-          brand: "Toyota",
-          model: "Supra",
-          fuel: "biodiesel",
-          power: 280,
+          registrationNumber: "TM05ZZZ",
+          status: "Not Available",
+          packageIds: [],
+          driverId: undefined,
         },
       ],
     };
   }
 
-  render() {  
-    return(        
+  render() {
+    return (
       <Table striped bordered hover variant="dark">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Brand</th>
-          <th>Model</th>
-          <th>Fuel</th>
-          <th>Power</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          this.state.cars.map((car,i) =>
-          
-            <tr key={car.guid}>
-              <td>{i+1}</td>
-             <td>{car.brand}</td>
-             <td>{car.model}</td>
-             <td>{car.fuel}</td>
-             <td>{car.power}</td>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Registration number</th>
+            <th>Status</th>
+            <th>Number of Packages</th>
+            <th>Assigned to a Driver</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.cars.map((car, i) => (
+            <tr key={car.car_guid}>
+              <td>{i + 1}</td>
+              <td>{car.registrationNumber}</td>
+              <td>{car.status}</td>
+              <td>{car.packageIds.length}</td>
+              <td>{car.driverId ? "Yes" : "No"}</td>
             </tr>
-            )
-        }
-      </tbody>
-    </Table>      
-     ) ;
+          ))}
+        </tbody>
+      </Table>
+    );
   }
 }
+
 
 export default Cars;

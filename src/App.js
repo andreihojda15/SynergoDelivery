@@ -7,26 +7,27 @@ import Footer from "./components/layout/Footer";
 import Packages from "./components/packages/Package";
 import Cars from "./components/cars/Cars";
 import Drivers from "./components/drivers/Drivers";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import NotFound from "./components/notFound/NotFound";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header>
+        <Header />
+        <Content>
           <Routes>
-            <Route path="/" element={<Packages />}>
-              <Route path="/cars" element={<Cars />} />
-              <Route path="/drivers" element={<Drivers />} />
-            </Route>
+            <Route path="/" element={<Navigate to="/packages" replace />} />
+            <Route path="/packages/*" element={<Packages />} />
+            {/* <Route path="/packages" element={<Packages />}>
+              <Route path=":packageId" element={<PackageDetails />} />
+            </Route> */}
+            <Route path="/cars" element={<Cars />} />
+            <Route path="/drivers" element={<Drivers />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        </Header>
+        </Content>
       </BrowserRouter>
-      <Content>
-        {/* <Packages></Packages>
-        <Cars></Cars>
-        <Drivers></Drivers> */}
-      </Content>
       <Footer />
     </div>
   );

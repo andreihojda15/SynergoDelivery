@@ -11,11 +11,16 @@ class Header extends React.Component {
       <>
         <Navbar bg="dark" variant="dark" className="nav">
           <Container className="con">
-            <Navbar.Brand href="#home">React</Navbar.Brand>
             <Nav className="me-auto">
-              <Link to="/">Packages</Link>
-              <Link to="/cars">Cars</Link>
-              <Link to="/drivers">Drivers</Link>
+              <Link className="link" to="/packages">
+                Packages
+              </Link>
+              <Link className="link" to="/cars">
+                Cars
+              </Link>
+              <Link className="link" to="/drivers">
+                Drivers
+              </Link>
             </Nav>
           </Container>
         </Navbar>

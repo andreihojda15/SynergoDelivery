@@ -4,15 +4,14 @@ import PackagesService from '../services/packages.service'
 // First, create the thunk
 export const getPackages = createAsyncThunk(
   'getPackages',
-  async () => {
+  async (_, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response = await PackagesService.getPackages()
-      // TODO: add proper handling for a fail
       console.log(`--- successful response: ${JSON.stringify(response)}`)
-      return response
+      return fulfillWithValue(response)
     } catch(err) {
       console.log(`--- error response: ${JSON.stringify(err)}`)
-      return err
+      return rejectWithValue(err)
     }
   }
 )
@@ -45,7 +44,7 @@ const packagesSlice = createSlice({
       console.log('--- get packages rejected...')
       state.isLoading = false
       state.packages = []
-      // TODO: handle error messages
+      // TODO: handle error messages from action.payload
     })
   },
 })

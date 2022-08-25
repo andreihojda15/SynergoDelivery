@@ -66,14 +66,6 @@ const packagesSlice = createSlice({
       state.packages = action.payload || [];
     });
 
-    //   toast.success('Success notification!',
-    //      {position: toast.POSITION.TOP_RIGHT,
-    //       autoClose: 5000
-    //     })
-    //   toast.failure('Failure notification!',
-    //      {position: toast.POSITION.TOP_CENTER,
-    //       autoClose: false
-    //     })
     // TODO: handle error messages from action.payload
   },
 });

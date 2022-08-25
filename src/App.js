@@ -9,6 +9,10 @@ import Cars from "./components/cars/Cars";
 import Drivers from "./components/drivers/Drivers";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NotFound from "./components/notFound/NotFound";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure()
+
 
 function App() {
   return (

@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import PackagesService from '../services/packages.service'
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure()
 
 // First, create the thunk
 export const getPackages = createAsyncThunk(
@@ -37,6 +40,7 @@ const packagesSlice = createSlice({
     
     builder.addCase(getPackages.fulfilled, (state, action) => {
       console.log('--- get packages fulfilled...')
+      
       state.isLoading = false
       state.packages = action.payload || []
     })
@@ -45,8 +49,18 @@ const packagesSlice = createSlice({
       console.log('--- get packages rejected...')
       state.isLoading = false
       state.packages = []
-      // TODO: handle error messages
-    })
+
+    })  
+   
+    //   toast.success('Success notification!',
+    //      {position: toast.POSITION.TOP_RIGHT,
+    //       autoClose: 5000
+    //     })
+    //   toast.failure('Failure notification!',
+    //      {position: toast.POSITION.TOP_CENTER,
+    //       autoClose: false
+    //     })
+   
   },
 })
 

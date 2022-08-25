@@ -2,17 +2,19 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import PackagesService from "../services/packages.service";
 
 // First, create the thunk
-export const getPackages = createAsyncThunk("getPackages", async () => {
-  try {
-    const response = await PackagesService.getPackages();
-    // TODO: add proper handling for a fail
-    console.log(`--- successful response: ${JSON.stringify(response)}`);
-    return response;
-  } catch (err) {
-    console.log(`--- error response: ${JSON.stringify(err)}`);
-    return err;
+export const getPackages = createAsyncThunk(
+  "getPackages",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await PackagesService.getPackages();
+      console.log(`--- successful response: ${JSON.stringify(response)}`);
+      return fulfillWithValue(response);
+    } catch (err) {
+      console.log(`--- error response: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
   }
-});
+);
 
 export const addPackage = createAsyncThunk("addPackage", async (pack) => {
   try {
@@ -31,6 +33,7 @@ const packagesSlice = createSlice({
   initialState: {
     isLoading: false,
     packages: [],
+    isError: false,
   },
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
@@ -46,21 +49,32 @@ const packagesSlice = createSlice({
     builder.addCase(getPackages.fulfilled, (state, action) => {
       console.log("--- get packages fulfilled...");
       state.isLoading = false;
+      state.isError = false;
       state.packages = action.payload || [];
     });
 
     builder.addCase(getPackages.rejected, (state, action) => {
       console.log("--- get packages rejected...");
       state.isLoading = false;
+      state.isError = true;
       state.packages = [];
-      // TODO: handle error messages
     });
 
     builder.addCase(addPackage.fulfilled, (state, action) => {
       console.log("--- add package fulfilled...");
+      state.isError = false;
       state.packages = action.payload || [];
-      console.log(`state: ${state.packages.length}`);
     });
+
+    //   toast.success('Success notification!',
+    //      {position: toast.POSITION.TOP_RIGHT,
+    //       autoClose: 5000
+    //     })
+    //   toast.failure('Failure notification!',
+    //      {position: toast.POSITION.TOP_CENTER,
+    //       autoClose: false
+    //     })
+    // TODO: handle error messages from action.payload
   },
 });
 

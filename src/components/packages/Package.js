@@ -48,8 +48,17 @@ class Packages extends Component {
 
   render() {
     if (this.props.isError) {
-      toast.error("bad");
-    } else toast.success("good");
+      toast.failure('Failure notification!',
+      {position: toast.POSITION.TOP_CENTER,
+       autoClose: false
+     })
+    } 
+    else { 
+      toast.success('Success notification!',
+      {position: toast.POSITION.TOP_RIGHT,
+       autoClose: 5000
+     })
+    }
     return (
       <>
         {this.props.isLoading ? (

@@ -7,7 +7,7 @@ export const getPackages = createAsyncThunk(
   async (_, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response = await PackagesService.getPackages();
-      console.log(`--- successful response: ${JSON.stringify(response)}`);
+      // console.log(`--- successful response: ${JSON.stringify(response)}`);
       return fulfillWithValue(response);
     } catch (err) {
       console.log(`--- error response: ${JSON.stringify(err)}`);
@@ -16,16 +16,19 @@ export const getPackages = createAsyncThunk(
   }
 );
 
-export const addPackage = createAsyncThunk("addPackage", async (pack) => {
-  try {
-    const res = await PackagesService.addPackage(pack);
-    console.log(`Added successfuly`);
-    return res;
-  } catch (err) {
-    console.log(`Error: ${JSON.stringify(err)}`);
-    return err;
+export const addPackage = createAsyncThunk(
+  "addPackage",
+  async (pack, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const res = await PackagesService.addPackage(pack);
+      console.log(`Added successfuly`);
+      return fulfillWithValue(res);
+    } catch (err) {
+      console.log(`Error: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
   }
-});
+);
 
 // Then, handle actions in your reducers:
 const packagesSlice = createSlice({
@@ -60,20 +63,24 @@ const packagesSlice = createSlice({
       state.packages = [];
     });
 
+    builder.addCase(addPackage.pending, (state, action) => {
+      console.log("--- add package pending...");
+      state.isError = false;
+      state.isLoading = true;
+    });
+
     builder.addCase(addPackage.fulfilled, (state, action) => {
       console.log("--- add package fulfilled...");
       state.isError = false;
+      state.isLoading = false;
       state.packages = action.payload || [];
     });
 
-    //   toast.success('Success notification!',
-    //      {position: toast.POSITION.TOP_RIGHT,
-    //       autoClose: 5000
-    //     })
-    //   toast.failure('Failure notification!',
-    //      {position: toast.POSITION.TOP_CENTER,
-    //       autoClose: false
-    //     })
+    builder.addCase(addPackage.rejected, (state, action) => {
+      console.log("--- add package rejected...");
+      state.isError = true;
+      state.isLoading = false;
+    });
     // TODO: handle error messages from action.payload
   },
 });

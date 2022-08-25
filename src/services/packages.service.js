@@ -1,4 +1,4 @@
-export const PACKAGES = [
+export let PACKAGES = [
   {
     guid: "b39b0daa-82af-4617-bf30-49bd915fa46f",
     senderName: "Wilfred Warner",
@@ -144,9 +144,19 @@ export default class PackagesService {
   static addPackage(pack) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        PACKAGES.push(pack);
-        resolve(PACKAGES);
-      }, 2000);
+        PACKAGES = [...PACKAGES, pack];
+        return resolve(PACKAGES);
+      }, 1000);
+    });
+  }
+
+  // simulate add failed
+  static addPackageFail(pack) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        PACKAGES = [...PACKAGES, pack];
+        return reject(PACKAGES);
+      }, 1000);
     });
   }
 }

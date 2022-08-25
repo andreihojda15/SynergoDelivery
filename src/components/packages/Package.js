@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Toast } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -44,7 +44,6 @@ class Packages extends Component {
   constructor(props) {
     super(props);
     this.props._getPackages();
-    // this.props._addPackage();
   }
 
   render() {
@@ -127,24 +126,8 @@ const mapDispatchToProps = (dispatch) => {
     _getPackages: () => {
       return dispatch(getPackages());
     },
-    _addPackage: () => {
-      return dispatch(
-        addPackage({
-          guid: "3731ba01-57b5-4742-a64d-0de061b381c9",
-          senderName: "Osvin Trin",
-          senderPhoneNumber: "+1 214-121-2375",
-          departureAdress: "506 Ander Drive",
-          departureDate: new Date(2022, 7, 28).toLocaleDateString(),
-          awb: "46159826123",
-          deliveryAdress: "3947 Stark Old Road",
-          deliveryDate: undefined,
-          recipientName: "Camille Needrod",
-          recipientPhoneNumber: "+1 203-284-1580",
-          carID: undefined,
-          packageStatus: "set",
-          assignedToCar: undefined,
-        })
-      );
+    _addPackage: (pack) => {
+      return dispatch(addPackage(pack));
     },
   };
 };

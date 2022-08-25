@@ -48,7 +48,7 @@ const packagesSlice = createSlice({
       console.log('--- get packages rejected...')
       state.isLoading = false
       state.packages = []
-<<<<<<< HEAD
+// <<<<<<< HEAD
 
     })  
    
@@ -61,10 +61,10 @@ const packagesSlice = createSlice({
     //       autoClose: false
     //     })
    
-=======
+// =======
       // TODO: handle error messages from action.payload
-    })
->>>>>>> main
+ 
+// >>>>>>> main
   },
 })
 

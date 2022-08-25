@@ -1,10 +1,12 @@
 .con {
-    margin-left: 10px;
+    margin-left: 0px;
 }
 
 .nav {
     position: sticky;
     top: 0px;
+    padding: 20px;
+    margin: 0;
 }
 
 .link {

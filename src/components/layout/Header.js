@@ -4,8 +4,24 @@ import { Nav } from "react-bootstrap";
 import { Navbar } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import AddPackage from "../modal/AddPackage";
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      show: false,
+    };
+  }
+
+  handleClick = () => {
+    this.setState({ show: !this.state.show });
+  };
+
+  show = () => this.state.show;
+
   render() {
     return (
       <>
@@ -23,6 +39,10 @@ class Header extends React.Component {
               </Link>
             </Nav>
           </Container>
+          <Button variant="success" onClick={this.handleClick}>
+            Add
+          </Button>
+          <AddPackage show={this.show()} handleClose={this.handleClick} />
         </Navbar>
       </>
     );

@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
 
-import {
-  getPackages,
-} from '../../redux/packages.slice';
+import { addPackage, getPackages } from "../../redux/packages.slice";
 
 /**
  * Package model:
@@ -19,13 +17,13 @@ import {
  *  recipientName
  *  recipientPhoneNumber
  *  carId // can be undefined
- * 
+ *
  * Derived properties:
  *   => package status:
  *      sent (deliveryDate = undefined, carId = undefined)
  *      in delivery (deliveryDate = undefined, carId set)
  *      delivered (deliveryDate set, carId = undefined)
- * 
+ *
  * Table columns
  *  #
  *  AWB
@@ -41,19 +39,18 @@ import {
  */
 
 class Packages extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.props._getPackages();
+    this.props._addPackage();
   }
 
   render() {
     return (
-
       <>
-        {
-          this.props.isLoading ?
-          <div>Please wait! Loading packages...</div> :
+        {this.props.isLoading ? (
+          <div>Please wait! Loading packages...</div>
+        ) : (
           <Table striped bordered hover variant="dark">
             <thead>
               <tr>
@@ -71,43 +68,41 @@ class Packages extends Component {
               </tr>
             </thead>
             <tbody>
-              {
-                this.props.packages.map((p, i) => {
-                  
-                  let packageStatus
-                  let assignedToCar
-                  if (p.deliveryDate === undefined && p.carID === undefined) {
-                    packageStatus = "sent"
-                    assignedToCar = "no"
-                  }
-                  if (p.deliveryDate === undefined && p.carID) {
-                    packageStatus = "in delivery"
-                    assignedToCar = "yes"
-                  }
-                  if (p.deliveryDate) {
-                    packageStatus = "delivered"
-                    assignedToCar = "no"
-                  }
+              {this.props.packages.map((p, i) => {
+                let packageStatus;
+                let assignedToCar;
+                if (p.deliveryDate === undefined && p.carID === undefined) {
+                  packageStatus = "sent";
+                  assignedToCar = "no";
+                }
+                if (p.deliveryDate === undefined && p.carID) {
+                  packageStatus = "in delivery";
+                  assignedToCar = "yes";
+                }
+                if (p.deliveryDate) {
+                  packageStatus = "delivered";
+                  assignedToCar = "no";
+                }
 
-                  return (
-                    <tr key={p.guid}>
-                      <td>{i + 1}</td>
-                      <td>{p.awb}</td>
-                      <td>{p.senderName}</td>
-                      <td>{p.senderPhoneNumber}</td>
-                      <td>{p.departureAdress}</td>
-                      <td>{p.departureDate}</td>
-                      <td>{p.recipientName}</td>
-                      <td>{p.recipientPhoneNumber}</td>
-                      <td>{p.deliveryAdress}</td>
-                      <td>{assignedToCar}</td>
-                      <td>{packageStatus}</td>
-                    </tr>
-                  );
-                })}
+                return (
+                  <tr key={p.guid}>
+                    <td>{i + 1}</td>
+                    <td>{p.awb}</td>
+                    <td>{p.senderName}</td>
+                    <td>{p.senderPhoneNumber}</td>
+                    <td>{p.departureAdress}</td>
+                    <td>{p.departureDate}</td>
+                    <td>{p.recipientName}</td>
+                    <td>{p.recipientPhoneNumber}</td>
+                    <td>{p.deliveryAdress}</td>
+                    <td>{assignedToCar}</td>
+                    <td>{packageStatus}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
-        }
+        )}
       </>
     );
   }
@@ -124,7 +119,26 @@ const mapDispatchToProps = (dispatch) => {
     _getPackages: () => {
       return dispatch(getPackages());
     },
+    _addPackage: () => {
+      return dispatch(
+        addPackage({
+          guid: "3731ba01-57b5-4742-a64d-0de061b381c9",
+          senderName: "Osvin Trin",
+          senderPhoneNumber: "+1 214-121-2375",
+          departureAdress: "506 Ander Drive",
+          departureDate: new Date(2022, 7, 28).toLocaleDateString(),
+          awb: "46159826123",
+          deliveryAdress: "3947 Stark Old Road",
+          deliveryDate: undefined,
+          recipientName: "Camille Needrod",
+          recipientPhoneNumber: "+1 203-284-1580",
+          carID: undefined,
+          packageStatus: "set",
+          assignedToCar: undefined,
+        })
+      );
+    },
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Packages);

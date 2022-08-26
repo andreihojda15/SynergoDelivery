@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { addPackage, getPackages } from "../../redux/packages.slice";
+import { addPackage, getPackages, clearMessages } from "../../redux/packages.slice";
 
 /**
  * Package model:
@@ -46,26 +46,36 @@ class Packages extends Component {
     this.props._getPackages();
   }
 
-  render() {
-    if (this.props.isError) {
-      toast.failure('Failure notification!',
-      {position: toast.POSITION.TOP_CENTER,
-       autoClose: false
-     })
-    } 
-    else { 
-      toast.success('Success notification!',
-      {position: toast.POSITION.TOP_RIGHT,
-       autoClose: 5000
-     })
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.errorMessage && this.props.errorMessage) {
+      toast.error(this.props.errorMessage,
+      {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000
+      });
+
+      this.props._clearMessages();
     }
+
+    if (!prevProps.successMessage && this.props.successMessage) {
+      toast.success(this.props.successMessage,
+      {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000
+      });
+
+      this.props._clearMessages();
+    }
+  }
+
+  render() {
+
     return (
       <>
         {this.props.isLoading ? (
           <div>Please wait! Loading packages...</div>
         ) : (
           <>
-            <ToastContainer />
             <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
@@ -119,6 +129,8 @@ class Packages extends Component {
             </Table>
           </>
         )}
+
+        <ToastContainer />
       </>
     );
   }
@@ -137,6 +149,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     _addPackage: (pack) => {
       return dispatch(addPackage(pack));
+    },
+    _clearMessages: () => {
+      return dispatch(clearMessages());
     },
   };
 };

@@ -5,7 +5,7 @@ export const getDrivers = createAsyncThunk(
     'getDrivers',
     async (_, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const response = await DriversService.getDrivers()
+            const response = await DriversService.getDriversFail()
             console.log(`--- successful response: ${JSON.stringify(response)}`)
             return fulfillWithValue(response)
         } catch (err) {

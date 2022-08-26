@@ -3,12 +3,30 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { connect } from "react-redux";
-import { addPackage, getPackages } from "../../redux/packages.slice";
+import { addPackage } from "../../redux/packages.slice";
 import { nanoid } from "nanoid";
 
 class AddPackage extends Component {
+  // TO DO add state object
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      pack: {
+        guid: nanoid(),
+        awb: "",
+        senderName: "",
+        senderPhoneNumber: "",
+        departureAdress: "",
+        departureDate: "",
+        recipientName: "",
+        recipientPhoneNumber: "",
+        deliveryAdress: "",
+      },
+    };
+  }
+
   render() {
-    let object = {};
     return (
       <Modal show={this.props.show} onHide={this.props.handleClose}>
         <Modal.Header closeButton>
@@ -20,7 +38,11 @@ class AddPackage extends Component {
               <Form.Label>AWB</Form.Label>
               <Form.Control
                 type="text"
-                onChange={(e) => (object.awb = e.target.value)}
+                onChange={(e) =>
+                  this.setState({
+                    pack: { ...this.state.pack, awb: e.target.value },
+                  })
+                }
                 placeholder="AWB"
               />
             </Form.Group>
@@ -29,7 +51,11 @@ class AddPackage extends Component {
               <Form.Control
                 type="text"
                 placeholder="Sender"
-                onChange={(e) => (object.senderName = e.target.value)}
+                onChange={(e) =>
+                  this.setState({
+                    pack: { ...this.state.pack, senderName: e.target.value },
+                  })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formSenderPhone">
@@ -37,7 +63,14 @@ class AddPackage extends Component {
               <Form.Control
                 type="text"
                 placeholder="Phone"
-                onChange={(e) => (object.senderPhoneNumber = e.target.value)}
+                onChange={(e) =>
+                  this.setState({
+                    pack: {
+                      ...this.state.pack,
+                      senderPhoneNumber: e.target.value,
+                    },
+                  })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formDepatureAddress">
@@ -45,7 +78,14 @@ class AddPackage extends Component {
               <Form.Control
                 type="text"
                 placeholder="Departure"
-                onChange={(e) => (object.departureAdress = e.target.value)}
+                onChange={(e) =>
+                  this.setState({
+                    pack: {
+                      ...this.state.pack,
+                      departureAdress: e.target.value,
+                    },
+                  })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formDepDate">
@@ -53,7 +93,16 @@ class AddPackage extends Component {
               <Form.Control
                 type="date"
                 placeholder="Date"
-                onChange={(e) => (object.departureDate = e.target.value)}
+                onChange={(e) =>
+                  this.setState({
+                    pack: {
+                      ...this.state.pack,
+                      departureDate: new Date(
+                        e.target.value
+                      ).toLocaleDateString(),
+                    },
+                  })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formRepicName">
@@ -61,7 +110,11 @@ class AddPackage extends Component {
               <Form.Control
                 type="text"
                 placeholder="Name"
-                onChange={(e) => (object.recipientName = e.target.value)}
+                onChange={(e) =>
+                  this.setState({
+                    pack: { ...this.state.pack, recipientName: e.target.value },
+                  })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formRepicPhone">
@@ -69,7 +122,14 @@ class AddPackage extends Component {
               <Form.Control
                 type="text"
                 placeholder="Phone"
-                onChange={(e) => (object.recipientPhoneNumber = e.target.value)}
+                onChange={(e) =>
+                  this.setState({
+                    pack: {
+                      ...this.state.pack,
+                      recipientPhoneNumber: e.target.value,
+                    },
+                  })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formRepicAddress">
@@ -77,53 +137,14 @@ class AddPackage extends Component {
               <Form.Control
                 type="text"
                 placeholder="Address"
-                onChange={(e) => (object.deliveryAdress = e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formAssignedCar">
-              <Form.Label>Assigned to Car</Form.Label>
-              <Form.Check
-                type="radio"
-                id="yesCar"
-                name="carRadio"
-                label="Yes"
-                value="yes"
-                onChange={(e) => (object.assignedToCar = e.target.value)}
-              />
-              <Form.Check
-                type="radio"
-                id="noCar"
-                name="carRadio"
-                label="No"
-                value="no"
-                onChange={(e) => (object.assignedToCar = e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formStatus">
-              <Form.Label>Package Status</Form.Label>
-              <Form.Check
-                type="radio"
-                id="sent"
-                name="packageStatus"
-                label="Sent"
-                value="sent"
-                onChange={(e) => (object.packageStatus = e.target.value)}
-              />
-              <Form.Check
-                type="radio"
-                id="indelivery"
-                name="packageStatus"
-                label="In delivery"
-                value="in delivery"
-                onChange={(e) => (object.packageStatus = e.target.value)}
-              />
-              <Form.Check
-                type="radio"
-                id="delivered"
-                name="packageStatus"
-                label="Delivered"
-                value="delivered"
-                onChange={(e) => (object.packageStatus = e.target.value)}
+                onChange={(e) =>
+                  this.setState({
+                    pack: {
+                      ...this.state.pack,
+                      deliveryAdress: e.target.value,
+                    },
+                  })
+                }
               />
             </Form.Group>
           </Form>
@@ -135,8 +156,7 @@ class AddPackage extends Component {
           <Button
             variant="success"
             onClick={() => {
-              object.guid = nanoid();
-              return this.props._addPackage(object);
+              return this.props._addPackage(this.state.pack);
             }}
           >
             Save
@@ -147,16 +167,11 @@ class AddPackage extends Component {
   }
 }
 const mapStateToProps = (store) => {
-  return {
-    ...store.packages,
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    _getPackages: () => {
-      return dispatch(getPackages());
-    },
     _addPackage: (pack) => {
       return dispatch(addPackage(pack));
     },

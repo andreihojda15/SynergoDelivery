@@ -73,7 +73,8 @@ const packagesSlice = createSlice({
       console.log("--- add package fulfilled...");
       state.isError = false;
       state.isLoading = false;
-      state.packages = action.payload || [];
+      state.packages.push(action.payload);
+      // state.packages = [...state.packages, action.payload]
     });
 
     builder.addCase(addPackage.rejected, (state, action) => {

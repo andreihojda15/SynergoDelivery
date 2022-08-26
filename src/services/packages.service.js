@@ -1,4 +1,4 @@
-export let PACKAGES = [
+export const PACKAGES = [
   {
     guid: "b39b0daa-82af-4617-bf30-49bd915fa46f",
     senderName: "Wilfred Warner",
@@ -144,8 +144,7 @@ export default class PackagesService {
   static addPackage(pack) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        PACKAGES = [...PACKAGES, pack];
-        return resolve(PACKAGES);
+        return resolve(pack);
       }, 1000);
     });
   }
@@ -154,8 +153,7 @@ export default class PackagesService {
   static addPackageFail(pack) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        PACKAGES = [...PACKAGES, pack];
-        return reject(PACKAGES);
+        return reject(`400 Bad Request: Couldn't add package`);
       }, 1000);
     });
   }

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import {
-  getPackages,
-} from '../../redux/packages.slice';
+import { addPackage, getPackages, clearMessages } from "../../redux/packages.slice";
 
 /**
  * Package model:
@@ -19,13 +19,13 @@ import {
  *  recipientName
  *  recipientPhoneNumber
  *  carId // can be undefined
- * 
+ *
  * Derived properties:
  *   => package status:
  *      sent (deliveryDate = undefined, carId = undefined)
  *      in delivery (deliveryDate = undefined, carId set)
  *      delivered (deliveryDate set, carId = undefined)
- * 
+ *
  * Table columns
  *  #
  *  AWB
@@ -41,52 +41,72 @@ import {
  */
 
 class Packages extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.props._getPackages();
   }
 
-  render() {
-    return (
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.errorMessage && this.props.errorMessage) {
+      toast.error(this.props.errorMessage,
+      {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000
+      });
 
+      this.props._clearMessages();
+    }
+
+    if (!prevProps.successMessage && this.props.successMessage) {
+      toast.success(this.props.successMessage,
+      {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000
+      });
+
+      this.props._clearMessages();
+    }
+  }
+
+  render() {
+
+    return (
       <>
-        {
-          this.props.isLoading ?
-          <div>Please wait! Loading packages...</div> :
-          <Table striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>AWB</th>
-                <th>Sender</th>
-                <th>Sender Phone</th>
-                <th>Departure Adress</th>
-                <th>Departure Date</th>
-                <th>Recipient Name</th>
-                <th>Recipient Phone</th>
-                <th>Recipient Adress</th>
-                <th>Assigned to a car</th>
-                <th>Package Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                this.props.packages.map((p, i) => {
-                  
-                  let packageStatus
-                  let assignedToCar
+        {this.props.isLoading ? (
+          <div>Please wait! Loading packages...</div>
+        ) : (
+          <>
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>AWB</th>
+                  <th>Sender</th>
+                  <th>Sender Phone</th>
+                  <th>Departure Adress</th>
+                  <th>Departure Date</th>
+                  <th>Recipient Name</th>
+                  <th>Recipient Phone</th>
+                  <th>Recipient Adress</th>
+                  <th>Assigned to a car</th>
+                  <th>Package Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.props.packages.map((p, i) => {
+                  let packageStatus;
+                  let assignedToCar;
                   if (p.deliveryDate === undefined && p.carID === undefined) {
-                    packageStatus = "sent"
-                    assignedToCar = "no"
+                    packageStatus = "sent";
+                    assignedToCar = "no";
                   }
                   if (p.deliveryDate === undefined && p.carID) {
-                    packageStatus = "in delivery"
-                    assignedToCar = "yes"
+                    packageStatus = "in delivery";
+                    assignedToCar = "yes";
                   }
                   if (p.deliveryDate) {
-                    packageStatus = "delivered"
-                    assignedToCar = "no"
+                    packageStatus = "delivered";
+                    assignedToCar = "no";
                   }
 
                   return (
@@ -105,9 +125,12 @@ class Packages extends Component {
                     </tr>
                   );
                 })}
-            </tbody>
-          </Table>
-        }
+              </tbody>
+            </Table>
+          </>
+        )}
+
+        <ToastContainer />
       </>
     );
   }
@@ -124,7 +147,13 @@ const mapDispatchToProps = (dispatch) => {
     _getPackages: () => {
       return dispatch(getPackages());
     },
+    _addPackage: (pack) => {
+      return dispatch(addPackage(pack));
+    },
+    _clearMessages: () => {
+      return dispatch(clearMessages());
+    },
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Packages);

@@ -3,15 +3,14 @@ import DriversService from '../services/drivers.service'
 
 export const getDrivers = createAsyncThunk(
     'getDrivers',
-    async () => {
+    async (_, { rejectWithValue, fulfillWithValue }) => {
         try {
             const response = await DriversService.getDrivers()
-            // TODO: add proper handling for a fail
             console.log(`--- successful response: ${JSON.stringify(response)}`)
-            return response
+            return fulfillWithValue(response)
         } catch (err) {
             console.log(`--- error response: ${JSON.stringify(err)}`)
-            return err
+            return rejectWithValue(err)
         }
     }
 )

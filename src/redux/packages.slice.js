@@ -6,7 +6,7 @@ export const getPackages = createAsyncThunk(
   "getPackages",
   async (_, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response = await PackagesService.getPackagesFail();
+      const response = await PackagesService.getPackages();
       // console.log(`--- successful response: ${JSON.stringify(response)}`);
       return fulfillWithValue(response);
     } catch (err) {

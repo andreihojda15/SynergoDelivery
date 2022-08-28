@@ -1,4 +1,5 @@
 import "./style/bootstrap.scss";
+import "./App.css";
 
 import Header from "./components/layout/Header";
 import Content from "./components/layout/Content";
@@ -12,8 +13,8 @@ import NotFound from "./components/notFound/NotFound";
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="App">
         <Header />
         <Content>
           <Routes>
@@ -27,9 +28,9 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Content>
-        <Footer />
-      </BrowserRouter>
-    </div>
+        <Footer className="footer" />
+      </div>
+    </BrowserRouter>
   );
 }
 

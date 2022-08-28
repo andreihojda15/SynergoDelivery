@@ -6,6 +6,7 @@ import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import AddPackage from "../modal/AddPackage";
+import Image from "react-bootstrap/Image";
 
 class Header extends React.Component {
   constructor(props) {
@@ -40,8 +41,17 @@ class Header extends React.Component {
       <>
         <Navbar bg="dark" variant="dark" className="nav">
           <Container className="con">
-            <Nav className="me-auto">
-              <Link className="link" to="/packages" onClick={this.onPackage}>
+            <Image
+              src={require("../../assets/images/box.png")}
+              alt="header logo"
+              className="logo"
+            />
+            <div className="linkContainer">
+              <Link
+                className="link1 link"
+                to="/packages"
+                onClick={this.onPackage}
+              >
                 Packages
               </Link>
               <Link className="link" to="/cars" onClick={this.notPackage}>
@@ -50,9 +60,8 @@ class Header extends React.Component {
               <Link className="link" to="/drivers" onClick={this.notPackage}>
                 Drivers
               </Link>
-            </Nav>
+            </div>
           </Container>
-
           {this.state.package ? (
             <>
               <Button variant="success" onClick={this.handleClick}>

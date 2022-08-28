@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -177,6 +178,12 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(addPackage(pack));
     },
   };
+};
+
+AddPackage.propTypes = {
+  _addPackage: PropTypes.func,
+  handleClose: PropTypes.func,
+  show: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPackage);

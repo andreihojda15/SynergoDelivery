@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Table from "react-bootstrap/Table";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
@@ -78,6 +79,20 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(getCars());
     },
   };
+};
+
+Cars.propTypes = {
+  cars: PropTypes.arrayOf(
+    PropTypes.exact({
+      guid: PropTypes.string,
+      registrationNumber: PropTypes.string,
+      status: PropTypes.string,
+      packageIds: PropTypes.arrayOf(PropTypes.string),
+      driverId: PropTypes.string,
+    })
+  ),
+  _getCars: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cars);

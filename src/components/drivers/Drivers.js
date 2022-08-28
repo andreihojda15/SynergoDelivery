@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import Spinner from "react-bootstrap/Spinner";
@@ -76,6 +77,19 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(getDrivers());
     },
   };
+};
+
+Drivers.propTypes = {
+  drivers: PropTypes.arrayOf(
+    PropTypes.exact({
+      guid: PropTypes.string,
+      name: PropTypes.string,
+      phoneNumber: PropTypes.string,
+      carId: PropTypes.string,
+    })
+  ),
+  _getDrivers: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Drivers);

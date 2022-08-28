@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Table } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
@@ -163,6 +164,32 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(clearMessages());
     },
   };
+};
+
+Packages.propTypes = {
+  packages: PropTypes.arrayOf(
+    PropTypes.exact({
+      guid: PropTypes.string,
+      senderName: PropTypes.string,
+      senderPhoneNumber: PropTypes.string,
+      departureAdress: PropTypes.string,
+      departureDate: PropTypes.string,
+      awb: PropTypes.string,
+      deliveryAdress: PropTypes.string,
+      deliveryDate: PropTypes.string,
+      recipientName: PropTypes.string,
+      recipientPhoneNumber: PropTypes.string,
+      carID: PropTypes.string,
+      packageStatus: PropTypes.string,
+      assignedToCar: PropTypes.string,
+    })
+  ),
+  _getPackages: PropTypes.func,
+  _addPackage: PropTypes.func,
+  _clearMessages: PropTypes.func,
+  errorMessage: PropTypes.string,
+  successMessage: PropTypes.string,
+  isLoading: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Packages);

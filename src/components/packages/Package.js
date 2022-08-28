@@ -139,7 +139,7 @@ class Packages extends Component {
           </>
         )}
 
-        <ToastContainer />
+        <ToastContainer theme="dark" />
       </>
     );
   }

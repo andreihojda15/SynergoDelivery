@@ -1,7 +1,9 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
+import Spinner from "react-bootstrap/Spinner";
 import { getCars } from "../../redux/cars.slice";
 import { connect } from "react-redux";
+import "./Cars.css";
 /**
  * Car model:
  *  guid
@@ -28,7 +30,7 @@ class Cars extends React.Component {
     return (
       <>
         {this.props.isLoading ? (
-          <div>Please wait! Loading packages...</div>
+          <Spinner className="spinner" animation="border" variant="info" />
         ) : (
           <Table striped bordered hover variant="dark">
             <thead>

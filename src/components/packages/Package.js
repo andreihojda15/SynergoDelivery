@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./Package.css";
 
-import { addPackage, getPackages, clearMessages } from "../../redux/packages.slice";
+import {
+  addPackage,
+  getPackages,
+  clearMessages,
+} from "../../redux/packages.slice";
 
 /**
  * Package model:
@@ -48,20 +54,18 @@ class Packages extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevProps.errorMessage && this.props.errorMessage) {
-      toast.error(this.props.errorMessage,
-      {
+      toast.error(this.props.errorMessage, {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 5000
+        autoClose: 5000,
       });
 
       this.props._clearMessages();
     }
 
     if (!prevProps.successMessage && this.props.successMessage) {
-      toast.success(this.props.successMessage,
-      {
+      toast.success(this.props.successMessage, {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 5000
+        autoClose: 5000,
       });
 
       this.props._clearMessages();
@@ -69,11 +73,10 @@ class Packages extends Component {
   }
 
   render() {
-
     return (
       <>
         {this.props.isLoading ? (
-          <div>Please wait! Loading packages...</div>
+          <Spinner className="spinner" animation="border" variant="info" />
         ) : (
           <>
             <Table striped bordered hover variant="dark">

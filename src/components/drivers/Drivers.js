@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
+import Spinner from "react-bootstrap/Spinner";
+import "./Drivers.css";
 
-import {
-  getDrivers,
-} from '../../redux/drivers.slice';
-
+import { getDrivers } from "../../redux/drivers.slice";
 
 /**
  * Driver model:
@@ -30,33 +29,31 @@ class Drivers extends Component {
   render() {
     return (
       <>
-        {
-          this.props.isLoading ?
-            <div>Please wait! Loading drivers...</div> :
-            <Table striped bordered hover variant="dark">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Phone Number</th>
-                  <th>Status</th>
+        {this.props.isLoading ? (
+          <Spinner className="spinner" animation="border" variant="info" />
+        ) : (
+          <Table striped bordered hover variant="dark">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.props.drivers.map((item, i) => (
+                <tr key={item.guid}>
+                  <td>{i + 1}</td>
+                  <td>{item.name}</td>
+                  <td>{item.phoneNumber}</td>
+                  <td>{item.carId ? "Busy" : "Available"}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {
-                this.props.drivers.map((item, i) => (
-                  <tr key={item.guid}>
-                    <td>{i + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.phoneNumber}</td>
-                    <td>{item.carId ? "Busy" : "Available"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-        }
+              ))}
+            </tbody>
+          </Table>
+        )}
       </>
-
     );
   }
 }
@@ -73,6 +70,6 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(getDrivers());
     },
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Drivers);

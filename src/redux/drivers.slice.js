@@ -1,3 +1,4 @@
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import DriversService from '../services/drivers.service'
 
@@ -14,6 +15,20 @@ export const getDrivers = createAsyncThunk(
         }
     }
 )
+
+export const addDrivers = createAsyncThunk(
+    "addDrivers",
+    async (pack, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const res = await DriversService.addDrivers(pack);
+            console.log(`Added successfuly`);
+            return fulfillWithValue(res);
+        } catch (err) {
+            console.log(`Error: ${JSON.stringify(err)}`);
+            return rejectWithValue(err);
+        }
+    }
+);
 
 // Then, handle actions in your reducers:
 const driversSlice = createSlice({
@@ -45,6 +60,25 @@ const driversSlice = createSlice({
             state.drivers = []
             // TODO: handle error messages
         })
+
+        builder.addCase(addDrivers.pending, (state, action) => {
+            console.log("--- add driver pending...");
+            state.isError = false;
+            state.isLoading = true;
+        });
+
+        builder.addCase(addDrivers.fulfilled, (state, action) => {
+            console.log("--- add driver fulfilled...");
+            state.isError = false;
+            state.isLoading = false;
+            state.drivers.push(action.payload);
+        });
+
+        builder.addCase(addDrivers.rejected, (state, action) => {
+            console.log("--- add driver rejected...");
+            state.isError = true;
+            state.isLoading = false;
+        });
     },
 })
 

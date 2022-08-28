@@ -1,4 +1,3 @@
-
 export const DRIVERS = [
     {
         guid: "eb3aebe1-e3ee-4524-b87b-d62fd7f3ba71",
@@ -78,6 +77,24 @@ export default class DriversService {
             setTimeout(() => {
                 reject('500 Internal Server Error');
             }, 5000);
+        });
+    }
+
+    // simulate add
+    static addDrivers(pack) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                return resolve(pack);
+            }, 1000);
+        });
+    }
+
+    // simulate add failed
+    static addDriversFail(pack) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                return reject(`400 Bad Request: Couldn't add driver`);
+            }, 1000);
         });
     }
 }

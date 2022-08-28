@@ -3,7 +3,7 @@ import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
 
 import {
-  getDrivers,
+  getDrivers, addDrivers
 } from '../../redux/drivers.slice';
 
 
@@ -44,14 +44,14 @@ class Drivers extends Component {
               </thead>
               <tbody>
                 {
-                this.props.drivers.map((item, i) => (
-                  <tr key={item.guid}>
-                    <td>{i + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.phoneNumber}</td>
-                    <td>{item.carId ? "Busy" : "Available"}</td>
-                  </tr>
-                ))}
+                  this.props.drivers.map((item, i) => (
+                    <tr key={item.guid}>
+                      <td>{i + 1}</td>
+                      <td>{item.name}</td>
+                      <td>{item.phoneNumber}</td>
+                      <td>{item.carId ? "Busy" : "Available"}</td>
+                    </tr>
+                  ))}
               </tbody>
             </Table>
         }
@@ -71,6 +71,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     _getDrivers: () => {
       return dispatch(getDrivers());
+    },
+    _addDrivers: (pack) => {
+      return dispatch(addDrivers(pack));
     },
   };
 }

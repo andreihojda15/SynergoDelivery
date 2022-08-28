@@ -32,7 +32,7 @@ class Cars extends React.Component {
         {this.props.isLoading ? (
           <Spinner className="spinner" animation="border" variant="info" />
         ) : (
-          <Table striped bordered hover variant="dark">
+          <Table className="table" striped bordered hover variant="dark">
             <thead>
               <tr>
                 <th>#</th>

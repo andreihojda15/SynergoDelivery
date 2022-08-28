@@ -7,3 +7,9 @@
 .table {
   margin: 0;
 }
+
+.cardTable {
+  width: 80vw;
+  z-index: 0;
+  overflow: auto;
+}

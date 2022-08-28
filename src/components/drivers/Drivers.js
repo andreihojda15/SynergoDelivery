@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import Spinner from "react-bootstrap/Spinner";
+import Card from "react-bootstrap/Card";
 import "./Drivers.css";
 
 import { getDrivers } from "../../redux/drivers.slice";
@@ -32,26 +33,31 @@ class Drivers extends Component {
         {this.props.isLoading ? (
           <Spinner className="spinner" animation="border" variant="info" />
         ) : (
-          <Table className="table" striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.drivers.map((item, i) => (
-                <tr key={item.guid}>
-                  <td>{i + 1}</td>
-                  <td>{item.name}</td>
-                  <td>{item.phoneNumber}</td>
-                  <td>{item.carId ? "Busy" : "Available"}</td>
+          <Card bg="dark" text="white" className="cardTable">
+            <Card.Header style={{ textAlign: "center" }}>
+              List of Drivers
+            </Card.Header>
+            <Table className="table" striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Phone Number</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {this.props.drivers.map((item, i) => (
+                  <tr key={item.guid}>
+                    <td>{i + 1}</td>
+                    <td>{item.name}</td>
+                    <td>{item.phoneNumber}</td>
+                    <td>{item.carId ? "Busy" : "Available"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card>
         )}
       </>
     );

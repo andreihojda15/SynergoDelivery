@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
+import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -79,57 +80,62 @@ class Packages extends Component {
           <Spinner className="spinner" animation="border" variant="info" />
         ) : (
           <>
-            <Table striped bordered hover variant="dark">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>AWB</th>
-                  <th>Sender</th>
-                  <th>Sender Phone</th>
-                  <th>Departure Adress</th>
-                  <th>Departure Date</th>
-                  <th>Recipient Name</th>
-                  <th>Recipient Phone</th>
-                  <th>Recipient Adress</th>
-                  <th>Assigned to a car</th>
-                  <th>Package Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.packages.map((p, i) => {
-                  let packageStatus;
-                  let assignedToCar;
-                  if (p.deliveryDate === undefined && p.carID === undefined) {
-                    packageStatus = "sent";
-                    assignedToCar = "no";
-                  }
-                  if (p.deliveryDate === undefined && p.carID) {
-                    packageStatus = "in delivery";
-                    assignedToCar = "yes";
-                  }
-                  if (p.deliveryDate) {
-                    packageStatus = "delivered";
-                    assignedToCar = "no";
-                  }
+            <Card bg="dark" text="white" className="cardTable">
+              <Card.Header style={{ textAlign: "center" }}>
+                List of Packages
+              </Card.Header>
+              <Table striped bordered hover variant="dark">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>AWB</th>
+                    <th>Sender</th>
+                    <th>Sender Phone</th>
+                    <th>Departure Adress</th>
+                    <th>Departure Date</th>
+                    <th>Recipient Name</th>
+                    <th>Recipient Phone</th>
+                    <th>Recipient Adress</th>
+                    <th>Assigned to a car</th>
+                    <th>Package Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.props.packages.map((p, i) => {
+                    let packageStatus;
+                    let assignedToCar;
+                    if (p.deliveryDate === undefined && p.carID === undefined) {
+                      packageStatus = "sent";
+                      assignedToCar = "no";
+                    }
+                    if (p.deliveryDate === undefined && p.carID) {
+                      packageStatus = "in delivery";
+                      assignedToCar = "yes";
+                    }
+                    if (p.deliveryDate) {
+                      packageStatus = "delivered";
+                      assignedToCar = "no";
+                    }
 
-                  return (
-                    <tr key={p.guid}>
-                      <td>{i + 1}</td>
-                      <td>{p.awb}</td>
-                      <td>{p.senderName}</td>
-                      <td>{p.senderPhoneNumber}</td>
-                      <td>{p.departureAdress}</td>
-                      <td>{p.departureDate}</td>
-                      <td>{p.recipientName}</td>
-                      <td>{p.recipientPhoneNumber}</td>
-                      <td>{p.deliveryAdress}</td>
-                      <td>{assignedToCar}</td>
-                      <td>{packageStatus}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+                    return (
+                      <tr key={p.guid}>
+                        <td>{i + 1}</td>
+                        <td>{p.awb}</td>
+                        <td>{p.senderName}</td>
+                        <td>{p.senderPhoneNumber}</td>
+                        <td>{p.departureAdress}</td>
+                        <td>{p.departureDate}</td>
+                        <td>{p.recipientName}</td>
+                        <td>{p.recipientPhoneNumber}</td>
+                        <td>{p.deliveryAdress}</td>
+                        <td>{assignedToCar}</td>
+                        <td>{packageStatus}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Card>
           </>
         )}
 

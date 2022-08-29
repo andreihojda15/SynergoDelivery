@@ -5,8 +5,9 @@ import { connect } from "react-redux";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import "./Drivers.css";
-
-import { getDrivers } from "../../redux/drivers.slice";
+import {
+  getDrivers, addDrivers
+} from '../../redux/drivers.slice';
 
 /**
  * Driver model:
@@ -75,6 +76,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     _getDrivers: () => {
       return dispatch(getDrivers());
+    },
+    _addDrivers: (pack) => {
+      return dispatch(addDrivers(pack));
     },
   };
 };

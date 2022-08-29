@@ -76,7 +76,25 @@ export default class CarsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         reject("500 Internal Server Error");
-      }, 5000);
+      }, 2000);
+    });
+  }
+
+  // simulate add
+  static addCar(car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(car);
+      }, 2000);
+    });
+  }
+
+  // simulate add failed
+  static addCarFail(car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return reject(`400 Bad Request: Couldn't add car`);
+      }, 2000);
     });
   }
 }

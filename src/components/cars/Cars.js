@@ -1,7 +1,17 @@
 import React from "react";
+import { ToastContainer, Toast } from "react-toastify";
 import Table from "react-bootstrap/Table";
-import { getCars } from "../../redux/cars.slice";
+import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
+import { addCar, getCars, clearMessages } from "../../redux/cars.slice";
+import AddCar from "../modal/addCar";
+import "react-toastify/dist/ReactToastify.css";
+
+
+
+
+
+
 /**
  * Car model:
  *  guid
@@ -22,38 +32,79 @@ class Cars extends React.Component {
   constructor(props) {
     super(props);
     this.props._getCars();
+    this.state = {
+      show: false,
+    };
   }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (!prevProps.errorMessage && this.props.errorMessage) {
+  //     toast.error(this.props.errorMessage,
+  //       {
+  //         position: toast.POSITION.TOP_RIGHT,
+  //         autoClose: 2000
+  //       });
+
+  //     this.props._clearMessages();
+  //   }
+
+  //   if (!prevProps.successMessage && this.props.successMessage) {
+  //     toast.success(this.props.successMessage,
+  //       {
+  //         position: toast.POSITION.TOP_RIGHT,
+  //         autoClose: 2000
+  //       });
+
+  //     this.props._clearMessages();
+  //   }
+  // }
+  handleClick = () => {
+    this.setState({ show: !this.state.show });
+  };
+
+  show = () => this.state.show;
 
   render() {
     return (
       <>
         {this.props.isLoading ? (
-          <div>Please wait! Loading packages...</div>
+          <div>Please wait! Loading cars...</div>
         ) : (
-          <Table striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Registration number</th>
-                <th>Status</th>
-                <th>Number of Packages</th>
-                <th>Assigned to a Driver</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.cars.map((car, i) => (
-                <tr key={car.guid}>
-                  <td>{i + 1}</td>
-                  <td>{car.registrationNumber}</td>
-                  <td>{car.status}</td>
-                  <td>{car.packageIds.length}</td>
-                  <td>{car.driverId ? "Yes" : "No"}</td>
+          <>
+            <Button variant="success" onClick={this.handleClick}>
+              Add Car
+            </Button>
+            <AddCar show={this.show()} handleClose={this.handleClick} />
+
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Registration number</th>
+                  <th>Status</th>
+                  <th>Number of Packages</th>
+                  <th>Assigned to a Driver</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {this.props.cars.map((car, i) => (
+                  <tr key={car.guid}>
+                    <td>{i + 1}</td>
+                    <td>{car.registrationNumber}</td>
+                    <td>{car.status}</td>
+                    <td>{car.packageIds?.length}</td>
+                    <td>{car.driverId ? "Yes" : "No"}</td>
+                    <td><Button size="sm" variant="primary" onCLick={() => { this.props.onEdit(car) }}>Edit</Button> | <Button size="sm" variant="primary" onCLick={() => { this.props.onDelete(car) }}>Delete</Button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </>
         )}
+        <ToastContainer />
       </>
+
     );
   }
 }
@@ -69,6 +120,13 @@ const mapDispatchToProps = (dispatch) => {
     _getCars: () => {
       return dispatch(getCars());
     },
+    _addCar: (car) => {
+      return dispatch(addCar(car));
+    },
+    _clearMessages: () => {
+      return dispatch(clearMessages());
+    },
+
   };
 };
 

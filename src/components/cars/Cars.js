@@ -1,5 +1,5 @@
 import React from "react";
-import { ToastContainer, Toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
@@ -37,27 +37,27 @@ class Cars extends React.Component {
     };
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (!prevProps.errorMessage && this.props.errorMessage) {
-  //     toast.error(this.props.errorMessage,
-  //       {
-  //         position: toast.POSITION.TOP_RIGHT,
-  //         autoClose: 2000
-  //       });
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.errorMessage && this.props.errorMessage) {
+      toast.error(this.props.errorMessage,
+        {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000
+        });
 
-  //     this.props._clearMessages();
-  //   }
+      this.props._clearMessages();
+    }
 
-  //   if (!prevProps.successMessage && this.props.successMessage) {
-  //     toast.success(this.props.successMessage,
-  //       {
-  //         position: toast.POSITION.TOP_RIGHT,
-  //         autoClose: 2000
-  //       });
+    if (!prevProps.successMessage && this.props.successMessage) {
+      toast.success(this.props.successMessage,
+        {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000
+        });
 
-  //     this.props._clearMessages();
-  //   }
-  // }
+      this.props._clearMessages();
+    }
+  }
   handleClick = () => {
     this.setState({ show: !this.state.show });
   };
@@ -95,7 +95,7 @@ class Cars extends React.Component {
                     <td>{car.status}</td>
                     <td>{car.packageIds?.length}</td>
                     <td>{car.driverId ? "Yes" : "No"}</td>
-                    <td><Button size="sm" variant="primary" onCLick={() => { this.props.onEdit(car) }}>Edit</Button> | <Button size="sm" variant="primary" onCLick={() => { this.props.onDelete(car) }}>Delete</Button></td>
+                    <td><Button size="sm" variant="primary" onClick={() => { this.props.onEdit(car) }}>Edit</Button> | <Button size="sm" variant="primary" onClick={() => { this.props.onDelete(car) }}>Delete</Button></td>
                   </tr>
                 ))}
               </tbody>

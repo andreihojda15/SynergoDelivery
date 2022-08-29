@@ -95,7 +95,7 @@ class Cars extends React.Component {
                     <td>{car.status}</td>
                     <td>{car.packageIds?.length}</td>
                     <td>{car.driverId ? "Yes" : "No"}</td>
-                    <td><Button size="sm" variant="primary" onClick={() => { this.props.onEdit(car) }}>Edit</Button> | <Button size="sm" variant="primary" onClick={() => { this.props.onDelete(car) }}>Delete</Button></td>
+                    <td><Button size="sm" variant="primary" onClick={() => { this.props.onEdit(car) }}>Edit</Button> &nbsp; <Button size="sm" variant="primary" onClick={() => { this.props.onDelete(car) }}>Delete</Button></td>
                   </tr>
                 ))}
               </tbody>

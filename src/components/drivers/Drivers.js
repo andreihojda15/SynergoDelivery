@@ -1,11 +1,13 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
-
+import Spinner from "react-bootstrap/Spinner";
+import Card from "react-bootstrap/Card";
+import "./Drivers.css";
 import {
-  getDrivers,
+  getDrivers, addDrivers
 } from '../../redux/drivers.slice';
-
 
 /**
  * Driver model:
@@ -30,10 +32,14 @@ class Drivers extends Component {
   render() {
     return (
       <>
-        {
-          this.props.isLoading ?
-            <div>Please wait! Loading drivers...</div> :
-            <Table striped bordered hover variant="dark">
+        {this.props.isLoading ? (
+          <Spinner className="spinner" animation="border" variant="info" />
+        ) : (
+          <Card bg="dark" text="white" className="cardTable">
+            <Card.Header style={{ textAlign: "center" }}>
+              List of Drivers
+            </Card.Header>
+            <Table className="table" striped bordered hover variant="dark">
               <thead>
                 <tr>
                   <th>#</th>
@@ -43,8 +49,7 @@ class Drivers extends Component {
                 </tr>
               </thead>
               <tbody>
-                {
-                this.props.drivers.map((item, i) => (
+                {this.props.drivers.map((item, i) => (
                   <tr key={item.guid}>
                     <td>{i + 1}</td>
                     <td>{item.name}</td>
@@ -54,9 +59,9 @@ class Drivers extends Component {
                 ))}
               </tbody>
             </Table>
-        }
+          </Card>
+        )}
       </>
-
     );
   }
 }
@@ -72,7 +77,23 @@ const mapDispatchToProps = (dispatch) => {
     _getDrivers: () => {
       return dispatch(getDrivers());
     },
+    _addDrivers: (pack) => {
+      return dispatch(addDrivers(pack));
+    },
   };
-}
+};
+
+Drivers.propTypes = {
+  drivers: PropTypes.arrayOf(
+    PropTypes.exact({
+      guid: PropTypes.string,
+      name: PropTypes.string,
+      phoneNumber: PropTypes.string,
+      carId: PropTypes.string,
+    })
+  ),
+  _getDrivers: PropTypes.func,
+  isLoading: PropTypes.bool,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Drivers);

@@ -1,16 +1,15 @@
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
+import PropTypes from "prop-types";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
 import { addCar, getCars, clearMessages } from "../../redux/cars.slice";
 import AddCar from "../modal/addCar";
 import "react-toastify/dist/ReactToastify.css";
-
-
-
-
-
+import Spinner from "react-bootstrap/Spinner";
+import Card from "react-bootstrap/Card";
+import "./Cars.css";
 
 /**
  * Car model:
@@ -68,15 +67,17 @@ class Cars extends React.Component {
     return (
       <>
         {this.props.isLoading ? (
-          <div>Please wait! Loading cars...</div>
+          <Spinner className="spinner" animation="border" variant="info" />
         ) : (
-          <>
+          <Card bg="dark" text="white" className="cardTable">
+            <Card.Header style={{ textAlign: "center" }}>
+              List of Cars
+            </Card.Header>
             <Button variant="success" onClick={this.handleClick}>
               Add Car
             </Button>
             <AddCar show={this.show()} handleClose={this.handleClick} />
-
-            <Table striped bordered hover variant="dark">
+            <Table className="table" striped bordered hover variant="dark">
               <thead>
                 <tr>
                   <th>#</th>
@@ -100,7 +101,7 @@ class Cars extends React.Component {
                 ))}
               </tbody>
             </Table>
-          </>
+          </Card>
         )}
         <ToastContainer />
       </>
@@ -128,6 +129,20 @@ const mapDispatchToProps = (dispatch) => {
     },
 
   };
+};
+
+Cars.propTypes = {
+  cars: PropTypes.arrayOf(
+    PropTypes.exact({
+      guid: PropTypes.string,
+      registrationNumber: PropTypes.string,
+      status: PropTypes.string,
+      packageIds: PropTypes.arrayOf(PropTypes.string),
+      driverId: PropTypes.string,
+    })
+  ),
+  _getCars: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cars);

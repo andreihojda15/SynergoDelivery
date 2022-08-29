@@ -1,11 +1,11 @@
 import React from "react";
 import "./HeaderStyle.css";
-import { Nav } from "react-bootstrap";
 import { Navbar } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import AddPackage from "../modal/AddPackage";
+import Image from "react-bootstrap/Image";
+import AddDrivers from "../modal/AddDrivers";
 
 class Header extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class Header extends React.Component {
 
     this.state = {
       show: false,
-      package: true,
+      drivers: true,
     };
   }
 
@@ -21,15 +21,15 @@ class Header extends React.Component {
     this.setState({ show: !this.state.show });
   };
 
-  notPackage = () => {
+  notDrivers = () => {
     this.setState({
-      package: false,
+      drivers: false,
     });
   };
 
-  onPackage = () => {
+  onDrivers = () => {
     this.setState({
-      package: true,
+      drivers: true,
     });
   };
 
@@ -40,25 +40,29 @@ class Header extends React.Component {
       <>
         <Navbar bg="dark" variant="dark" className="nav">
           <Container className="con">
-            <Nav className="me-auto">
-              <Link className="link" to="/packages" onClick={this.onPackage}>
+            <Image
+              src={require("../../assets/images/box.png")}
+              alt="header logo"
+              className="logo"
+            />
+            <div className="linkContainer">
+              <Link className="link" to="/packages" onClick={this.notDrivers}>
                 Packages
               </Link>
-              <Link className="link" to="/cars" onClick={this.notPackage}>
+              <Link className="link" to="/cars" onClick={this.notDrivers}>
                 Cars
               </Link>
-              <Link className="link" to="/drivers" onClick={this.notPackage}>
+              <Link className="link" to="/drivers" onClick={this.onDrivers}>
                 Drivers
               </Link>
-            </Nav>
+            </div>
           </Container>
-
-          {this.state.package ? (
+          {this.state.drivers ? (
             <>
               <Button variant="success" onClick={this.handleClick}>
                 Add
               </Button>
-              <AddPackage show={this.show()} handleClose={this.handleClick} />
+              <AddDrivers show={this.show()} handleClose={this.handleClick} />
             </>
           ) : (
             <></>

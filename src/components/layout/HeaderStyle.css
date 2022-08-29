@@ -1,18 +1,32 @@
-.con {
-    margin-left: 0px;
+.nav .con {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    max-width: 100vw;
+}
+
+.logo{
+    width: 2rem;
+}
+
+.linkContainer {
+    margin: 0px auto;
 }
 
 .nav {
     position: sticky;
     top: 0px;
     padding: 20px;
-    margin: 0;
+    z-index: 2;
 }
 
 .link {
     text-decoration: none;
     margin: 0px 10px;
     color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 
 .link:hover {

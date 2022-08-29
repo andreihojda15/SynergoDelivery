@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import { connect } from "react-redux";
 import { addPackage } from "../../redux/packages.slice";
 import { nanoid } from "nanoid";
-import "./AddPackage.css";
+import "../../style/common.css";
 
 class AddPackage extends Component {
   // TO DO add state object

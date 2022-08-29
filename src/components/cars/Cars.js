@@ -5,7 +5,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import { getCars } from "../../redux/cars.slice";
 import { connect } from "react-redux";
-import "./Cars.css";
+import "../../style/common.css";
 /**
  * Car model:
  *  guid
@@ -84,7 +84,7 @@ const mapDispatchToProps = (dispatch) => {
 Cars.propTypes = {
   cars: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string,
+      guid: PropTypes.string.isRequired,
       registrationNumber: PropTypes.string,
       status: PropTypes.string,
       packageIds: PropTypes.arrayOf(PropTypes.string),

@@ -1,3 +1,13 @@
 .notFound {
   margin: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; 
+}
+
+.spinner {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1.5rem;
 }

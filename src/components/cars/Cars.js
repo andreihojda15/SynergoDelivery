@@ -1,7 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Table from "react-bootstrap/Table";
+import Spinner from "react-bootstrap/Spinner";
+import Card from "react-bootstrap/Card";
 import { getCars } from "../../redux/cars.slice";
 import { connect } from "react-redux";
+import "./Cars.css";
 /**
  * Car model:
  *  guid
@@ -28,30 +32,35 @@ class Cars extends React.Component {
     return (
       <>
         {this.props.isLoading ? (
-          <div>Please wait! Loading packages...</div>
+          <Spinner className="spinner" animation="border" variant="info" />
         ) : (
-          <Table striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Registration number</th>
-                <th>Status</th>
-                <th>Number of Packages</th>
-                <th>Assigned to a Driver</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.cars.map((car, i) => (
-                <tr key={car.guid}>
-                  <td>{i + 1}</td>
-                  <td>{car.registrationNumber}</td>
-                  <td>{car.status}</td>
-                  <td>{car.packageIds.length}</td>
-                  <td>{car.driverId ? "Yes" : "No"}</td>
+          <Card bg="dark" text="white" className="cardTable">
+            <Card.Header style={{ textAlign: "center" }}>
+              List of Cars
+            </Card.Header>
+            <Table className="table" striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Registration number</th>
+                  <th>Status</th>
+                  <th>Number of Packages</th>
+                  <th>Assigned to a Driver</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {this.props.cars.map((car, i) => (
+                  <tr key={car.guid}>
+                    <td>{i + 1}</td>
+                    <td>{car.registrationNumber}</td>
+                    <td>{car.status}</td>
+                    <td>{car.packageIds.length}</td>
+                    <td>{car.driverId ? "Yes" : "No"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card>
         )}
       </>
     );
@@ -70,6 +79,20 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(getCars());
     },
   };
+};
+
+Cars.propTypes = {
+  cars: PropTypes.arrayOf(
+    PropTypes.exact({
+      guid: PropTypes.string,
+      registrationNumber: PropTypes.string,
+      status: PropTypes.string,
+      packageIds: PropTypes.arrayOf(PropTypes.string),
+      driverId: PropTypes.string,
+    })
+  ),
+  _getCars: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cars);

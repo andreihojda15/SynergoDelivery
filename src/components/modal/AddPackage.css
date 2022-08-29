@@ -1,0 +1,9 @@
+.modalBody, .modalHeader, .modalFooter{
+  background-color: #363945;
+  color: white;
+  border: none;
+}
+
+.btn-close {
+  background-color: #fff;
+}

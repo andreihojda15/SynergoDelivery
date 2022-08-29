@@ -1,11 +1,10 @@
-
 import React from "react";
 import "./HeaderStyle.css";
-import { Nav } from "react-bootstrap";
 import { Navbar } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
 import AddDrivers from "../modal/AddDrivers";
 
 class Header extends React.Component {
@@ -41,7 +40,12 @@ class Header extends React.Component {
       <>
         <Navbar bg="dark" variant="dark" className="nav">
           <Container className="con">
-            <Nav className="me-auto">
+            <Image
+              src={require("../../assets/images/box.png")}
+              alt="header logo"
+              className="logo"
+            />
+            <div className="linkContainer">
               <Link className="link" to="/packages" onClick={this.notDrivers}>
                 Packages
               </Link>
@@ -51,9 +55,8 @@ class Header extends React.Component {
               <Link className="link" to="/drivers" onClick={this.onDrivers}>
                 Drivers
               </Link>
-            </Nav>
+            </div>
           </Container>
-
           {this.state.drivers ? (
             <>
               <Button variant="success" onClick={this.handleClick}>

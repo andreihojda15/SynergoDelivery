@@ -6,7 +6,7 @@ class Footer extends React.Component {
     return (
       <div className="footer">
         <p>Version : {packageJson.version}</p>
-        <p>@2022 Copyright SynergoDelivery</p>
+        <p>©{new Date().getFullYear()} SynergoDelivery</p>
       </div>
     );
   }

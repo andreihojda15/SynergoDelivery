@@ -1,10 +1,18 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Table } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
+import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./Package.css";
 
-import { addPackage, getPackages, clearMessages } from "../../redux/packages.slice";
+import {
+  addPackage,
+  getPackages,
+  clearMessages,
+} from "../../redux/packages.slice";
 
 /**
  * Package model:
@@ -48,20 +56,18 @@ class Packages extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevProps.errorMessage && this.props.errorMessage) {
-      toast.error(this.props.errorMessage,
-      {
+      toast.error(this.props.errorMessage, {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 5000
+        autoClose: 5000,
       });
 
       this.props._clearMessages();
     }
 
     if (!prevProps.successMessage && this.props.successMessage) {
-      toast.success(this.props.successMessage,
-      {
+      toast.success(this.props.successMessage, {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 5000
+        autoClose: 5000,
       });
 
       this.props._clearMessages();
@@ -69,68 +75,72 @@ class Packages extends Component {
   }
 
   render() {
-
     return (
       <>
         {this.props.isLoading ? (
-          <div>Please wait! Loading packages...</div>
+          <Spinner className="spinner" animation="border" variant="info" />
         ) : (
           <>
-            <Table striped bordered hover variant="dark">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>AWB</th>
-                  <th>Sender</th>
-                  <th>Sender Phone</th>
-                  <th>Departure Adress</th>
-                  <th>Departure Date</th>
-                  <th>Recipient Name</th>
-                  <th>Recipient Phone</th>
-                  <th>Recipient Adress</th>
-                  <th>Assigned to a car</th>
-                  <th>Package Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.packages.map((p, i) => {
-                  let packageStatus;
-                  let assignedToCar;
-                  if (p.deliveryDate === undefined && p.carID === undefined) {
-                    packageStatus = "sent";
-                    assignedToCar = "no";
-                  }
-                  if (p.deliveryDate === undefined && p.carID) {
-                    packageStatus = "in delivery";
-                    assignedToCar = "yes";
-                  }
-                  if (p.deliveryDate) {
-                    packageStatus = "delivered";
-                    assignedToCar = "no";
-                  }
+            <Card bg="dark" text="white" className="cardTable">
+              <Card.Header style={{ textAlign: "center" }}>
+                List of Packages
+              </Card.Header>
+              <Table striped bordered hover variant="dark">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>AWB</th>
+                    <th>Sender</th>
+                    <th>Sender Phone</th>
+                    <th>Departure Adress</th>
+                    <th>Departure Date</th>
+                    <th>Recipient Name</th>
+                    <th>Recipient Phone</th>
+                    <th>Recipient Adress</th>
+                    <th>Assigned to a car</th>
+                    <th>Package Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.props.packages.map((p, i) => {
+                    let packageStatus;
+                    let assignedToCar;
+                    if (p.deliveryDate === undefined && p.carID === undefined) {
+                      packageStatus = "sent";
+                      assignedToCar = "no";
+                    }
+                    if (p.deliveryDate === undefined && p.carID) {
+                      packageStatus = "in delivery";
+                      assignedToCar = "yes";
+                    }
+                    if (p.deliveryDate) {
+                      packageStatus = "delivered";
+                      assignedToCar = "no";
+                    }
 
-                  return (
-                    <tr key={p.guid}>
-                      <td>{i + 1}</td>
-                      <td>{p.awb}</td>
-                      <td>{p.senderName}</td>
-                      <td>{p.senderPhoneNumber}</td>
-                      <td>{p.departureAdress}</td>
-                      <td>{p.departureDate}</td>
-                      <td>{p.recipientName}</td>
-                      <td>{p.recipientPhoneNumber}</td>
-                      <td>{p.deliveryAdress}</td>
-                      <td>{assignedToCar}</td>
-                      <td>{packageStatus}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+                    return (
+                      <tr key={p.guid}>
+                        <td>{i + 1}</td>
+                        <td>{p.awb}</td>
+                        <td>{p.senderName}</td>
+                        <td>{p.senderPhoneNumber}</td>
+                        <td>{p.departureAdress}</td>
+                        <td>{p.departureDate}</td>
+                        <td>{p.recipientName}</td>
+                        <td>{p.recipientPhoneNumber}</td>
+                        <td>{p.deliveryAdress}</td>
+                        <td>{assignedToCar}</td>
+                        <td>{packageStatus}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Card>
           </>
         )}
 
-        <ToastContainer />
+        <ToastContainer theme="dark" />
       </>
     );
   }
@@ -154,6 +164,32 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(clearMessages());
     },
   };
+};
+
+Packages.propTypes = {
+  packages: PropTypes.arrayOf(
+    PropTypes.exact({
+      guid: PropTypes.string,
+      senderName: PropTypes.string,
+      senderPhoneNumber: PropTypes.string,
+      departureAdress: PropTypes.string,
+      departureDate: PropTypes.string,
+      awb: PropTypes.string,
+      deliveryAdress: PropTypes.string,
+      deliveryDate: PropTypes.string,
+      recipientName: PropTypes.string,
+      recipientPhoneNumber: PropTypes.string,
+      carID: PropTypes.string,
+      packageStatus: PropTypes.string,
+      assignedToCar: PropTypes.string,
+    })
+  ),
+  _getPackages: PropTypes.func,
+  _addPackage: PropTypes.func,
+  _clearMessages: PropTypes.func,
+  errorMessage: PropTypes.string,
+  successMessage: PropTypes.string,
+  isLoading: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Packages);

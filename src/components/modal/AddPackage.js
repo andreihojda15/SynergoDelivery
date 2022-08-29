@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { connect } from "react-redux";
 import { addPackage } from "../../redux/packages.slice";
 import { nanoid } from "nanoid";
+import "./AddPackage.css";
 
 class AddPackage extends Component {
   // TO DO add state object
@@ -29,10 +31,10 @@ class AddPackage extends Component {
   render() {
     return (
       <Modal show={this.props.show} onHide={this.props.handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header className="modalHeader" closeButton>
           <Modal.Title>Add Package</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="modalBody">
           <Form>
             <Form.Group className="mb-3" controlId="formAWB">
               <Form.Label>AWB</Form.Label>
@@ -149,7 +151,7 @@ class AddPackage extends Component {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="modalFooter">
           <Button variant="primary" onClick={this.props.handleClose}>
             Close
           </Button>
@@ -176,6 +178,12 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(addPackage(pack));
     },
   };
+};
+
+AddPackage.propTypes = {
+  _addPackage: PropTypes.func,
+  handleClose: PropTypes.func,
+  show: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPackage);

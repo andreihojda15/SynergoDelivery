@@ -2,11 +2,16 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import "./Drivers.css";
+import DeleteDrivers from "../modal/DeleteDrivers";
+import EditDrivers from "../modal/EditDrivers";
 import {
-  getDrivers, addDrivers
+  getDrivers, addDrivers, editDrivers, deleteDrivers, clearMessages,
 } from '../../redux/drivers.slice';
 
 /**
@@ -27,6 +32,39 @@ class Drivers extends Component {
   constructor(props) {
     super(props);
     this.props._getDrivers();
+
+    this.state = {
+      showDelete: false,
+      showEdit: false
+    };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.errorMessage && this.props.errorMessage) {
+      toast.error(this.props.errorMessage, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      });
+
+      this.props._clearMessages();
+    }
+
+    if (!prevProps.successMessage && this.props.successMessage) {
+      toast.success(this.props.successMessage, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      });
+
+      this.props._clearMessages();
+    }
+  }
+
+  handleDelete  =()=> {
+    this.setState({ showDelete: !this.state.showDelete });
+  }
+
+  handleEdit  =()=> {
+    this.setState({ showEdit: !this.state.showEdit });
   }
 
   render() {
@@ -46,6 +84,7 @@ class Drivers extends Component {
                   <th>Name</th>
                   <th>Phone Number</th>
                   <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,6 +94,13 @@ class Drivers extends Component {
                     <td>{item.name}</td>
                     <td>{item.phoneNumber}</td>
                     <td>{item.carId ? "Busy" : "Available"}</td>
+                    <td>
+                      <Button  variant="secondary"  onClick={this.handleEdit}>Edit</Button>
+                      <EditDrivers  show={this.state.showEdit} handleClose={this.handleEdit}/>
+                  
+                      <Button onClick={this.handleDelete}>Delete</Button>
+                      <DeleteDrivers  show={this.state.showDelete} handleClose={this.handleDelete}/>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -80,6 +126,16 @@ const mapDispatchToProps = (dispatch) => {
     _addDrivers: (pack) => {
       return dispatch(addDrivers(pack));
     },
+    _editDrivers: (pack) => {
+      return dispatch(editDrivers(pack));
+    },
+    _deleteDrivers: (pack) => {
+      return dispatch(deleteDrivers(pack));
+    },
+    _clearMessages: () => {
+      return dispatch(clearMessages());
+    },
+
   };
 };
 

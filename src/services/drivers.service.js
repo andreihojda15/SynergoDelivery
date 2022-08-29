@@ -67,7 +67,7 @@ export default class DriversService {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(DRIVERS);
-            }, 5000);
+            }, 1000);
         });
     }
 
@@ -76,7 +76,7 @@ export default class DriversService {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 reject('500 Internal Server Error');
-            }, 5000);
+            }, 1000);
         });
     }
 
@@ -90,11 +90,48 @@ export default class DriversService {
     }
 
     // simulate add failed
-    static addDriversFail(pack) {
-        return new Promise((resolve, reject) => {
+    static addDriversFail() {
+        return new Promise((reject) => {
             setTimeout(() => {
                 return reject(`400 Bad Request: Couldn't add driver`);
             }, 1000);
         });
     }
+    
+       // simulate edit
+       static editDrivers(pack) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                return resolve(pack);
+            }, 1000);
+        });
+    }
+
+    // simulate edit failed
+    static editDriversFail(pack) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                return reject(`400 Bad Request: Couldn't edit driver`);
+            }, 1000);
+        });
+    }
+     // simulate delete
+     static deleteDrivers(pack) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                return resolve(pack);
+            }, 1000);
+        });
+    }
+
+    // simulate delete failed
+    static deleteDriversFail(pack) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                return reject(`400 Bad Request: Couldn't delete driver`);
+            }, 1000);
+        });
+    }
+    
+    
 }

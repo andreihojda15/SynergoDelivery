@@ -97,4 +97,22 @@ export default class CarsService {
       }, 2000);
     });
   }
+
+  // simulate add
+  static editCar(car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(car);
+      }, 2000);
+    });
+  }
+
+  // simulate edit failed
+  static editCarFail(car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return reject(`400 Bad Request: Couldn't edit car`);
+      }, 2000);
+    });
+  }
 }

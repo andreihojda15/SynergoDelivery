@@ -9,7 +9,7 @@ import AddCar from "../modal/addCar";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
-import "./Cars.css";
+import "../../style/common.css";
 
 /**
  * Car model:
@@ -134,7 +134,7 @@ const mapDispatchToProps = (dispatch) => {
 Cars.propTypes = {
   cars: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string,
+      guid: PropTypes.string.isRequired,
       registrationNumber: PropTypes.string,
       status: PropTypes.string,
       packageIds: PropTypes.arrayOf(PropTypes.string),

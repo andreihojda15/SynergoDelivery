@@ -8,7 +8,10 @@ class Content extends React.Component {
 }
 
 Content.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]),
 };
 
 export default Content;

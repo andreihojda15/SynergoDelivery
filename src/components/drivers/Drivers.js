@@ -4,10 +4,8 @@ import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
-import "./Drivers.css";
-import {
-  getDrivers, addDrivers
-} from '../../redux/drivers.slice';
+import "../../style/common.css";
+import { getDrivers, addDrivers } from "../../redux/drivers.slice";
 
 /**
  * Driver model:
@@ -86,7 +84,7 @@ const mapDispatchToProps = (dispatch) => {
 Drivers.propTypes = {
   drivers: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string,
+      guid: PropTypes.string.isRequired,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
       carId: PropTypes.string,

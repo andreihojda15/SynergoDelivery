@@ -7,12 +7,16 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
+
 import "./Drivers.css";
 import DeleteDrivers from "../modal/DeleteDrivers";
 import EditDrivers from "../modal/EditDrivers";
 import {
   getDrivers, addDrivers, editDrivers, deleteDrivers, clearMessages,
 } from '../../redux/drivers.slice';
+
+import "../../style/common.css";
+
 
 /**
  * Driver model:
@@ -143,7 +147,7 @@ const mapDispatchToProps = (dispatch) => {
 Drivers.propTypes = {
   drivers: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string,
+      guid: PropTypes.string.isRequired,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
       carId: PropTypes.string,

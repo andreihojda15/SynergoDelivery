@@ -31,10 +31,25 @@ export const addCar = createAsyncThunk(
   }
 );
 
+export const editCar = createAsyncThunk(
+  'editCar',
+  async (car, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await CarsService.editCar(car)
+      console.log(`--- successful response: ${JSON.stringify(response)}`)
+      return fulfillWithValue(response)
+    } catch(err) {
+      console.log(`--- error response: ${JSON.stringify(err)}`)
+      return rejectWithValue(err)
+    }
+  }
+);
+
 const carsSlice = createSlice({
   name: "cars",
   initialState: {
     isLoading: false,
+    isEditingCar: false,
     cars: [],
     errorMessage: '',
     successMessage: '',
@@ -91,24 +106,28 @@ const carsSlice = createSlice({
       state.isLoading = false;
     });
 
-    // builder.addCase(editCar.pending, (state, action) => {
-    //   console.log("--- edit car pending...");
-    //   state.isError = false;
-    //   state.isLoading = true;
-    // });
+    builder.addCase(editCar.pending, (state, action) => {
+      console.log("--- edit car pending...");
+      state.isEditingCar = true;
+      state.errorMessage = '';
+      state.successMessage = '';
+    });
 
-    // builder.addCase(editCar.fulfilled, (state, action) => {
-    //   console.log("--- edit car fulfilled...");
-    //   state.isError = false;
-    //   state.isLoading = false;
-    //   state.cars.push(action.payload); // state.cars = [...state.cars, action.payload]
-    // });
+    builder.addCase(editCar.fulfilled, (state, action) => {
+      console.log("--- edit car fulfilled...");
+      state.isEditingCar = false;
+      let indexOfUpdatedCar = state.cars.findIndex((car) => car.guid === action.payload.guid);
+      if (indexOfUpdatedCar !== -1) {
+        state.cars.splice(indexOfUpdatedCar, 1, action.payload);
+        state.successMessage = `Successfully updated car with registration number ${action.payload.registrationNumber}.`;
+      }
+    });
 
-    // builder.addCase(editCar.rejected, (state, action) => {
-    //   console.log("--- edit car rejected...");
-    //   state.isError = true;
-    //   state.isLoading = false;
-    // });
+    builder.addCase(editCar.rejected, (state, action) => {
+      console.log("--- edit car rejected...");
+      state.isEditingCar = false;
+      state.errorMessage = 'Unable to edit car.';
+    });
   },
 });
 

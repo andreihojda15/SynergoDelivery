@@ -4,12 +4,18 @@ import PropTypes from "prop-types";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
-import { addCar, getCars, clearMessages } from "../../redux/cars.slice";
-import AddCar from "../modal/addCar";
+import {
+  addCar,
+  editCar,
+  getCars,
+  clearMessages,
+} from "../../redux/cars.slice";
+import AddOrEditCar from "../modal/AddOrEditCar";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import "../../style/common.css";
+import { nanoid } from "nanoid";
 
 /**
  * Car model:
@@ -30,40 +36,60 @@ import "../../style/common.css";
 class Cars extends React.Component {
   constructor(props) {
     super(props);
-    this.props._getCars();
+
+    if (this.props.cars.length === 0) {
+      this.props._getCars();
+    }
+
     this.state = {
-      show: false,
+      showAddOrEditModal: false,
+      carSelectedForEdit: undefined,
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevProps.errorMessage && this.props.errorMessage) {
-      toast.error(this.props.errorMessage,
-        {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 2000
-        });
+      toast.error(this.props.errorMessage, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
 
       this.props._clearMessages();
     }
 
     if (!prevProps.successMessage && this.props.successMessage) {
-      toast.success(this.props.successMessage,
-        {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 2000
-        });
+      toast.success(this.props.successMessage, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
 
       this.props._clearMessages();
     }
   }
-  handleClick = () => {
-    this.setState({ show: !this.state.show });
+
+  onEditCar = (car) => {
+    this.setState({
+      showAddOrEditModal: true,
+      carSelectedForEdit: car,
+    });
   };
 
-  show = () => this.state.show;
+  onAddCar = () => {
+    this.setState({
+      showAddOrEditModal: true,
+      carSelectedForEdit: undefined,
+    });
+  };
+
+  onCloseAddOrEditModal = () => {
+    this.setState({
+      showAddOrEditModal: false,
+      carSelectedForEdit: undefined,
+    });
+  };
 
   render() {
+    console.log(`--- render: ${this.state.showAddOrEditModal}`);
     return (
       <>
         {this.props.isLoading ? (
@@ -73,10 +99,36 @@ class Cars extends React.Component {
             <Card.Header style={{ textAlign: "center" }}>
               List of Cars
             </Card.Header>
-            <Button variant="success" onClick={this.handleClick}>
+            <Button variant="success" onClick={this.onAddCar}>
               Add Car
             </Button>
-            <AddCar show={this.show()} handleClose={this.handleClick} />
+            {this.state.showAddOrEditModal && (
+              <AddOrEditCar
+                isLoading={this.props.isEditingCar}
+                handleClose={this.onCloseAddOrEditModal}
+                car={
+                  this.state.carSelectedForEdit ?? {
+                    guid: nanoid(),
+                    registrationNumber: "",
+                    status: "",
+                  }
+                }
+                title={this.state.carSelectedForEdit ? "Edit Car" : "Add Car"}
+                handleSave={(car) => {
+                  this.state.carSelectedForEdit
+                    ? this.props._editCar(car).then((response) => {
+                      if (!response.error) {
+                        this.onCloseAddOrEditModal();
+                      }
+                    })
+                    : this.props._addCar(car).then((response) => {
+                      if (!response.error) {
+                        this.onCloseAddOrEditModal();
+                      }
+                    });
+                }}
+              />
+            )}
             <Table className="table" striped bordered hover variant="dark">
               <thead>
                 <tr>
@@ -96,7 +148,27 @@ class Cars extends React.Component {
                     <td>{car.status}</td>
                     <td>{car.packageIds?.length}</td>
                     <td>{car.driverId ? "Yes" : "No"}</td>
-                    <td><Button size="sm" variant="primary" onClick={() => { this.props.onEdit(car) }}>Edit</Button> &nbsp; <Button size="sm" variant="primary" onClick={() => { this.props.onDelete(car) }}>Delete</Button></td>
+                    <td>
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        onClick={() => {
+                          this.onEditCar(car);
+                        }}
+                      >
+                        Edit
+                      </Button>{" "}
+                      &nbsp;{" "}
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        onClick={() => {
+                          this.props.onDelete(car);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -105,7 +177,6 @@ class Cars extends React.Component {
         )}
         <ToastContainer />
       </>
-
     );
   }
 }
@@ -124,10 +195,12 @@ const mapDispatchToProps = (dispatch) => {
     _addCar: (car) => {
       return dispatch(addCar(car));
     },
+    _editCar: (car) => {
+      return dispatch(editCar(car));
+    },
     _clearMessages: () => {
       return dispatch(clearMessages());
     },
-
   };
 };
 
@@ -142,6 +215,8 @@ Cars.propTypes = {
     })
   ),
   _getCars: PropTypes.func,
+  _addCar: PropTypes.func,
+  _editCar: PropTypes.func,
   isLoading: PropTypes.bool,
 };
 

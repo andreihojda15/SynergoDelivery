@@ -1,4 +1,3 @@
-
 export const CARS = [
   {
     guid: "d1c51f3b-f13f-407f-b6e2-46c5bbc747ad",
@@ -67,7 +66,7 @@ export default class CarsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(CARS);
-      }, 5000);
+      }, 1000);
     });
   }
 
@@ -76,7 +75,7 @@ export default class CarsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         reject("500 Internal Server Error");
-      }, 2000);
+      }, 1000);
     });
   }
 
@@ -85,7 +84,7 @@ export default class CarsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         return resolve(car);
-      }, 2000);
+      }, 1000);
     });
   }
 
@@ -94,7 +93,7 @@ export default class CarsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         return reject(`400 Bad Request: Couldn't add car`);
-      }, 2000);
+      }, 1000);
     });
   }
 
@@ -103,7 +102,7 @@ export default class CarsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         return resolve(car);
-      }, 2000);
+      }, 1000);
     });
   }
 
@@ -112,7 +111,7 @@ export default class CarsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         return reject(`400 Bad Request: Couldn't edit car`);
-      }, 2000);
+      }, 1000);
     });
   }
 }

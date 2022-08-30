@@ -67,7 +67,7 @@ export default class DriversService {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(DRIVERS);
-            }, 5000);
+            }, 1000);
         });
     }
 
@@ -76,7 +76,7 @@ export default class DriversService {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 reject('500 Internal Server Error');
-            }, 5000);
+            }, 1000);
         });
     }
 

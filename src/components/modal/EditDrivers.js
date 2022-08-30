@@ -7,20 +7,20 @@ import { connect } from "react-redux";
 import { editDrivers } from "../../redux/drivers.slice";
 
 
-class EditDrivers extends Component{
-    constructor(props){
+class EditDrivers extends Component {
+    constructor(props) {
         super(props);
 
-        this.state={};
+        this.state = {};
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <Modal show={this.props.show} onHide={this.props.handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>Edit Driver</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Driver</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3" controlId="formName">
                             <Form.Label>Name</Form.Label>
@@ -49,11 +49,11 @@ class EditDrivers extends Component{
 
                     </Form>
                 </Modal.Body>
-            <ModalFooter>
-                <Button variant="success" onClick={()=> {return this.props._editDrivers()}}>
-                    Apply         
-                </Button>
-            </ModalFooter>
+                <ModalFooter>
+                    <Button variant="success" onClick={() => { return this.props._editDrivers() }}>
+                        Apply
+                    </Button>
+                </ModalFooter>
             </Modal>
         )
     }
@@ -65,10 +65,10 @@ const mapStateToProps = (store) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-    _editDrivers: (props) => {
-        return dispatch(editDrivers(props));
-    },
-};
+        _editDrivers: (props) => {
+            return dispatch(editDrivers(props));
+        },
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditDrivers);

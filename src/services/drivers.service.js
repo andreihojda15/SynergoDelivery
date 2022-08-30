@@ -97,9 +97,9 @@ export default class DriversService {
             }, 1000);
         });
     }
-    
-       // simulate edit
-       static editDrivers(pack) {
+
+    // simulate edit
+    static editDrivers(pack) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 return resolve(pack);
@@ -115,8 +115,8 @@ export default class DriversService {
             }, 1000);
         });
     }
-     // simulate delete
-     static deleteDrivers(pack) {
+    // simulate delete
+    static deleteDrivers(pack) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 return resolve(pack);
@@ -132,6 +132,6 @@ export default class DriversService {
             }, 1000);
         });
     }
-    
-    
+
+
 }

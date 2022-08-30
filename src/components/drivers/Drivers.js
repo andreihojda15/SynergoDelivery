@@ -59,11 +59,11 @@ class Drivers extends Component {
     }
   }
 
-  handleDelete  =()=> {
+  handleDelete = () => {
     this.setState({ showDelete: !this.state.showDelete });
   }
 
-  handleEdit  =()=> {
+  handleEdit = () => {
     this.setState({ showEdit: !this.state.showEdit });
   }
 
@@ -95,11 +95,11 @@ class Drivers extends Component {
                     <td>{item.phoneNumber}</td>
                     <td>{item.carId ? "Busy" : "Available"}</td>
                     <td>
-                      <Button  variant="secondary"  onClick={this.handleEdit}>Edit</Button>
-                      <EditDrivers  show={this.state.showEdit} handleClose={this.handleEdit}/>
-                  
+                      <Button variant="secondary" onClick={this.handleEdit}>Edit</Button>
+                      <EditDrivers show={this.state.showEdit} handleClose={this.handleEdit} />
+
                       <Button onClick={this.handleDelete}>Delete</Button>
-                      <DeleteDrivers  show={this.state.showDelete} handleClose={this.handleDelete}/>
+                      <DeleteDrivers show={this.state.showDelete} handleClose={this.handleDelete} />
                     </td>
                   </tr>
                 ))}
@@ -107,6 +107,7 @@ class Drivers extends Component {
             </Table>
           </Card>
         )}
+        <ToastContainer theme="dark" />
       </>
     );
   }

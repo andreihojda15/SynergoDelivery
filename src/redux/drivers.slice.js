@@ -7,7 +7,7 @@ export const getDrivers = createAsyncThunk(
     async (_, { rejectWithValue, fulfillWithValue }) => {
         try {
             const response = await DriversService.getDrivers()
-            console.log(`--- successful response: ${JSON.stringify(response)}`)
+            // console.log(`--- successful response: ${JSON.stringify(response)}`)
             return fulfillWithValue(response)
         } catch (err) {
             console.log(`--- error response: ${JSON.stringify(err)}`)
@@ -65,13 +65,13 @@ const driversSlice = createSlice({
         isLoading: false,
         drivers: [],
         errorMessage: '',
-        successMessage: '', 
+        successMessage: '',
     },
     reducers: {
         clearMessages: (state, action) => {
             state.errorMessage = '';
             state.successMessage = '';
-          },
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -86,16 +86,17 @@ const driversSlice = createSlice({
         builder.addCase(getDrivers.fulfilled, (state, action) => {
             console.log('--- get drivers fulfilled...')
             state.isLoading = false
-            state.drivers = action.payload || []
             state.isError = false;
+            state.drivers = action.payload || []
             state.successMessage = action.payload.length === 0 ? 'No drivers found.' : 'Successfully retrieved drivers.';
         })
 
         builder.addCase(getDrivers.rejected, (state, action) => {
             console.log('--- get drivers rejected...')
             state.isLoading = false
+            state.isError = true;
             state.drivers = []
-            state.isError = false;
+
             state.errorMessage = 'Unable to retrieve drivers';
             // TODO: handle error messages
         })

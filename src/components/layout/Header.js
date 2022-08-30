@@ -8,33 +8,6 @@ import Image from "react-bootstrap/Image";
 import AddDrivers from "../modal/AddDrivers";
 
 class Header extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      show: false,
-      drivers: true,
-    };
-  }
-
-  handleClick = () => {
-    this.setState({ show: !this.state.show });
-  };
-
-  notDrivers = () => {
-    this.setState({
-      drivers: false,
-    });
-  };
-
-  onDrivers = () => {
-    this.setState({
-      drivers: true,
-    });
-  };
-
-  show = () => this.state.show;
-
   render() {
     return (
       <>
@@ -46,27 +19,17 @@ class Header extends React.Component {
               className="logo"
             />
             <div className="linkContainer">
-              <Link className="link" to="/packages" onClick={this.notDrivers}>
+              <Link className="link" to="/packages">
                 Packages
               </Link>
-              <Link className="link" to="/cars" onClick={this.notDrivers}>
+              <Link className="link" to="/cars">
                 Cars
               </Link>
-              <Link className="link" to="/drivers" onClick={this.onDrivers}>
+              <Link className="link" to="/drivers">
                 Drivers
               </Link>
             </div>
           </Container>
-          {this.state.drivers ? (
-            <>
-              <Button variant="success" onClick={this.handleClick}>
-                Add
-              </Button>
-              <AddDrivers show={this.show()} handleClose={this.handleClick} />
-            </>
-          ) : (
-            <></>
-          )}
         </Navbar>
       </>
     );

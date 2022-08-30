@@ -1,4 +1,3 @@
-
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import DriversService from '../services/drivers.service'
 
@@ -16,11 +15,11 @@ export const getDrivers = createAsyncThunk(
     }
 )
 
-export const addDrivers = createAsyncThunk(
-    "addDrivers",
-    async (pack, { rejectWithValue, fulfillWithValue }) => {
+export const addDriver = createAsyncThunk(
+    "addDriver",
+    async (driver, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const res = await DriversService.addDrivers(pack);
+            const res = await DriversService.addDriver(driver);
             console.log(`Added successfuly`);
             return fulfillWithValue(res);
         } catch (err) {
@@ -30,11 +29,11 @@ export const addDrivers = createAsyncThunk(
     }
 );
 
-export const editDrivers = createAsyncThunk(
-    "editDrivers",
-    async (pack, { rejectWithValue, fulfillWithValue }) => {
+export const editDriver = createAsyncThunk(
+    "editDriver",
+    async (driver, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const res = await DriversService.editDrivers(pack);
+            const res = await DriversService.editDriver(driver);
             console.log(`Edited successfuly`);
             return fulfillWithValue(res);
         } catch (err) {
@@ -63,6 +62,7 @@ const driversSlice = createSlice({
     name: 'drivers',
     initialState: {
         isLoading: false,
+        isEditingDriver: false,
         drivers: [],
         errorMessage: '',
         successMessage: '',
@@ -86,7 +86,6 @@ const driversSlice = createSlice({
         builder.addCase(getDrivers.fulfilled, (state, action) => {
             console.log('--- get drivers fulfilled...')
             state.isLoading = false
-            state.isError = false;
             state.drivers = action.payload || []
             state.successMessage = action.payload.length === 0 ? 'No drivers found.' : 'Successfully retrieved drivers.';
         })
@@ -94,49 +93,47 @@ const driversSlice = createSlice({
         builder.addCase(getDrivers.rejected, (state, action) => {
             console.log('--- get drivers rejected...')
             state.isLoading = false
-            state.isError = true;
             state.drivers = []
-
-            state.errorMessage = 'Unable to retrieve drivers';
-            // TODO: handle error messages
+            state.errorMessage = 'Unable to retrieve drivers';    
         })
 
-        builder.addCase(addDrivers.pending, (state, action) => {
+        builder.addCase(addDriver.pending, (state, action) => {
             console.log("--- add driver pending...");
-            state.isError = false;
             state.isLoading = true;
         });
 
-        builder.addCase(addDrivers.fulfilled, (state, action) => {
+        builder.addCase(addDriver.fulfilled, (state, action) => {
             console.log("--- add driver fulfilled...");
-            state.isError = false;
             state.isLoading = false;
             state.drivers.push(action.payload);
         });
 
-        builder.addCase(addDrivers.rejected, (state, action) => {
+        builder.addCase(addDriver.rejected, (state, action) => {
             console.log("--- add driver rejected...");
-            state.isError = true;
             state.isLoading = false;
         });
 
-        builder.addCase(editDrivers.pending, (state, action) => {
+        builder.addCase(editDriver.pending, (state, action) => {
             console.log("--- edit driver pending...");
-            state.isError = false;
-            state.isLoading = true;
+            state.isEditingDriver = true;
+            state.errorMessage = '';
+            state.successMessage = '';
         });
 
-        builder.addCase(editDrivers.fulfilled, (state, action) => {
+        builder.addCase(editDriver.fulfilled, (state, action) => {
             console.log("--- edit driver fulfilled...");
-            state.isError = false;
-            state.isLoading = false;
-            state.drivers.push(action.payload);
-        });
+            state.isEditingDriver = false;
+            let indexOfUpdatedDriver = state.drivers.findIndex((driver) => driver.guid === action.payload.guid);
+            if (indexOfUpdatedDriver !== -1) {
+              state.drivers.splice(indexOfUpdatedDriver, 1, action.payload);
+              state.successMessage = `Successfully updated driver`;
+            }
+          });
 
-        builder.addCase(editDrivers.rejected, (state, action) => {
+        builder.addCase(editDriver.rejected, (state, action) => {
             console.log("--- edit driver rejected...");
-            state.isError = true;
-            state.isLoading = false;
+            state.isEditingCar = false;
+           state.errorMessage = 'Unable to edit driver.';
         });
 
         builder.addCase(deleteDrivers.pending, (state, action) => {

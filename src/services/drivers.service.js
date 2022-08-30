@@ -9,7 +9,7 @@ export const DRIVERS = [
         guid: "813a7c01-ea18-4962-b152-71efcb5c2b05",
         name: "Jack Sparrow",
         phoneNumber: "+1 301-909-1968",
-        carId: "62ee4afa-b261-4f0a-9581-386cf9e0c4c0",
+        carId: undefined,
     },
     {
         guid: "5f93d951-1dc6-4632-86dd-7b6b3fc51191",
@@ -21,7 +21,7 @@ export const DRIVERS = [
         guid: "7f71a066-74b6-43c8-bda3-8a6fe4fc1ed9",
         name: "Mellony Lee",
         phoneNumber: "+1 601-833-0545",
-        carId: "0e063045-c96a-4d34-8cc5-4ca2223616dc",
+        carId: undefined,
     },
     {
         guid: "1dfdfb6e-8791-4766-8fe4-9973b965e1ac",
@@ -39,7 +39,7 @@ export const DRIVERS = [
         guid: "fc80d8f4-d2c3-460d-8596-fb26d41df3d8",
         name: "Cheryl Kaden",
         phoneNumber: "+1 818-373-7905",
-        carId: "80575920-8b09-42be-90ae-e7000e9c0384",
+        carId: undefined,
     },
     {
         guid: "0bc15d56-f542-4228-802b-6ed877b87474",
@@ -81,16 +81,16 @@ export default class DriversService {
     }
 
     // simulate add
-    static addDrivers(pack) {
+    static addDriver(driver) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                return resolve(pack);
+                return resolve(driver);
             }, 1000);
         });
     }
 
     // simulate add failed
-    static addDriversFail() {
+    static addDriverFail(driver) {
         return new Promise((reject) => {
             setTimeout(() => {
                 return reject(`400 Bad Request: Couldn't add driver`);
@@ -99,22 +99,22 @@ export default class DriversService {
     }
 
     // simulate edit
-    static editDrivers(pack) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                return resolve(pack);
-            }, 1000);
-        });
-    }
+  static editDriver(driver) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(driver);
+      }, 2000);
+    });
+  }
 
-    // simulate edit failed
-    static editDriversFail(pack) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                return reject(`400 Bad Request: Couldn't edit driver`);
-            }, 1000);
-        });
-    }
+  // simulate edit failed
+  static editDriverFail(driver) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return reject(`400 Bad Request: Couldn't edit driver`);
+      }, 2000);
+    });
+  }
     // simulate delete
     static deleteDrivers(pack) {
         return new Promise((resolve) => {

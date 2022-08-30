@@ -7,15 +7,19 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
-
-import "./Drivers.css";
 import DeleteDrivers from "../modal/DeleteDrivers";
-import EditDrivers from "../modal/EditDrivers";
+import AddOrEditDrivers from "../modal/AddOrEditDrivers";
+import "../../style/common.css";
+import { nanoid } from "nanoid";
+
 import {
-  getDrivers, addDrivers, editDrivers, deleteDrivers, clearMessages,
+  getDrivers,
+  addDriver, 
+  editDriver, 
+  deleteDrivers, 
+  clearMessages,
 } from '../../redux/drivers.slice';
 
-import "../../style/common.css";
 
 
 /**
@@ -37,9 +41,13 @@ class Drivers extends Component {
     super(props);
     this.props._getDrivers();
 
+    if (this.props.drivers.length === 0) {
+      this.props._getDrivers();
+    }
+
     this.state = {
-      showDelete: false,
-      showEdit: false
+      showAddOrEditModal: false,
+      driverSelectedForEdit: undefined,
     };
   }
 
@@ -63,15 +71,29 @@ class Drivers extends Component {
     }
   }
 
-  handleDelete = () => {
-    this.setState({ showDelete: !this.state.showDelete });
-  }
+  onEditDriver = (driver) => {
+    this.setState({
+      showAddOrEditModal: true,
+      driverSelectedForEdit: driver,
+    });
+  };
 
-  handleEdit = () => {
-    this.setState({ showEdit: !this.state.showEdit });
-  }
+  onAddDriver = () => {
+    this.setState({
+      showAddOrEditModal: true,
+      driverSelectedForEdit: undefined,
+    });
+  };
+
+  onCloseAddOrEditModal = () => {
+    this.setState({
+      showAddOrEditModal: false,
+      driverSelectedForEdit: undefined,
+    });
+  };
 
   render() {
+    console.log(`--- render: ${this.state.showAddOrEditModal}`);
     return (
       <>
         {this.props.isLoading ? (
@@ -81,6 +103,36 @@ class Drivers extends Component {
             <Card.Header style={{ textAlign: "center" }}>
               List of Drivers
             </Card.Header>
+            <Button variant="success" size="lg" onClick={this.onAddDriver}>
+              Add Driver
+            </Button>
+            {this.state.showAddOrEditModal && (
+              <AddOrEditDrivers
+                isLoading={this.props.isEditingDriver}
+                handleClose={this.onCloseAddOrEditModal}
+                driver={
+                  this.state.driverSelectedForEdit ?? {
+                    guid: nanoid(),
+                    name: "",
+                    phoneNumber: "",
+                  }
+                }
+                title={this.state.driverSelectedForEdit ? "Edit Driver" : "Add Driver"}
+                handleSave={(driver) => {
+                  this.state.driverSelectedForEdit
+                    ? this.props._editDriver(driver).then((response) => {
+                      if (!response.error) {
+                        this.onCloseAddOrEditModal();
+                      }
+                    })
+                    : this.props._addDriver(driver).then((response) => {
+                      if (!response.error) {
+                        this.onCloseAddOrEditModal();
+                      }
+                    });
+                }}
+              />
+            )}
             <Table className="table" striped bordered hover variant="dark">
               <thead>
                 <tr>
@@ -92,18 +144,32 @@ class Drivers extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.drivers.map((item, i) => (
-                  <tr key={item.guid}>
+                {this.props.drivers.map((driver, i) => (
+                  <tr key={driver.guid}>
                     <td>{i + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.phoneNumber}</td>
-                    <td>{item.carId ? "Busy" : "Available"}</td>
+                    <td>{driver.name}</td>
+                    <td>{driver.phoneNumber}</td>
+                    <td>{driver.carId ? "Busy" : "Available"}</td>
                     <td>
-                      <Button variant="secondary" onClick={this.handleEdit}>Edit</Button>
-                      <EditDrivers show={this.state.showEdit} handleClose={this.handleEdit} />
-
-                      <Button onClick={this.handleDelete}>Delete</Button>
-                      <DeleteDrivers show={this.state.showDelete} handleClose={this.handleDelete} />
+                    <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => {
+                          this.onEditDriver(driver);
+                        }}
+                      >
+                        Edit
+                      </Button>{" "}
+                      &nbsp;{" "}
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        onClick={() => {
+                          this.props.onDelete(driver);
+                        }}
+                      >
+                        Delete
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -128,14 +194,14 @@ const mapDispatchToProps = (dispatch) => {
     _getDrivers: () => {
       return dispatch(getDrivers());
     },
-    _addDrivers: (pack) => {
-      return dispatch(addDrivers(pack));
+    _addDriver: (driver) => {
+      return dispatch(addDriver(driver));
     },
-    _editDrivers: (pack) => {
-      return dispatch(editDrivers(pack));
+    _editDriver: (driver) => {
+      return dispatch(editDriver(driver));
     },
-    _deleteDrivers: (pack) => {
-      return dispatch(deleteDrivers(pack));
+    _deleteDrivers: (driver) => {
+      return dispatch(deleteDrivers(driver));
     },
     _clearMessages: () => {
       return dispatch(clearMessages());
@@ -150,10 +216,13 @@ Drivers.propTypes = {
       guid: PropTypes.string.isRequired,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      carId: PropTypes.string,
+      status: PropTypes.string,
+     
     })
   ),
-  _getDrivers: PropTypes.func,
+  _getCars: PropTypes.func,
+  _addCar: PropTypes.func,
+  _editCar: PropTypes.func,
   isLoading: PropTypes.bool,
 };
 

@@ -175,7 +175,7 @@ class Cars extends React.Component {
             </Table>
           </Card>
         )}
-        <ToastContainer />
+        <ToastContainer theme="dark" />
       </>
     );
   }

@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
+import "../../style/common.css";
 
 class AddOrEditCar extends React.Component {
   constructor(props) {
@@ -17,11 +18,11 @@ class AddOrEditCar extends React.Component {
 
   render() {
     return (
-      <Modal backdrop={'static'} show={true} onHide={this.props.handleClose}>
-        <Modal.Header closeButton>
+      <Modal backdrop={"static"} show={true} onHide={this.props.handleClose}>
+        <Modal.Header className="modalHeader" closeButton>
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="modalBody">
           {this.props.isLoading ? (
             <div>Saving car...</div>
           ) : (
@@ -58,7 +59,7 @@ class AddOrEditCar extends React.Component {
             </Form>
           )}
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="modalFooter">
           <Button
             disabled={this.props.isLoading}
             variant="primary"

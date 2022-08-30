@@ -7,27 +7,42 @@ import { connect } from "react-redux";
 import { addPackage } from "../../redux/packages.slice";
 import { nanoid } from "nanoid";
 import "../../style/common.css";
+import { Formik } from "formik";
+import * as Yup from "yup";
+
+const packageSchema = Yup.object().shape({
+  awb: Yup.number()
+    .typeError("AWB must be a number!")
+    .required("Required!")
+    .min(2, "Too short!"),
+  senderName: Yup.string()
+    .required("Required!")
+    .min(2, "Too short!")
+    .matches(/^[A-Za-z- ]*$/, "Please enter a valid name"),
+  senderPhoneNumber: Yup.string()
+    .required("Required!")
+    .min(2, "Too short!")
+    .matches(/^[0-9 +-]*$/, "Please enter a valid phone number"),
+  departureAdress: Yup.string()
+    .required("Required!")
+    .min(2, "Too short!")
+    .matches(/^[0-9A-Za-z- ]*$/, "Please enter a valid address"),
+  departureDate: Yup.date().required("Required!"),
+  recipientName: Yup.string()
+    .required("Required!")
+    .min(2, "Too short!")
+    .matches(/^[A-Za-z- ]*$/, "Please enter a valid name"),
+  recipientPhoneNumber: Yup.string()
+    .required("Required!")
+    .min(2, "Too short!")
+    .matches(/^[0-9 +-]*$/, "Please enter a valid phone number"),
+  deliveryAdress: Yup.string()
+    .required("Required!")
+    .min(2, "Too short!")
+    .matches(/^[0-9A-Za-z- ]*$/, "Please enter a valid address"),
+});
 
 class AddPackage extends Component {
-  // TO DO add state object
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      pack: {
-        guid: nanoid(),
-        awb: "",
-        senderName: "",
-        senderPhoneNumber: "",
-        departureAdress: "",
-        departureDate: "",
-        recipientName: "",
-        recipientPhoneNumber: "",
-        deliveryAdress: "",
-      },
-    };
-  }
-
   render() {
     return (
       <Modal show={this.props.show} onHide={this.props.handleClose}>
@@ -35,135 +50,186 @@ class AddPackage extends Component {
           <Modal.Title>Add Package</Modal.Title>
         </Modal.Header>
         <Modal.Body className="modalBody">
-          <Form>
-            <Form.Group className="mb-3" controlId="formAWB">
-              <Form.Label>AWB</Form.Label>
-              <Form.Control
-                type="text"
-                onChange={(e) =>
-                  this.setState({
-                    pack: { ...this.state.pack, awb: e.target.value },
-                  })
-                }
-                placeholder="AWB"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formSender">
-              <Form.Label>Sender</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Sender"
-                onChange={(e) =>
-                  this.setState({
-                    pack: { ...this.state.pack, senderName: e.target.value },
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formSenderPhone">
-              <Form.Label>Sender Phone</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Phone"
-                onChange={(e) =>
-                  this.setState({
-                    pack: {
-                      ...this.state.pack,
-                      senderPhoneNumber: e.target.value,
-                    },
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formDepatureAddress">
-              <Form.Label>Departure Address</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Departure"
-                onChange={(e) =>
-                  this.setState({
-                    pack: {
-                      ...this.state.pack,
-                      departureAdress: e.target.value,
-                    },
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formDepDate">
-              <Form.Label>Departure Date</Form.Label>
-              <Form.Control
-                type="date"
-                placeholder="Date"
-                onChange={(e) =>
-                  this.setState({
-                    pack: {
-                      ...this.state.pack,
-                      departureDate: new Date(
-                        e.target.value
-                      ).toLocaleDateString(),
-                    },
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formRepicName">
-              <Form.Label>Recipient Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Name"
-                onChange={(e) =>
-                  this.setState({
-                    pack: { ...this.state.pack, recipientName: e.target.value },
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formRepicPhone">
-              <Form.Label>Recipient Phone</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Phone"
-                onChange={(e) =>
-                  this.setState({
-                    pack: {
-                      ...this.state.pack,
-                      recipientPhoneNumber: e.target.value,
-                    },
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formRepicAddress">
-              <Form.Label>Recipient Address</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Address"
-                onChange={(e) =>
-                  this.setState({
-                    pack: {
-                      ...this.state.pack,
-                      deliveryAdress: e.target.value,
-                    },
-                  })
-                }
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer className="modalFooter">
-          <Button variant="primary" onClick={this.props.handleClose}>
-            Close
-          </Button>
-          <Button
-            variant="success"
-            onClick={() => {
-              return this.props._addPackage(this.state.pack);
+          <Formik
+            initialValues={{
+              awb: "",
+              senderName: "",
+              senderPhoneNumber: "+1",
+              departureAdress: "",
+              departureDate: "",
+              recipientName: "",
+              recipientPhoneNumber: "",
+              deliveryAdress: "",
             }}
+            validationSchema={packageSchema}
           >
-            Save
-          </Button>
-        </Modal.Footer>
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              touched,
+              isValid,
+              errors,
+            }) => (
+              <Form noValidate onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formAWB">
+                  <Form.Label>AWB</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="awb"
+                    value={values.awb}
+                    onChange={handleChange}
+                    isValid={touched.awb && !errors.awb}
+                    placeholder="AWB"
+                  />
+                  {errors.awb && touched.awb ? <div>{errors.awb}</div> : null}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formSender">
+                  <Form.Label>Sender</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Sender"
+                    name="senderName"
+                    value={values.senderName}
+                    isValid={touched.senderName && !errors.senderName}
+                    onChange={handleChange}
+                  />
+                  {errors.senderName && touched.senderName ? (
+                    <div>{errors.senderName}</div>
+                  ) : null}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formSenderPhone">
+                  <Form.Label>Sender Phone</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Phone"
+                    name="senderPhoneNumber"
+                    value={values.senderPhoneNumber}
+                    isValid={
+                      touched.senderPhoneNumber && !errors.senderPhoneNumber
+                    }
+                    onChange={handleChange}
+                  />
+                  {errors.senderPhoneNumber && touched.senderPhoneNumber ? (
+                    <div>{errors.senderPhoneNumber}</div>
+                  ) : null}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formDepatureAddress">
+                  <Form.Label>Departure Address</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Departure"
+                    name="departureAdress"
+                    value={values.departureAdress}
+                    isValid={touched.departureAdress && !errors.departureAdress}
+                    onChange={handleChange}
+                  />
+                  {errors.departureAdress && touched.departureAdress ? (
+                    <div>{errors.departureAdress}</div>
+                  ) : null}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formDepDate">
+                  <Form.Label>Departure Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    placeholder="Date"
+                    name="departureDate"
+                    value={values.departureDate}
+                    isValid={touched.departureDate && !errors.departureDate}
+                    onChange={handleChange}
+                  />
+                  {errors.departureDate && touched.departureDate ? (
+                    <div>{errors.departureDate}</div>
+                  ) : null}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRepicName">
+                  <Form.Label>Recipient Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Name"
+                    name="recipientName"
+                    value={values.recipientName}
+                    isValid={touched.recipientName && !errors.recipientName}
+                    onChange={handleChange}
+                  />
+                  {errors.recipientName && touched.recipientName ? (
+                    <div>{errors.recipientName}</div>
+                  ) : null}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRepicPhone">
+                  <Form.Label>Recipient Phone</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Phone"
+                    name="recipientPhoneNumber"
+                    value={values.recipientPhoneNumber}
+                    isValid={
+                      touched.recipientPhoneNumber &&
+                      !errors.recipientPhoneNumber
+                    }
+                    onChange={handleChange}
+                  />
+                  {errors.recipientPhoneNumber &&
+                  touched.recipientPhoneNumber ? (
+                    <div>{errors.recipientPhoneNumber}</div>
+                  ) : null}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formRepicAddress">
+                  <Form.Label>Recipient Address</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Address"
+                    name="deliveryAdress"
+                    value={values.deliveryAdress}
+                    isValid={touched.deliveryAdress && !errors.deliveryAdress}
+                    onChange={handleChange}
+                  />
+                  {errors.deliveryAdress && touched.deliveryAdress ? (
+                    <div>{errors.deliveryAdress}</div>
+                  ) : null}
+                </Form.Group>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <Button
+                    type="submit"
+                    variant="success"
+                    style={{ marginRight: 10 }}
+                    onClick={() => {
+                      // check if inputs are empty on submit
+                      for (let value in values) {
+                        if (values[value] === "") {
+                          return;
+                        }
+                      }
+                      // check if there are errors from form validation
+                      if (Object.keys(errors).length !== 0) {
+                        return;
+                      }
+
+                      return this.props._addPackage({
+                        guid: nanoid(),
+                        awb: values.awb,
+                        senderName: values.senderName,
+                        senderPhoneNumber: values.senderPhoneNumber,
+                        departureAdress: values.departureAdress,
+                        departureDate: new Date(
+                          values.departureDate
+                        ).toLocaleDateString(),
+                        recipientName: values.recipientName,
+                        recipientPhoneNumber: values.recipientPhoneNumber,
+                        deliveryAdress: values.deliveryAdress,
+                      });
+                    }}
+                  >
+                    Save
+                  </Button>
+                  <Button variant="primary" onClick={this.props.handleClose}>
+                    Close
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </Modal.Body>
       </Modal>
     );
   }

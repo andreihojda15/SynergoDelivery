@@ -6,7 +6,6 @@ import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./Package.css";
 import "../../style/common.css";
 
 import {

@@ -24,8 +24,35 @@ import { getDrivers, addDrivers } from "../../redux/drivers.slice";
 class Drivers extends Component {
   constructor(props) {
     super(props);
-    this.props._getDrivers();
+
+    this.state = {
+      errorMessage: undefined,
+    };
   }
+
+  componentDidMount() {
+    this.retrieveDrivers();
+  }
+
+  retrieveDrivers = () => {
+    if (this.props.drivers.length === 0) {
+      this.setState({
+        errorMessage: undefined,
+      });
+      this.props._getDrivers().then((res) => {
+        if (res.error) {
+          this.setState({
+            errorMessage: "Error when retrieving drivers",
+          });
+        }
+        if (res.payload.length === 0) {
+          this.setState({
+            errorMessage: "No drivers have been retrieved",
+          });
+        }
+      });
+    }
+  };
 
   render() {
     return (
@@ -33,31 +60,47 @@ class Drivers extends Component {
         {this.props.isLoading ? (
           <Spinner className="spinner" animation="border" variant="info" />
         ) : (
-          <Card bg="dark" text="white" className="cardTable">
-            <Card.Header style={{ textAlign: "center" }}>
-              List of Drivers
-            </Card.Header>
-            <Table className="table" striped bordered hover variant="dark">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Phone Number</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.drivers.map((item, i) => (
-                  <tr key={item.guid}>
-                    <td>{i + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.phoneNumber}</td>
-                    <td>{item.carId ? "Busy" : "Available"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </Card>
+          <>
+            <Card bg="dark" text="white" className="cardTable">
+              <Card.Header style={{ textAlign: "center" }}>
+                List of Drivers
+              </Card.Header>
+              <Card.Body style={{ textAlign: "center" }} className="cardBody">
+                {this.state.errorMessage ? (
+                  <p className="errorText">{this.state.errorMessage}</p>
+                ) : (
+                  <>
+                    <Table
+                      className="tableData"
+                      striped
+                      bordered
+                      hover
+                      variant="dark"
+                    >
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                          <th>Phone Number</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.props.drivers.map((item, i) => (
+                          <tr key={item.guid}>
+                            <td>{i + 1}</td>
+                            <td>{item.name}</td>
+                            <td>{item.phoneNumber}</td>
+                            <td>{item.carId ? "Busy" : "Available"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+          </>
         )}
       </>
     );

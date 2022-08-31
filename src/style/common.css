@@ -5,14 +5,18 @@
 }
 
 .cardTable {
-  width: 80vw;
   z-index: 0;
-  padding: 10px 100px;
+  margin: 2rem 0px;
+  max-width: 100vw;
 }
 
-.table {
-  margin: 10px auto;
-  width: 70vw;
+.cardBody{
+  overflow: auto;
+  padding: 10px 10rem;
+}
+
+.tableData {
+  width: 60vw;
   height: 60vh;
 }
 
@@ -26,3 +30,12 @@
   background-color: #fff;
 }
 
+.errorCard {
+  padding: 2rem;
+}
+
+.errorDiv, .errorText {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: rgb(252, 69, 69);
+}

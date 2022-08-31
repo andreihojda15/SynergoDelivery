@@ -37,15 +37,31 @@ class Cars extends React.Component {
   constructor(props) {
     super(props);
 
-    if (this.props.cars.length === 0) {
-      this.props._getCars();
-    }
-
     this.state = {
       showAddOrEditModal: false,
       carSelectedForEdit: undefined,
+      errorMessage: undefined,
     };
   }
+
+  componentDidMount() {
+    this.retrieveCars();
+  }
+
+  retrieveCars = () => {
+    if (this.props.cars.length === 0) {
+      this.setState({
+        errorMessage: undefined,
+      });
+      this.props._getCars().then((res) => {
+        if (res.error) {
+          this.setState({
+            errorMessage: "Error when retrieving cars",
+          });
+        }
+      });
+    }
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevProps.errorMessage && this.props.errorMessage) {
@@ -95,85 +111,103 @@ class Cars extends React.Component {
         {this.props.isLoading ? (
           <Spinner className="spinner" animation="border" variant="info" />
         ) : (
-          <Card bg="dark" text="white" className="cardTable">
-            <Card.Header style={{ textAlign: "center" }}>
-              List of Cars
-            </Card.Header>
-            <Button variant="success" onClick={this.onAddCar}>
-              Add Car
-            </Button>
-            {this.state.showAddOrEditModal && (
-              <AddOrEditCar
-                isLoading={this.props.isEditingCar}
-                handleClose={this.onCloseAddOrEditModal}
-                car={
-                  this.state.carSelectedForEdit ?? {
-                    guid: uuid4(),
-                    registrationNumber: "",
-                    status: "",
-                  }
-                }
-                title={this.state.carSelectedForEdit ? "Edit Car" : "Add Car"}
-                handleSave={(car) => {
-                  this.state.carSelectedForEdit
-                    ? this.props._editCar(car).then((response) => {
-                        if (!response.error) {
-                          this.onCloseAddOrEditModal();
+          <>
+            <Card bg="dark" text="white" className="cardTable">
+              <Card.Header style={{ textAlign: "center" }}>
+                List of Cars
+              </Card.Header>
+              <Card.Body style={{ textAlign: "center" }}>
+                {this.state.errorMessage ? (
+                  <p className="errorText">{this.state.errorMessage}</p>
+                ) : (
+                  <>
+                    <Button variant="success" onClick={this.onAddCar}>
+                      Add Car
+                    </Button>
+                    {this.state.showAddOrEditModal && (
+                      <AddOrEditCar
+                        isLoading={this.props.isEditingCar}
+                        handleClose={this.onCloseAddOrEditModal}
+                        car={
+                          this.state.carSelectedForEdit ?? {
+                            guid: uuid4(),
+                            registrationNumber: "",
+                            status: "",
+                          }
                         }
-                      })
-                    : this.props._addCar(car).then((response) => {
-                        if (!response.error) {
-                          this.onCloseAddOrEditModal();
+                        title={
+                          this.state.carSelectedForEdit ? "Edit Car" : "Add Car"
                         }
-                      });
-                }}
-              />
-            )}
-            <Table className="table" striped bordered hover variant="dark">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Registration number</th>
-                  <th>Status</th>
-                  <th>Number of Packages</th>
-                  <th>Assigned to a Driver</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.cars.map((car, i) => (
-                  <tr key={car.guid}>
-                    <td>{i + 1}</td>
-                    <td>{car.registrationNumber}</td>
-                    <td>{car.status}</td>
-                    <td>{car.packageIds?.length}</td>
-                    <td>{car.driverId ? "Yes" : "No"}</td>
-                    <td>
-                      <Button
-                        size="sm"
-                        variant="primary"
-                        onClick={() => {
-                          this.onEditCar(car);
+                        handleSave={(car) => {
+                          this.state.carSelectedForEdit
+                            ? this.props._editCar(car).then((response) => {
+                                if (!response.error) {
+                                  this.onCloseAddOrEditModal();
+                                }
+                              })
+                            : this.props._addCar(car).then((response) => {
+                                if (!response.error) {
+                                  this.onCloseAddOrEditModal();
+                                }
+                              });
                         }}
-                      >
-                        Edit
-                      </Button>{" "}
-                      &nbsp;{" "}
-                      <Button
-                        size="sm"
-                        variant="primary"
-                        onClick={() => {
-                          this.props.onDelete(car);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </Card>
+                      />
+                    )}
+                    <Table
+                      className="table"
+                      striped
+                      bordered
+                      hover
+                      variant="dark"
+                    >
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Registration number</th>
+                          <th>Status</th>
+                          <th>Number of Packages</th>
+                          <th>Assigned to a Driver</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.props.cars.map((car, i) => (
+                          <tr key={car.guid}>
+                            <td>{i + 1}</td>
+                            <td>{car.registrationNumber}</td>
+                            <td>{car.status}</td>
+                            <td>{car.packageIds?.length}</td>
+                            <td>{car.driverId ? "Yes" : "No"}</td>
+                            <td>
+                              <Button
+                                size="sm"
+                                variant="primary"
+                                onClick={() => {
+                                  this.onEditCar(car);
+                                }}
+                              >
+                                Edit
+                              </Button>{" "}
+                              &nbsp;{" "}
+                              <Button
+                                size="sm"
+                                variant="primary"
+                                onClick={() => {
+                                  this.props.onDelete(car);
+                                }}
+                              >
+                                Delete
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+          </>
         )}
         <ToastContainer theme="dark" />
       </>

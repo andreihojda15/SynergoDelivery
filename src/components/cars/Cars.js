@@ -103,7 +103,7 @@ class Cars extends React.Component {
 
   onDelete = (car) => {
     this.setState({
-      showDeleteModel: true,
+      showDeleteCar: true,
       carSelectedForDelete: car,
     })
   }
@@ -241,7 +241,7 @@ class Cars extends React.Component {
                                 size="sm"
                                 variant="primary"
                                 onClick={() => {
-                                  this.props.onDelete(car);
+                                  this.onDelete(car);
                                 }}
                               >
                                 Delete

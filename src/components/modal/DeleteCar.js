@@ -20,8 +20,8 @@ class DeleteCar extends React.Component {
     render() {
 
         return (
-            <Modal>
-                <Modal.Header>
+            <Modal backdrop={"static"} show={true} onHide={this.props.handleClose}>
+                <Modal.Header closeButton>
                     <Modal.Title>
                         Delete Car
                     </Modal.Title>

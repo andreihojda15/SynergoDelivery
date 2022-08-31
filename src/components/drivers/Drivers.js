@@ -45,6 +45,11 @@ class Drivers extends Component {
             errorMessage: "Error when retrieving drivers",
           });
         }
+        if (res.payload.length === 0) {
+          this.setState({
+            errorMessage: "No drivers have been retrieved",
+          });
+        }
       });
     }
   };

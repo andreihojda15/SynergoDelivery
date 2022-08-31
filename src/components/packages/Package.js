@@ -72,6 +72,11 @@ class Packages extends Component {
             errorMessage: "Error when retrieving packages",
           });
         }
+        if (res.payload.length === 0) {
+          this.setState({
+            errorMessage: "No packages have been retrieved",
+          });
+        }
       });
     }
   };

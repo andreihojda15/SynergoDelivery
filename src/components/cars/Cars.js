@@ -59,6 +59,11 @@ class Cars extends React.Component {
             errorMessage: "Error when retrieving cars",
           });
         }
+        if (res.payload.length === 0) {
+          this.setState({
+            errorMessage: "No cars have been retrieved",
+          });
+        }
       });
     }
   };

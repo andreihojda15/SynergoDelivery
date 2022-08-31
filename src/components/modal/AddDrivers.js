@@ -45,6 +45,13 @@ class AddDrivers extends Component {
               phoneNumber: "",
             }}
             validationSchema={driverSchema}
+            onSubmit={(values) => {
+              return this.props._addDrivers({
+                guid: uuid4(),
+                name: values.name,
+                phoneNumber: values.phoneNumber,
+              });
+            }}
           >
             {({
               handleSubmit,
@@ -66,7 +73,7 @@ class AddDrivers extends Component {
                     onChange={handleChange}
                   />
                   {errors.name && touched.name ? (
-                    <div>{errors.name}</div>
+                    <div className="errorDiv">{errors.name}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formPhoneNumber">
@@ -80,7 +87,7 @@ class AddDrivers extends Component {
                     onChange={handleChange}
                   />
                   {errors.phoneNumber && touched.phoneNumber ? (
-                    <div>{errors.phoneNumber}</div>
+                    <div className="errorDiv">{errors.phoneNumber}</div>
                   ) : null}
                 </Form.Group>
                 <div style={{ display: "flex", justifyContent: "center" }}>
@@ -88,23 +95,6 @@ class AddDrivers extends Component {
                     type="submit"
                     variant="success"
                     style={{ marginRight: 10 }}
-                    onClick={() => {
-                      // check if inputs are empty on submit
-                      for (let value in values) {
-                        if (values[value] === "") {
-                          return;
-                        }
-                      }
-                      // check if there are errors from form validation
-                      if (Object.keys(errors).length !== 0) {
-                        return;
-                      }
-                      return this.props._addDrivers({
-                        guid: uuid4(),
-                        name: values.name,
-                        phoneNumber: values.phoneNumber,
-                      });
-                    }}
                   >
                     Save
                   </Button>

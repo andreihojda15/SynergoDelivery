@@ -97,7 +97,7 @@ export default class CarsService {
     });
   }
 
-  // simulate add
+  // simulate edit
   static editCar(car) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -112,6 +112,24 @@ export default class CarsService {
       setTimeout(() => {
         return reject(`400 Bad Request: Couldn't edit car`);
       }, 1000);
+    });
+  }
+
+  // simulate delete
+  static deleteCar(car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(car);
+      }, 2000);
+    });
+  }
+
+  // simulate delete failed
+  static deleteCarFail(car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return reject(`400 Bad Request: Couldn't delete car`);
+      }, 2000);
     });
   }
 }

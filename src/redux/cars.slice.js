@@ -9,7 +9,7 @@ export const getCars = createAsyncThunk(
       const response = await CarsService.getCars()
       console.log(`--- successful response: ${JSON.stringify(response)}`)
       return fulfillWithValue(response)
-    } catch(err) {
+    } catch (err) {
       console.log(`--- error response: ${JSON.stringify(err)}`)
       return rejectWithValue(err)
     }
@@ -38,7 +38,21 @@ export const editCar = createAsyncThunk(
       const response = await CarsService.editCar(car)
       console.log(`--- successful response: ${JSON.stringify(response)}`)
       return fulfillWithValue(response)
-    } catch(err) {
+    } catch (err) {
+      console.log(`--- error response: ${JSON.stringify(err)}`)
+      return rejectWithValue(err)
+    }
+  }
+);
+
+export const deleteCar = createAsyncThunk(
+  'deleteCar',
+  async (car, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await CarsService.deleteCar(car)
+      console.log(`--- successful response: ${JSON.stringify(response)}`)
+      return fulfillWithValue(response)
+    } catch (err) {
       console.log(`--- error response: ${JSON.stringify(err)}`)
       return rejectWithValue(err)
     }
@@ -50,6 +64,7 @@ const carsSlice = createSlice({
   initialState: {
     isLoading: false,
     isEditingCar: false,
+    isDeletingCar: false,
     cars: [],
     errorMessage: '',
     successMessage: '',
@@ -59,8 +74,9 @@ const carsSlice = createSlice({
     clearMessages: (state, action) => {
       state.errorMessage = '';
       state.successMessage = '';
+    }
   },
-},
+
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(getCars.pending, (state, action) => {
@@ -89,20 +105,17 @@ const carsSlice = createSlice({
 
     builder.addCase(addCar.pending, (state, action) => {
       console.log("--- add car pending...");
-      state.isError = false;
       state.isLoading = true;
     });
 
     builder.addCase(addCar.fulfilled, (state, action) => {
       console.log("--- add car fulfilled...");
-      state.isError = false;
       state.isLoading = false;
       state.cars.push(action.payload); // state.cars = [...state.cars, action.payload]
     });
 
     builder.addCase(addCar.rejected, (state, action) => {
       console.log("--- add car rejected...");
-      state.isError = true;
       state.isLoading = false;
     });
 
@@ -128,7 +141,32 @@ const carsSlice = createSlice({
       state.isEditingCar = false;
       state.errorMessage = 'Unable to edit car.';
     });
+
+    builder.addCase(deleteCar.pending, (state, action) => {
+      console.log("--- delete car pending...");
+      state.isDeletedCar = true;
+      state.errorMessage = '';
+      state.successMessage = '';
+    });
+
+    builder.addCase(deleteCar.fulfilled, (state, action) => {
+      console.log("--- delete car fulfilled...");
+      state.isDeletedCar = false;
+      let indexOfDeletedCar = state.cars.findIndex((car) => car.guid === action.payload.guid);
+      if (indexOfDeletedCar !== -1) {
+        state.cars.splice(indexOfDeletedCar, 1);
+        state.successMessage = `Successfully deleted the car`;
+      }
+    });
+
+    builder.addCase(deleteCar.rejected, (state, action) => {
+      console.log("--- delete car rejected...");
+      state.isDeletedCar = false;
+      state.errorMessage = 'Unable to delete car.';
+    });
+
   },
+
 });
 
 // Action creators are generated for each case reducer function

@@ -8,9 +8,11 @@ import {
   addCar,
   editCar,
   getCars,
+  deleteCar,
   clearMessages,
 } from "../../redux/cars.slice";
 import AddOrEditCar from "../modal/AddOrEditCar";
+import DeleteCar from "../modal/DeleteCar";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
@@ -37,11 +39,15 @@ class Cars extends React.Component {
   constructor(props) {
     super(props);
 
+
     this.state = {
       showAddOrEditModal: false,
       carSelectedForEdit: undefined,
       errorMessage: undefined,
+      showDeleteCar: false,
+      carSelectedForDelete: undefined,
     };
+
   }
 
   componentDidMount() {
@@ -95,6 +101,13 @@ class Cars extends React.Component {
     });
   };
 
+  onDelete = (car) => {
+    this.setState({
+      showDeleteModel: true,
+      carSelectedForDelete: car,
+    })
+  }
+
   onAddCar = () => {
     this.setState({
       showAddOrEditModal: true,
@@ -109,8 +122,10 @@ class Cars extends React.Component {
     });
   };
 
+
   render() {
     console.log(`--- render: ${this.state.showAddOrEditModal}`);
+
     return (
       <>
         {this.props.isLoading ? (
@@ -120,15 +135,43 @@ class Cars extends React.Component {
             <Card bg="dark" text="white" className="cardTable">
               <Card.Header style={{ textAlign: "center" }}>
                 List of Cars
+                <Button variant="success" onClick={this.onAddCar}>
+                  Add Car
+                </Button>
               </Card.Header>
+              {this.state.showAddOrEditModal && (
+                <AddOrEditCar
+                  isLoading={this.props.isEditingCar}
+                  handleClose={this.onCloseAddOrEditModal}
+                  car={
+                    this.state.carSelectedForEdit ?? {
+                      guid: uuid4(),
+                      registrationNumber: "",
+                      status: "",
+                    }
+                  }
+                  title={this.state.carSelectedForEdit ? "Edit Car" : "Add Car"}
+                  handleSave={(car) => {
+                    this.state.carSelectedForEdit
+                      ? this.props._editCar(car).then((response) => {
+                        if (!response.error) {
+                          this.onCloseAddOrEditModal();
+                        }
+                      })
+                      : this.props._addCar(car).then((response) => {
+                        if (!response.error) {
+                          this.onCloseAddOrEditModal();
+                        }
+                      });
+                  }}
+                />
+              )}
+
               <Card.Body style={{ textAlign: "center" }} className="cardBody">
                 {this.state.errorMessage ? (
                   <p className="errorText">{this.state.errorMessage}</p>
                 ) : (
                   <>
-                    <Button variant="success" onClick={this.onAddCar}>
-                      Add Car
-                    </Button>
                     {this.state.showAddOrEditModal && (
                       <AddOrEditCar
                         isLoading={this.props.isEditingCar}
@@ -146,15 +189,15 @@ class Cars extends React.Component {
                         handleSave={(car) => {
                           this.state.carSelectedForEdit
                             ? this.props._editCar(car).then((response) => {
-                                if (!response.error) {
-                                  this.onCloseAddOrEditModal();
-                                }
-                              })
+                              if (!response.error) {
+                                this.onCloseAddOrEditModal();
+                              }
+                            })
                             : this.props._addCar(car).then((response) => {
-                                if (!response.error) {
-                                  this.onCloseAddOrEditModal();
-                                }
-                              });
+                              if (!response.error) {
+                                this.onCloseAddOrEditModal();
+                              }
+                            });
                         }}
                       />
                     )}
@@ -211,12 +254,29 @@ class Cars extends React.Component {
                   </>
                 )}
               </Card.Body>
+              {this.state.showDeleteCar && (
+                <DeleteCar
+                  show={this.state.showDeleteCar}
+                  handleClose={() => this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })}
+                  car={this.state.carSelectedForDelete}
+                  handleSave={(car) => {
+                    this.props._deleteCar(car).then((response) => {
+                      if (!response.error) {
+                        this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
+                      }
+                    })
+
+                  }}
+                />
+              )};
             </Card>
             <ToastContainer theme="dark" />
           </>
         )}
+
       </>
     );
+
   }
 }
 
@@ -237,6 +297,9 @@ const mapDispatchToProps = (dispatch) => {
     _editCar: (car) => {
       return dispatch(editCar(car));
     },
+    _deleteCar: (car) => {
+      return dispatch(deleteCar(car));
+    },
     _clearMessages: () => {
       return dispatch(clearMessages());
     },
@@ -256,7 +319,9 @@ Cars.propTypes = {
   _getCars: PropTypes.func,
   _addCar: PropTypes.func,
   _editCar: PropTypes.func,
+  _deleteCar: PropTypes.func,
   isLoading: PropTypes.bool,
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cars);

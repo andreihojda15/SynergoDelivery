@@ -131,7 +131,6 @@ class Packages extends Component {
                           packageStatus = "delivered";
                           assignedToCar = "no";
                         }
-                        console.log(p.guid);
                         return (
                           <tr key={p.guid}>
                             <td>{i + 1}</td>

@@ -62,6 +62,21 @@ class AddPackage extends Component {
               deliveryAdress: "",
             }}
             validationSchema={packageSchema}
+            onSubmit={(values) => {
+              return this.props._addPackage({
+                guid: uuid4(),
+                awb: values.awb,
+                senderName: values.senderName,
+                senderPhoneNumber: values.senderPhoneNumber,
+                departureAdress: values.departureAdress,
+                departureDate: new Date(
+                  values.departureDate
+                ).toLocaleDateString(),
+                recipientName: values.recipientName,
+                recipientPhoneNumber: values.recipientPhoneNumber,
+                deliveryAdress: values.deliveryAdress,
+              });
+            }}
           >
             {({
               handleSubmit,
@@ -82,7 +97,9 @@ class AddPackage extends Component {
                     isValid={touched.awb && !errors.awb}
                     placeholder="AWB"
                   />
-                  {errors.awb && touched.awb ? <div>{errors.awb}</div> : null}
+                  {errors.awb && touched.awb ? (
+                    <div className="errorDiv">{errors.awb}</div>
+                  ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formSender">
                   <Form.Label>Sender</Form.Label>
@@ -95,7 +112,7 @@ class AddPackage extends Component {
                     onChange={handleChange}
                   />
                   {errors.senderName && touched.senderName ? (
-                    <div>{errors.senderName}</div>
+                    <div className="errorDiv">{errors.senderName}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formSenderPhone">
@@ -111,7 +128,7 @@ class AddPackage extends Component {
                     onChange={handleChange}
                   />
                   {errors.senderPhoneNumber && touched.senderPhoneNumber ? (
-                    <div>{errors.senderPhoneNumber}</div>
+                    <div className="errorDiv">{errors.senderPhoneNumber}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formDepatureAddress">
@@ -125,7 +142,7 @@ class AddPackage extends Component {
                     onChange={handleChange}
                   />
                   {errors.departureAdress && touched.departureAdress ? (
-                    <div>{errors.departureAdress}</div>
+                    <div className="errorDiv">{errors.departureAdress}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formDepDate">
@@ -139,7 +156,7 @@ class AddPackage extends Component {
                     onChange={handleChange}
                   />
                   {errors.departureDate && touched.departureDate ? (
-                    <div>{errors.departureDate}</div>
+                    <div className="errorDiv">{errors.departureDate}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formRepicName">
@@ -153,7 +170,7 @@ class AddPackage extends Component {
                     onChange={handleChange}
                   />
                   {errors.recipientName && touched.recipientName ? (
-                    <div>{errors.recipientName}</div>
+                    <div className="errorDiv">{errors.recipientName}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formRepicPhone">
@@ -171,7 +188,9 @@ class AddPackage extends Component {
                   />
                   {errors.recipientPhoneNumber &&
                   touched.recipientPhoneNumber ? (
-                    <div>{errors.recipientPhoneNumber}</div>
+                    <div className="errorDiv">
+                      {errors.recipientPhoneNumber}
+                    </div>
                   ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formRepicAddress">
@@ -185,7 +204,7 @@ class AddPackage extends Component {
                     onChange={handleChange}
                   />
                   {errors.deliveryAdress && touched.deliveryAdress ? (
-                    <div>{errors.deliveryAdress}</div>
+                    <div className="errorDiv">{errors.deliveryAdress}</div>
                   ) : null}
                 </Form.Group>
                 <div style={{ display: "flex", justifyContent: "center" }}>
@@ -193,32 +212,6 @@ class AddPackage extends Component {
                     type="submit"
                     variant="success"
                     style={{ marginRight: 10 }}
-                    onClick={() => {
-                      // check if inputs are empty on submit
-                      for (let value in values) {
-                        if (values[value] === "") {
-                          return;
-                        }
-                      }
-                      // check if there are errors from form validation
-                      if (Object.keys(errors).length !== 0) {
-                        return;
-                      }
-
-                      return this.props._addPackage({
-                        guid: uuid4(),
-                        awb: values.awb,
-                        senderName: values.senderName,
-                        senderPhoneNumber: values.senderPhoneNumber,
-                        departureAdress: values.departureAdress,
-                        departureDate: new Date(
-                          values.departureDate
-                        ).toLocaleDateString(),
-                        recipientName: values.recipientName,
-                        recipientPhoneNumber: values.recipientPhoneNumber,
-                        deliveryAdress: values.deliveryAdress,
-                      });
-                    }}
                   >
                     Save
                   </Button>

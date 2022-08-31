@@ -29,3 +29,9 @@
 .errorCard {
   padding: 2rem;
 }
+
+.errorDiv {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: rgb(252, 69, 69);
+}

@@ -43,10 +43,12 @@ class AddOrEditCar extends React.Component {
           ) : (
             <Formik
               initialValues={{
-                registrationNumber: this.state.car.registrationNumber,
-                status: this.state.car.status,
+                ...this.state.car,
               }}
               validationSchema={carSchema}
+              onSubmit={(values) => {
+                return this.props.handleSave(values);
+              }}
             >
               {({
                 handleSubmit,
@@ -70,7 +72,9 @@ class AddOrEditCar extends React.Component {
                       placeholder="Registration number"
                     />
                     {errors.registrationNumber && touched.registrationNumber ? (
-                      <div>{errors.registrationNumber}</div>
+                      <div className="errorDiv">
+                        {errors.registrationNumber}
+                      </div>
                     ) : null}
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formSender">
@@ -84,7 +88,7 @@ class AddOrEditCar extends React.Component {
                       onChange={handleChange}
                     />
                     {errors.status && touched.status ? (
-                      <div>{errors.status}</div>
+                      <div className="errorDiv">{errors.status}</div>
                     ) : null}
                   </Form.Group>
                   <div style={{ display: "flex", justifyContent: "center" }}>
@@ -93,24 +97,6 @@ class AddOrEditCar extends React.Component {
                       type="submit"
                       variant="success"
                       style={{ marginRight: 10 }}
-                      onClick={() => {
-                        // check if inputs are empty on submit
-                        for (let value in values) {
-                          if (values[value] === "") {
-                            return;
-                          }
-                        }
-                        // check if there are errors from form validation
-                        if (Object.keys(errors).length !== 0) {
-                          return;
-                        }
-                        console.log(this.state.car);
-                        return this.props.handleSave({
-                          ...this.state.car,
-                          registrationNumber: values.registrationNumber,
-                          status: values.status,
-                        });
-                      }}
                     >
                       Save
                     </Button>

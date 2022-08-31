@@ -43,11 +43,11 @@ export const editDriver = createAsyncThunk(
     }
 );
 
-export const deleteDrivers = createAsyncThunk(
-    "deleteDrivers",
-    async (pack, { rejectWithValue, fulfillWithValue }) => {
+export const deleteDriver = createAsyncThunk(
+    "deleteDriver",
+    async (driver, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const res = await DriversService.deleteDrivers(pack);
+            const res = await DriversService.deleteDriver(driver);
             console.log(`Deleted successfuly`);
             return fulfillWithValue(res);
         } catch (err) {
@@ -63,6 +63,7 @@ const driversSlice = createSlice({
     initialState: {
         isLoading: false,
         isEditingDriver: false,
+        isDeletingDriver: false,
         drivers: [],
         errorMessage: '',
         successMessage: '',
@@ -94,7 +95,7 @@ const driversSlice = createSlice({
             console.log('--- get drivers rejected...')
             state.isLoading = false
             state.drivers = []
-            state.errorMessage = 'Unable to retrieve drivers';    
+            state.errorMessage = 'Unable to retrieve drivers';
         })
 
         builder.addCase(addDriver.pending, (state, action) => {
@@ -125,35 +126,40 @@ const driversSlice = createSlice({
             state.isEditingDriver = false;
             let indexOfUpdatedDriver = state.drivers.findIndex((driver) => driver.guid === action.payload.guid);
             if (indexOfUpdatedDriver !== -1) {
-              state.drivers.splice(indexOfUpdatedDriver, 1, action.payload);
-              state.successMessage = `Successfully updated driver`;
+                state.drivers.splice(indexOfUpdatedDriver, 1, action.payload);
+                state.successMessage = `Successfully updated driver`;
             }
-          });
+        });
 
         builder.addCase(editDriver.rejected, (state, action) => {
             console.log("--- edit driver rejected...");
-            state.isEditingCar = false;
-           state.errorMessage = 'Unable to edit driver.';
+            state.isEditingDriver = false;
+            state.errorMessage = 'Unable to edit driver.';
         });
 
-        builder.addCase(deleteDrivers.pending, (state, action) => {
+        builder.addCase(deleteDriver.pending, (state, action) => {
             console.log("--- delete driver pending...");
-            state.isError = false;
-            state.isLoading = true;
+            state.isDeletingDriver = true;
+            state.errorMessage = '';
+            state.successMessage = '';
         });
 
-        builder.addCase(deleteDrivers.fulfilled, (state, action) => {
+        builder.addCase(deleteDriver.fulfilled, (state, action) => {
             console.log("--- delete driver fulfilled...");
-            state.isError = false;
-            state.isLoading = false;
-            state.drivers.push(action.payload);
+            state.isDeletingDriver = false;
+            let indexOfDeletedDriver = state.drivers.findIndex((driver) => driver.guid === action.payload.guid);
+            if (indexOfDeletedDriver !== -1) {
+                state.drivers.splice(indexOfDeletedDriver, 1); 
+                state.successMessage = `Successfully deleted driver`;
+            }
         });
 
-        builder.addCase(deleteDrivers.rejected, (state, action) => {
+        builder.addCase(deleteDriver.rejected, (state, action) => {
             console.log("--- delete driver rejected...");
-            state.isError = true;
-            state.isLoading = false;
+            state.isDeletingDriver = false;
+            state.errorMessage = 'Unable to delete driver.';
         });
+
     },
 })
 

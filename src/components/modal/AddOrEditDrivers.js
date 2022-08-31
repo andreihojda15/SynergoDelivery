@@ -44,16 +44,12 @@ class AddOrEditDrivers extends Component {
                     ) : (
                         <Formik
                             initialValues={{
-                                name: "",
-                                phoneNumber: "",
+                              ...this.state.driver
                             }}
                             validationSchema={driverSchema}
                             onSubmit={(values) => {
-                                return this.props._addDrivers({
-                                    guid: uuid4(),
-                                    name: values.name,
-                                    phoneNumber: values.phoneNumber,
-                                });
+                                return this.props.handleSave(values
+                                );
                             }}
                         >
                             {({
@@ -111,22 +107,6 @@ class AddOrEditDrivers extends Component {
                         </Formik>
                     )}
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        disabled={this.props.isLoading}
-                        variant="primary"
-                        onClick={() => this.props.handleClose()}
-                    >
-                        Close
-                    </Button>
-                    <Button
-                        disabled={this.props.isLoading}
-                        variant="success"
-                        onClick={() => this.props.handleSave(this.state.driver)}
-                    >
-                        Save
-                    </Button>
-                </Modal.Footer>
             </Modal>
         )
     }

@@ -115,23 +115,23 @@ export default class DriversService {
       }, 2000);
     });
   }
-    // simulate delete
-    static deleteDrivers(pack) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                return resolve(pack);
-            }, 1000);
-        });
-    }
 
-    // simulate delete failed
-    static deleteDriversFail(pack) {
+     // simulate delete
+     static deleteDriver(driver) {
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                return reject(`400 Bad Request: Couldn't delete driver`);
-            }, 1000);
+          setTimeout(() => {
+            return resolve(driver);
+          }, 2000);
         });
-    }
-
-
+      }
+    
+      // simulate delete failed
+      static deleteDriverFail(driver) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            return reject(`400 Bad Request: Couldn't delete driver`);
+          }, 2000);
+        });
+      }
 }
+

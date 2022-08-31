@@ -6,13 +6,13 @@
 
 .cardTable {
   z-index: 0;
-  padding: 1rem 5rem;
   margin: 2rem 0px;
   max-width: 100vw;
 }
 
 .cardBody{
   overflow: auto;
+  padding: 10px 10rem;
 }
 
 .tableData {

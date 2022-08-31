@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
 import "../../style/common.css";
-import { nanoid } from "nanoid";
 import { Formik } from "formik";
 import * as Yup from "yup";
 

@@ -3,9 +3,7 @@ import "./HeaderStyle.css";
 import { Navbar } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
-import AddDrivers from "../modal/AddDrivers";
 
 class Header extends React.Component {
   render() {

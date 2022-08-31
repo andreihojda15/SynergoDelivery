@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import "../../style/common.css";
-import { nanoid } from "nanoid";
+import { uuid4 } from "uuid4";
 
 /**
  * Car model:
@@ -108,7 +108,7 @@ class Cars extends React.Component {
                 handleClose={this.onCloseAddOrEditModal}
                 car={
                   this.state.carSelectedForEdit ?? {
-                    guid: nanoid(),
+                    guid: uuid4(),
                     registrationNumber: "",
                     status: "",
                   }
@@ -117,15 +117,15 @@ class Cars extends React.Component {
                 handleSave={(car) => {
                   this.state.carSelectedForEdit
                     ? this.props._editCar(car).then((response) => {
-                      if (!response.error) {
-                        this.onCloseAddOrEditModal();
-                      }
-                    })
+                        if (!response.error) {
+                          this.onCloseAddOrEditModal();
+                        }
+                      })
                     : this.props._addCar(car).then((response) => {
-                      if (!response.error) {
-                        this.onCloseAddOrEditModal();
-                      }
-                    });
+                        if (!response.error) {
+                          this.onCloseAddOrEditModal();
+                        }
+                      });
                 }}
               />
             )}

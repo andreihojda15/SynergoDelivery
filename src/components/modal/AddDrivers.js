@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { connect } from "react-redux";
 import { addDrivers } from "../../redux/drivers.slice";
 import "../../style/common.css";
-import { nanoid } from "nanoid";
+import { uuid4 } from "uuid4";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -100,7 +100,7 @@ class AddDrivers extends Component {
                         return;
                       }
                       return this.props._addDrivers({
-                        guid: nanoid(),
+                        guid: uuid4(),
                         name: values.name,
                         phoneNumber: values.phoneNumber,
                       });

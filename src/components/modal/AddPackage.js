@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { connect } from "react-redux";
 import { addPackage } from "../../redux/packages.slice";
-import { nanoid } from "nanoid";
+import { uuid4 } from "uuid4";
 import "../../style/common.css";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -206,7 +206,7 @@ class AddPackage extends Component {
                       }
 
                       return this.props._addPackage({
-                        guid: nanoid(),
+                        guid: uuid4(),
                         awb: values.awb,
                         senderName: values.senderName,
                         senderPhoneNumber: values.senderPhoneNumber,

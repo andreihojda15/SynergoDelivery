@@ -121,7 +121,7 @@ class Cars extends React.Component {
               <Card.Header style={{ textAlign: "center" }}>
                 List of Cars
               </Card.Header>
-              <Card.Body style={{ textAlign: "center" }}>
+              <Card.Body style={{ textAlign: "center" }} className="cardBody">
                 {this.state.errorMessage ? (
                   <p className="errorText">{this.state.errorMessage}</p>
                 ) : (
@@ -159,7 +159,7 @@ class Cars extends React.Component {
                       />
                     )}
                     <Table
-                      className="table"
+                      className="tableData"
                       striped
                       bordered
                       hover
@@ -212,9 +212,9 @@ class Cars extends React.Component {
                 )}
               </Card.Body>
             </Card>
+            <ToastContainer theme="dark" />
           </>
         )}
-        <ToastContainer theme="dark" />
       </>
     );
   }

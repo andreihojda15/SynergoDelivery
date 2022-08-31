@@ -107,74 +107,80 @@ class Packages extends Component {
         {this.props.isLoading ? (
           <Spinner className="spinner" animation="border" variant="info" />
         ) : (
-          <>
-            <Card bg="dark" text="white" className="cardTable">
-              <Card.Header style={{ textAlign: "center" }}>
-                List of Packages
-              </Card.Header>
-              <>
-                <Card.Body style={{ textAlign: "center" }}>
-                  {this.state.errorMessage ? (
-                    <p className="errorText">{this.state.errorMessage}</p>
-                  ) : (
-                    <Table striped bordered hover variant="dark">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>AWB</th>
-                          <th>Sender</th>
-                          <th>Sender Phone</th>
-                          <th>Departure Adress</th>
-                          <th>Departure Date</th>
-                          <th>Recipient Name</th>
-                          <th>Recipient Phone</th>
-                          <th>Recipient Adress</th>
-                          <th>Assigned to a car</th>
-                          <th>Package Status</th>
+          <Card bg="dark" text="white" className="cardTable">
+            <Card.Header
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <p>List of Packages</p>
+            </Card.Header>
+            <Card.Body style={{ textAlign: "center" }} className="cardBody">
+              {this.state.errorMessage ? (
+                <p className="errorText">{this.state.errorMessage}</p>
+              ) : (
+                <Table
+                  striped
+                  bordered
+                  hover
+                  variant="dark"
+                  className="tableData"
+                >
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>AWB</th>
+                      <th>Sender</th>
+                      <th>Sender Phone</th>
+                      <th>Departure Adress</th>
+                      <th>Departure Date</th>
+                      <th>Recipient Name</th>
+                      <th>Recipient Phone</th>
+                      <th>Recipient Adress</th>
+                      <th>Assigned to a car</th>
+                      <th>Package Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.packages.map((p, i) => {
+                      let packageStatus;
+                      let assignedToCar;
+                      if (
+                        p.deliveryDate === undefined &&
+                        p.carID === undefined
+                      ) {
+                        packageStatus = "sent";
+                        assignedToCar = "no";
+                      }
+                      if (p.deliveryDate === undefined && p.carID) {
+                        packageStatus = "in delivery";
+                        assignedToCar = "yes";
+                      }
+                      if (p.deliveryDate) {
+                        packageStatus = "delivered";
+                        assignedToCar = "no";
+                      }
+                      return (
+                        <tr key={p.guid}>
+                          <td>{i + 1}</td>
+                          <td>{p.awb}</td>
+                          <td>{p.senderName}</td>
+                          <td>{p.senderPhoneNumber}</td>
+                          <td>{p.departureAdress}</td>
+                          <td>{p.departureDate}</td>
+                          <td>{p.recipientName}</td>
+                          <td>{p.recipientPhoneNumber}</td>
+                          <td>{p.deliveryAdress}</td>
+                          <td>{assignedToCar}</td>
+                          <td>{packageStatus}</td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {this.props.packages.map((p, i) => {
-                          let packageStatus;
-                          let assignedToCar;
-                          if (
-                            p.deliveryDate === undefined &&
-                            p.carID === undefined
-                          ) {
-                            packageStatus = "sent";
-                            assignedToCar = "no";
-                          }
-                          if (p.deliveryDate === undefined && p.carID) {
-                            packageStatus = "in delivery";
-                            assignedToCar = "yes";
-                          }
-                          if (p.deliveryDate) {
-                            packageStatus = "delivered";
-                            assignedToCar = "no";
-                          }
-                          return (
-                            <tr key={p.guid}>
-                              <td>{i + 1}</td>
-                              <td>{p.awb}</td>
-                              <td>{p.senderName}</td>
-                              <td>{p.senderPhoneNumber}</td>
-                              <td>{p.departureAdress}</td>
-                              <td>{p.departureDate}</td>
-                              <td>{p.recipientName}</td>
-                              <td>{p.recipientPhoneNumber}</td>
-                              <td>{p.deliveryAdress}</td>
-                              <td>{assignedToCar}</td>
-                              <td>{packageStatus}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  )}
-                </Card.Body>
-              </>
-            </Card>
-          </>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              )}
+            </Card.Body>
+          </Card>
         )}
         <ToastContainer theme="dark" />
       </>

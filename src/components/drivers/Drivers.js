@@ -65,13 +65,13 @@ class Drivers extends Component {
               <Card.Header style={{ textAlign: "center" }}>
                 List of Drivers
               </Card.Header>
-              <Card.Body style={{ textAlign: "center" }}>
+              <Card.Body style={{ textAlign: "center" }} className="cardBody">
                 {this.state.errorMessage ? (
                   <p className="errorText">{this.state.errorMessage}</p>
                 ) : (
                   <>
                     <Table
-                      className="table"
+                      className="tableData"
                       striped
                       bordered
                       hover

@@ -10,15 +10,16 @@ import Card from "react-bootstrap/Card";
 import DeleteDrivers from "../modal/DeleteDrivers";
 import AddOrEditDrivers from "../modal/AddOrEditDrivers";
 import "../../style/common.css";
-import { nanoid } from "nanoid";
+
 
 import {
   getDrivers,
-  addDriver, 
-  editDriver, 
-  deleteDrivers, 
+  addDriver,
+  editDriver,
+  deleteDrivers,
   clearMessages,
 } from '../../redux/drivers.slice';
+import uuid4 from "uuid4";
 
 
 
@@ -39,15 +40,12 @@ import {
 class Drivers extends Component {
   constructor(props) {
     super(props);
-    this.props._getDrivers();
 
-    if (this.props.drivers.length === 0) {
-      this.props._getDrivers();
-    }
 
     this.state = {
       showAddOrEditModal: false,
       driverSelectedForEdit: undefined,
+      errorMessage: undefined,
     };
   }
 
@@ -90,6 +88,30 @@ class Drivers extends Component {
       showAddOrEditModal: false,
       driverSelectedForEdit: undefined,
     });
+  }
+
+  componentDidMount() {
+    this.retrieveDrivers();
+  }
+
+  retrieveDrivers = () => {
+    if (this.props.drivers.length === 0) {
+      this.setState({
+        errorMessage: undefined,
+      });
+      this.props._getDrivers().then((res) => {
+        if (res.error) {
+          this.setState({
+            errorMessage: "Error when retrieving drivers",
+          });
+        }
+        if (res.payload.length === 0) {
+          this.setState({
+            errorMessage: "No drivers have been retrieved",
+          });
+        }
+      });
+    }
   };
 
   render() {
@@ -99,20 +121,21 @@ class Drivers extends Component {
         {this.props.isLoading ? (
           <Spinner className="spinner" animation="border" variant="info" />
         ) : (
-          <Card bg="dark" text="white" className="cardTable">
-            <Card.Header style={{ textAlign: "center" }}>
-              List of Drivers
-            </Card.Header>
-            <Button variant="success" size="lg" onClick={this.onAddDriver}>
+          <>
+            <Card bg="dark" text="white" className="cardTable">
+              <Card.Header style={{ textAlign: "center" }}>
+                List of Drivers
+                <Button variant="success" size="lg" onClick={this.onAddDriver}>
               Add Driver
             </Button>
+              </Card.Header>
             {this.state.showAddOrEditModal && (
               <AddOrEditDrivers
                 isLoading={this.props.isEditingDriver}
                 handleClose={this.onCloseAddOrEditModal}
                 driver={
                   this.state.driverSelectedForEdit ?? {
-                    guid: nanoid(),
+                    guid: uuid4(),
                     name: "",
                     phoneNumber: "",
                   }
@@ -133,24 +156,35 @@ class Drivers extends Component {
                 }}
               />
             )}
-            <Table className="table" striped bordered hover variant="dark">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Phone Number</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.drivers.map((driver, i) => (
-                  <tr key={driver.guid}>
-                    <td>{i + 1}</td>
-                    <td>{driver.name}</td>
-                    <td>{driver.phoneNumber}</td>
-                    <td>{driver.carId ? "Busy" : "Available"}</td>
-                    <td>
+            
+              <Card.Body style={{ textAlign: "center" }} className="cardBody">
+                {this.state.errorMessage ? (
+                  <p className="errorText">{this.state.errorMessage}</p>
+                ) : (
+                  <>
+                    <Table
+                      className="tableData"
+                      striped
+                      bordered
+                      hover
+                      variant="dark"
+                    >
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                          <th>Phone Number</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.props.drivers.map((driver,i) => (
+                          <tr key={driver.guid}>
+                            <td>{i + 1}</td>
+                            <td>{driver.name}</td>
+                            <td>{driver.phoneNumber}</td>
+                            <td>{driver.carId ? "Busy" : "Available"}</td>
+                            <td>
                     <Button
                         size="sm"
                         variant="secondary"
@@ -171,11 +205,16 @@ class Drivers extends Component {
                         Delete
                       </Button>
                     </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </Card>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+          </>
+
         )}
         <ToastContainer theme="dark" />
       </>
@@ -217,7 +256,7 @@ Drivers.propTypes = {
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
       status: PropTypes.string,
-     
+
     })
   ),
   _getCars: PropTypes.func,

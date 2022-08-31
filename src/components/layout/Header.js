@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 
 class Header extends React.Component {
-
-
   render() {
     return (
       <>
@@ -19,6 +17,7 @@ class Header extends React.Component {
               className="logo"
             />
             <div className="linkContainer">
+
               <Link className="link" to="/packages" >
                 Packages
               </Link>
@@ -30,7 +29,6 @@ class Header extends React.Component {
               </Link>
             </div>
           </Container>
-          
         </Navbar>
       </>
     );

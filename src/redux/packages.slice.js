@@ -30,20 +30,40 @@ export const addPackage = createAsyncThunk(
   }
 );
 
+export const getAvailablePackages = createAsyncThunk(
+  "getAvailablePackages",
+  async (car, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await PackagesService.getAvailablePackages(car);
+      console.log(
+        `--- successful response for available packages: ${JSON.stringify(
+          response
+        )}`
+      );
+      return fulfillWithValue(response);
+    } catch (err) {
+      console.log(`--- error response: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
+  }
+);
+
 // Then, handle actions in your reducers:
 const packagesSlice = createSlice({
   name: "packages",
   initialState: {
     isLoading: false,
+    isLoadingList: false,
     packages: [],
-    errorMessage: '',
-    successMessage: '',  
+    availablePackages: [],
+    errorMessage: "",
+    successMessage: "",
   },
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
     clearMessages: (state, action) => {
-      state.errorMessage = '';
-      state.successMessage = '';
+      state.errorMessage = "";
+      state.successMessage = "";
     },
   },
   extraReducers: (builder) => {
@@ -52,8 +72,8 @@ const packagesSlice = createSlice({
       console.log("--- get packages pending...");
       state.isLoading = true;
       state.packages = [];
-      state.errorMessage = '';
-      state.successMessage = '';
+      state.errorMessage = "";
+      state.successMessage = "";
     });
 
     builder.addCase(getPackages.fulfilled, (state, action) => {
@@ -61,7 +81,10 @@ const packagesSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
       state.packages = action.payload || [];
-      state.successMessage = action.payload.length === 0 ? 'No packages found.' : 'Successfully retrieved packages.';
+      state.successMessage =
+        action.payload.length === 0
+          ? "No packages found."
+          : "Successfully retrieved packages.";
     });
 
     builder.addCase(getPackages.rejected, (state, action) => {
@@ -69,7 +92,7 @@ const packagesSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
       state.packages = [];
-      state.errorMessage = 'Unable to retrieve packages';
+      state.errorMessage = "Unable to retrieve packages";
     });
 
     builder.addCase(addPackage.pending, (state, action) => {
@@ -90,10 +113,37 @@ const packagesSlice = createSlice({
       state.isError = true;
       state.isLoading = false;
     });
+
+    builder.addCase(getAvailablePackages.pending, (state, action) => {
+      console.log("--- get available packages pending...");
+      state.isLoadingList = true;
+      state.availablePackages = [];
+      state.errorMessage = "";
+      state.successMessage = "";
+    });
+
+    builder.addCase(getAvailablePackages.fulfilled, (state, action) => {
+      console.log("--- get available packages fulfilled...");
+      state.isLoadingList = false;
+      state.isError = false;
+      state.availablePackages = action.payload || [];
+      state.successMessage =
+        action.payload.length === 0
+          ? "No packages found."
+          : "Successfully retrieved packages.";
+    });
+
+    builder.addCase(getAvailablePackages.rejected, (state, action) => {
+      console.log("--- get available packages rejected...");
+      state.isLoadingList = false;
+      state.isError = true;
+      state.availablePackages = [];
+      state.errorMessage = "Unable to retrieve available packages";
+    });
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { clearMessages } = packagesSlice.actions
+export const { clearMessages } = packagesSlice.actions;
 
 export default packagesSlice.reducer;

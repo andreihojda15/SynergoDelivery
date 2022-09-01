@@ -25,7 +25,7 @@ export const PACKAGES = [
     deliveryDate: "set",
     recipientName: "Menelaus Rajko",
     recipientPhoneNumber: "+1 201-872-9969",
-    carID: undefined,
+    carID: "set",
     packageStatus: undefined,
     assignedToCar: undefined,
   },
@@ -55,7 +55,7 @@ export const PACKAGES = [
     deliveryDate: undefined,
     recipientName: "Medousa Domitius",
     recipientPhoneNumber: "+1 582-201-1351",
-    carID: undefined,
+    carID: "set",
     packageStatus: undefined,
     assignedToCar: undefined,
   },
@@ -85,7 +85,7 @@ export const PACKAGES = [
     deliveryDate: undefined,
     recipientName: "Oisin Browning",
     recipientPhoneNumber: "+1 505-644-6540",
-    carID: "set",
+    carID: undefined,
     packageStatus: undefined,
     assignedToCar: undefined,
   },
@@ -100,7 +100,7 @@ export const PACKAGES = [
     deliveryDate: undefined,
     recipientName: "Atif Kelley",
     recipientPhoneNumber: "+1 582-222-4932",
-    carID: "set",
+    carID: undefined,
     packageStatus: undefined,
     assignedToCar: undefined,
   },
@@ -133,6 +133,29 @@ export default class PackagesService {
 
   // simulate fail
   static getPackagesFail() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject("500 Internal Server Error");
+      }, 1000);
+    });
+  }
+
+  // simulate success
+  static getAvailablePackages(car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(
+          PACKAGES.filter(
+            (pack) =>
+              pack.carID === undefined || car.packageIds.includes(pack.guid)
+          )
+        );
+      }, 1000);
+    });
+  }
+
+  // simulate success
+  static getAvailablePackagesFail() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         reject("500 Internal Server Error");

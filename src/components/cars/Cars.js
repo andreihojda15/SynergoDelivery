@@ -10,7 +10,11 @@ import {
   getCars,
   clearMessages,
 } from "../../redux/cars.slice";
+
+import { getAvailablePackages } from "../../redux/packages.slice";
+
 import AddOrEditCar from "../modal/AddOrEditCar";
+import PackageList from "../modal/PackageList";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
@@ -41,6 +45,8 @@ class Cars extends React.Component {
       showAddOrEditModal: false,
       carSelectedForEdit: undefined,
       errorMessage: undefined,
+      showManagePackages: false,
+      carSelectedForManage: undefined,
     };
   }
 
@@ -102,6 +108,20 @@ class Cars extends React.Component {
     });
   };
 
+  onManagePackages = (car) => {
+    this.setState({
+      showManagePackages: true,
+      carSelectedForManage: car,
+    });
+  };
+
+  onCloseManagePackagesModal = () => {
+    this.setState({
+      showManagePackages: false,
+      carSelectedForManage: undefined,
+    });
+  };
+
   onCloseAddOrEditModal = () => {
     this.setState({
       showAddOrEditModal: false,
@@ -158,6 +178,21 @@ class Cars extends React.Component {
                         }}
                       />
                     )}
+                    {this.state.showManagePackages && (
+                      <PackageList
+                        packages={this.props.availablePackages}
+                        getAvailablePackages={this.props._getAvailablePackages}
+                        isLoading={this.props.isLoadingList}
+                        handleClose={this.onCloseManagePackagesModal}
+                        car={
+                          this.state.carSelectedForManage ?? {
+                            guid: uuid4(),
+                            registrationNumber: "",
+                            status: "",
+                          }
+                        }
+                      />
+                    )}
                     <Table
                       className="tableData"
                       striped
@@ -187,6 +222,7 @@ class Cars extends React.Component {
                               <Button
                                 size="sm"
                                 variant="primary"
+                                style={{ marginTop: 5 }}
                                 onClick={() => {
                                   this.onEditCar(car);
                                 }}
@@ -197,11 +233,21 @@ class Cars extends React.Component {
                               <Button
                                 size="sm"
                                 variant="primary"
+                                style={{ marginTop: 5 }}
                                 onClick={() => {
                                   this.props.onDelete(car);
                                 }}
                               >
                                 Delete
+                              </Button>
+                              &nbsp;{" "}
+                              <Button
+                                style={{ marginTop: 5 }}
+                                size="sm"
+                                variant="info"
+                                onClick={() => this.onManagePackages(car)}
+                              >
+                                Manage packages
                               </Button>
                             </td>
                           </tr>
@@ -223,6 +269,10 @@ class Cars extends React.Component {
 const mapStateToProps = (store) => {
   return {
     ...store.cars,
+    isLoadingList: store.packages.isLoadingList,
+    availablePackages: store.packages.availablePackages,
+    errorMessagePackage: store.packages.errorMessage,
+    successMessagePackage: store.packages.successMessage,
   };
 };
 
@@ -239,6 +289,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     _clearMessages: () => {
       return dispatch(clearMessages());
+    },
+    _getAvailablePackages: (car) => {
+      return dispatch(getAvailablePackages(car));
     },
   };
 };

@@ -27,11 +27,11 @@ class DeleteCar extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={this.props.handleClose}>
+                    <Button variant="success" onClick={this.props.handleClose}>
                         Close
                     </Button>
                     <Button
-                        variant="success"
+                        variant="primary"
                         onClick={() => {
                             return this.props._deleteCar(this.state.car);
                         }}

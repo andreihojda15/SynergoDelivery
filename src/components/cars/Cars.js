@@ -122,6 +122,12 @@ class Cars extends React.Component {
     });
   };
 
+  onDeleteModal = (car) => {
+    this.setState({
+      showDeleteCar: false,
+      carSelectedForDelete: car,
+    });
+  };
 
   render() {
     console.log(`--- render: ${this.state.showAddOrEditModal}`);
@@ -262,7 +268,8 @@ class Cars extends React.Component {
                   handleSave={(car) => {
                     this.props._deleteCar(car).then((response) => {
                       if (!response.error) {
-                        this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
+                        this.onDeleteModal();
+                        // this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
                       }
                     })
 

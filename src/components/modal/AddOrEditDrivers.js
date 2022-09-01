@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
-import { uuid4 } from "uuid4";
+import "../../style/common.css"
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -34,10 +34,10 @@ class AddOrEditDrivers extends Component {
     render() {
         return (
             <Modal backdrop={'static'} show={true} onHide={this.props.handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header className="modalHeader" closeButton>
                     <Modal.Title>{this.props.title}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="modalBody">
 
                     {this.props.isLoading ? (
                         <div>Saving driver...</div>

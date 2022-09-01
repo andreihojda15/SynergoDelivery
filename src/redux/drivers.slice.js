@@ -107,6 +107,7 @@ const driversSlice = createSlice({
             console.log("--- add driver fulfilled...");
             state.isLoading = false;
             state.drivers.push(action.payload);
+            state.successMessage = `Successfully added driver`;
         });
 
         builder.addCase(addDriver.rejected, (state, action) => {

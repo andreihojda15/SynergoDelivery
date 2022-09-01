@@ -21,10 +21,15 @@ class PackageList extends React.Component {
   }
 
   componentDidMount() {
+    this.props.unsetReadyForAdd();
     this.props.getAvailablePackages(this.state.car);
   }
 
-  assignCar = () => {};
+  assignToCar = (p) => {
+    this.props.readyForAdd(p);
+  };
+
+  deleteFromCar = (p, car) => {};
 
   render() {
     return (
@@ -91,13 +96,30 @@ class PackageList extends React.Component {
                     <td>{p.recipientName}</td>
                     <td>{p.recipientPhoneNumber}</td>
                     <td>{p.deliveryAdress}</td>
-                    <td>
+                    <td
+                      style={{
+                        width: "20rem",
+                      }}
+                    >
                       <Button
                         variant="success"
                         size="sm"
-                        onClick={this.assignCar}
+                        style={{
+                          margin: "2px",
+                        }}
+                        onClick={() => this.assignToCar(p)}
                       >
-                        Assign to car
+                        Add to car
+                      </Button>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        style={{
+                          margin: "2px",
+                        }}
+                        onClick={() => this.deleteFromCar(p, this.state.car)}
+                      >
+                        Remove from car
                       </Button>
                     </td>
                   </tr>
@@ -117,6 +139,7 @@ PackageList.propTypes = {
   car: PropTypes.object,
   isLoading: PropTypes.bool,
   handleClose: PropTypes.func,
+  _addToCar: PropTypes.func,
 };
 
 export default PackageList;

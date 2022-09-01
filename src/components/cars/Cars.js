@@ -9,6 +9,7 @@ import {
   editCar,
   getCars,
   clearMessages,
+  addToCar,
 } from "../../redux/cars.slice";
 
 import { getAvailablePackages } from "../../redux/packages.slice";
@@ -47,6 +48,8 @@ class Cars extends React.Component {
       errorMessage: undefined,
       showManagePackages: false,
       carSelectedForManage: undefined,
+      packageSelectedForManage: undefined,
+      readyForAdd: false,
     };
   }
 
@@ -92,6 +95,13 @@ class Cars extends React.Component {
 
       this.props._clearMessages();
     }
+
+    if (!prevState.readyForAdd && this.state.readyForAdd) {
+      this.props._addToCar({
+        pack: this.state.packageSelectedForManage,
+        car: this.state.carSelectedForManage,
+      });
+    }
   }
 
   onEditCar = (car) => {
@@ -126,6 +136,20 @@ class Cars extends React.Component {
     this.setState({
       showAddOrEditModal: false,
       carSelectedForEdit: undefined,
+    });
+  };
+
+  setReadyForAdd = (p) => {
+    this.setState({
+      readyForAdd: true,
+      packageSelectedForManage: p,
+    });
+  };
+
+  unsetReadyForAdd = () => {
+    this.setState({
+      readyForAdd: false,
+      packageSelectedForManage: undefined,
     });
   };
 
@@ -184,6 +208,8 @@ class Cars extends React.Component {
                         getAvailablePackages={this.props._getAvailablePackages}
                         isLoading={this.props.isLoadingList}
                         handleClose={this.onCloseManagePackagesModal}
+                        readyForAdd={this.setReadyForAdd}
+                        unsetReadyForAdd={this.unsetReadyForAdd}
                         car={
                           this.state.carSelectedForManage ?? {
                             guid: uuid4(),
@@ -191,6 +217,7 @@ class Cars extends React.Component {
                             status: "",
                           }
                         }
+                        package={this.state.packageSelectedForManage}
                       />
                     )}
                     <Table
@@ -292,6 +319,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     _getAvailablePackages: (car) => {
       return dispatch(getAvailablePackages(car));
+    },
+    _addToCar: (data) => {
+      return dispatch(addToCar(data));
     },
   };
 };

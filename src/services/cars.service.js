@@ -114,4 +114,22 @@ export default class CarsService {
       }, 1000);
     });
   }
+
+  // simulate add package to car
+  static addToCar(data) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(data);
+      }, 1000);
+    });
+  }
+
+  // simulate fail add package to car
+  static addToCarFail(p, car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject("400 Bad Request: Couldn't add package to car");
+      }, 1000);
+    });
+  }
 }

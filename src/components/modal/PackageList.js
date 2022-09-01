@@ -48,7 +48,10 @@ class PackageList extends React.Component {
         >
           <Modal.Title>Packages</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="modalBody" style={{ overflow: "auto" }}>
+        <Modal.Body
+          className="modalBody"
+          style={{ overflow: "auto", display: "flex" }}
+        >
           {this.props.isLoading ? (
             <Spinner className="spinner" animation="border" variant="info" />
           ) : (

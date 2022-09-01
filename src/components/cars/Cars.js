@@ -12,7 +12,11 @@ import {
   addToCar,
 } from "../../redux/cars.slice";
 
-import { getAvailablePackages } from "../../redux/packages.slice";
+import {
+  getAvailablePackages,
+  setPackage,
+  getPackages,
+} from "../../redux/packages.slice";
 
 import AddOrEditCar from "../modal/AddOrEditCar";
 import PackageList from "../modal/PackageList";
@@ -97,10 +101,15 @@ class Cars extends React.Component {
     }
 
     if (!prevState.readyForAdd && this.state.readyForAdd) {
-      this.props._addToCar({
-        pack: this.state.packageSelectedForManage,
-        car: this.state.carSelectedForManage,
-      });
+      this.props
+        ._addToCar({
+          pack: this.state.packageSelectedForManage,
+          car: this.state.carSelectedForManage,
+        })
+        .then((res) => {
+          this.props._getPackages();
+          this.props._setPackage(res.payload.pack);
+        });
     }
   }
 
@@ -298,6 +307,7 @@ const mapStateToProps = (store) => {
     ...store.cars,
     isLoadingList: store.packages.isLoadingList,
     availablePackages: store.packages.availablePackages,
+    getPackage: store.packages.getPackage,
     errorMessagePackage: store.packages.errorMessage,
     successMessagePackage: store.packages.successMessage,
   };
@@ -322,6 +332,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     _addToCar: (data) => {
       return dispatch(addToCar(data));
+    },
+    _setPackage: (pack) => {
+      return dispatch(setPackage(pack));
+    },
+    _getPackages: () => {
+      return dispatch(getPackages());
     },
   };
 };

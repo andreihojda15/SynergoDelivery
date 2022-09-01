@@ -48,6 +48,20 @@ export const getAvailablePackages = createAsyncThunk(
   }
 );
 
+export const setPackage = createAsyncThunk(
+  "setPackage",
+  async (pack, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await PackagesService.setPackage(pack);
+      console.log(`--- successful response: ${JSON.stringify(response)}`);
+      return fulfillWithValue(response);
+    } catch (err) {
+      console.log(`--- error response: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
+  }
+);
+
 // Then, handle actions in your reducers:
 const packagesSlice = createSlice({
   name: "packages",
@@ -139,6 +153,30 @@ const packagesSlice = createSlice({
       state.isError = true;
       state.availablePackages = [];
       state.errorMessage = "Unable to retrieve available packages";
+    });
+
+    builder.addCase(setPackage.rejected, (state, action) => {
+      console.log("--- set package rejected...");
+      state.isLoadingList = false;
+      state.isError = true;
+      state.errorMessage = "Unable to retrieve package";
+    });
+
+    builder.addCase(setPackage.pending, (state, action) => {
+      console.log("--- set package pending...");
+      state.isLoadingList = true;
+      state.errorMessage = "";
+      state.successMessage = "";
+    });
+
+    builder.addCase(setPackage.fulfilled, (state, action) => {
+      console.log("--- set package fulfilled...");
+      state.isLoadingList = false;
+      state.packages.find((pack) => pack.guid === action.payload.guid).carID =
+        "set";
+      state.errorMessage = "";
+      state.successMessage = "Succesfully retrieved package";
+      debugger;
     });
   },
 });

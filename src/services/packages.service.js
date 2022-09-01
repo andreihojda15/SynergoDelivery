@@ -155,6 +155,15 @@ export default class PackagesService {
   }
 
   // simulate success
+  static setPackage(pack) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(pack);
+      }, 1000);
+    });
+  }
+
+  // simulate success
   static getAvailablePackagesFail() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CarsService from "../services/cars.service";
+import { addPackageToCar } from "./common.thunks";
 
 // First, create the thunk
 export const getCars = createAsyncThunk(
@@ -44,15 +45,15 @@ export const editCar = createAsyncThunk(
   }
 );
 
-export const addToCar = createAsyncThunk(
-  "addToCar",
+export const removeFromCar = createAsyncThunk(
+  "removeFromCar",
   async (data, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const res = await CarsService.addToCar(data);
-      console.log(`Added successfuly`);
-      return fulfillWithValue(res);
+      const response = await CarsService.removeFromCar(data);
+      console.log(`--- successful response: ${JSON.stringify(response)}`);
+      return fulfillWithValue(response);
     } catch (err) {
-      console.log(`Error: ${JSON.stringify(err)}`);
+      console.log(`--- error response: ${JSON.stringify(err)}`);
       return rejectWithValue(err);
     }
   }
@@ -123,38 +124,49 @@ const carsSlice = createSlice({
       state.isLoading = false;
     });
 
-    builder.addCase(addToCar.pending, (state, action) => {
+    builder.addCase(addPackageToCar.pending, (state, action) => {
       console.log("--- add package to car pending...");
       state.isError = false;
       state.isLoadingList = true;
     });
 
-    builder.addCase(addToCar.fulfilled, (state, action) => {
+    builder.addCase(addPackageToCar.fulfilled, (state, action) => {
       console.log("--- add package to car fulfilled...");
       state.isError = false;
       state.isLoadingList = false;
-
-      console.log(
-        JSON.stringify(
-          state.cars.find((car) => car.guid === action.payload.car.guid)
-        )
+      let indexOfUpdatedCar = state.cars.findIndex(
+        (car) => car.guid === action.payload.car.guid
       );
-
-      state.cars
-        .find((car) => car.guid === action.payload.car.guid)
-        .packageIds.push(action.payload.pack.guid);
-
-      console.log(
-        JSON.stringify(
-          state.cars.find((car) => car.guid === action.payload.car.guid)
-        )
-      );
+      if (indexOfUpdatedCar !== -1) {
+        state.cars.splice(indexOfUpdatedCar, 1, action.payload.car);
+      }
     });
 
-    builder.addCase(addToCar.rejected, (state, action) => {
+    builder.addCase(addPackageToCar.rejected, (state, action) => {
       console.log("--- add package to car rejected...");
       state.isError = true;
       state.isLoadingList = false;
+    });
+
+    builder.addCase(removeFromCar.pending, (state, action) => {
+      console.log("--- remove package from car pending...");
+      state.isError = false;
+      state.isLoadingList = true;
+    });
+
+    builder.addCase(removeFromCar.fulfilled, (state, action) => {
+      console.log("--- remove package from car fulfilled...");
+      state.isError = false;
+      state.isLoadingList = false;
+      const idx = state.cars
+        .find((car) => car.guid === action.payload.car.guid)
+        .packageIds.findIndex((pack) => pack === action.payload.pack.guid);
+
+      if (idx !== -1) {
+        state.cars
+          .find((car) => car.guid === action.payload.car.guid)
+          .packageIds.splice(idx, 1);
+      }
     });
 
     builder.addCase(editCar.pending, (state, action) => {

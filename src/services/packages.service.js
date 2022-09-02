@@ -140,38 +140,6 @@ export default class PackagesService {
     });
   }
 
-  // simulate success
-  static getAvailablePackages(car) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(
-          PACKAGES.filter(
-            (pack) =>
-              pack.carID === undefined || car.packageIds.includes(pack.guid)
-          )
-        );
-      }, 1000);
-    });
-  }
-
-  // simulate success
-  static setPackage(pack) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(pack);
-      }, 1000);
-    });
-  }
-
-  // simulate success
-  static getAvailablePackagesFail() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject("500 Internal Server Error");
-      }, 1000);
-    });
-  }
-
   // simulate add
   static addPackage(pack) {
     return new Promise((resolve, reject) => {

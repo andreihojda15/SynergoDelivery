@@ -9,14 +9,10 @@ import {
   editCar,
   getCars,
   clearMessages,
-  addToCar,
+  removeFromCar,
 } from "../../redux/cars.slice";
 
-import {
-  getAvailablePackages,
-  setPackage,
-  getPackages,
-} from "../../redux/packages.slice";
+import { getPackages } from "../../redux/packages.slice";
 
 import AddOrEditCar from "../modal/AddOrEditCar";
 import PackageList from "../modal/PackageList";
@@ -25,6 +21,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import "../../style/common.css";
 import { uuid4 } from "uuid4";
+import { addPackageToCar } from "../../redux/common.thunks";
 
 /**
  * Car model:
@@ -54,6 +51,7 @@ class Cars extends React.Component {
       carSelectedForManage: undefined,
       packageSelectedForManage: undefined,
       readyForAdd: false,
+      readyForDelete: false,
     };
   }
 
@@ -79,6 +77,23 @@ class Cars extends React.Component {
         }
       });
     }
+    if (this.props.packages.length === 0) {
+      this.props._getPackages();
+    }
+  };
+
+  getAvailablePackages = () => {
+    if (this.state.carSelectedForManage) {
+      let result = this.props.packages.filter(
+        (pack) =>
+          pack.carID === undefined ||
+          this.props.cars
+            .find((item) => item.guid === this.state.carSelectedForManage.guid)
+            .packageIds.includes(pack.guid)
+      );
+      return result;
+    }
+    return [];
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -99,18 +114,6 @@ class Cars extends React.Component {
 
       this.props._clearMessages();
     }
-
-    if (!prevState.readyForAdd && this.state.readyForAdd) {
-      this.props
-        ._addToCar({
-          pack: this.state.packageSelectedForManage,
-          car: this.state.carSelectedForManage,
-        })
-        .then((res) => {
-          this.props._getPackages();
-          this.props._setPackage(res.payload.pack);
-        });
-    }
   }
 
   onEditCar = (car) => {
@@ -130,7 +133,9 @@ class Cars extends React.Component {
   onManagePackages = (car) => {
     this.setState({
       showManagePackages: true,
-      carSelectedForManage: car,
+      carSelectedForManage: this.props.cars.find(
+        (item) => item.guid === car.guid
+      ),
     });
   };
 
@@ -149,15 +154,33 @@ class Cars extends React.Component {
   };
 
   setReadyForAdd = (p) => {
-    this.setState({
-      readyForAdd: true,
-      packageSelectedForManage: p,
+    this.props._addPackageToCar({
+      pack: p,
+      car: this.props.cars.find(
+        (item) => item.guid === this.state.carSelectedForManage.guid
+      ),
     });
   };
 
   unsetReadyForAdd = () => {
     this.setState({
       readyForAdd: false,
+      packageSelectedForManage: undefined,
+    });
+  };
+
+  setReadyForDelete = (p) => {
+    this.setState({
+      readyForDelete: true,
+      packageSelectedForManage: this.props.packages.find(
+        (item) => item.guid === this.state.packageSelectedForManage.guid
+      ),
+    });
+  };
+
+  unsetReadyForDelete = () => {
+    this.setState({
+      readyForDelete: false,
       packageSelectedForManage: undefined,
     });
   };
@@ -213,12 +236,7 @@ class Cars extends React.Component {
                     )}
                     {this.state.showManagePackages && (
                       <PackageList
-                        packages={this.props.availablePackages}
-                        getAvailablePackages={this.props._getAvailablePackages}
-                        isLoading={this.props.isLoadingList}
-                        handleClose={this.onCloseManagePackagesModal}
-                        readyForAdd={this.setReadyForAdd}
-                        unsetReadyForAdd={this.unsetReadyForAdd}
+                        getAvailablePackages={this.getAvailablePackages}
                         car={
                           this.state.carSelectedForManage ?? {
                             guid: uuid4(),
@@ -226,7 +244,12 @@ class Cars extends React.Component {
                             status: "",
                           }
                         }
-                        package={this.state.packageSelectedForManage}
+                        unsetReadyForAdd={this.unsetReadyForAdd}
+                        unsetReadyForDelete={this.unsetReadyForDelete}
+                        readyForAdd={this.setReadyForAdd}
+                        readyForDelete={this.setReadyForDelete}
+                        isLoading={this.props.isLoadingList}
+                        handleClose={this.onCloseManagePackagesModal}
                       />
                     )}
                     <Table
@@ -305,6 +328,8 @@ class Cars extends React.Component {
 const mapStateToProps = (store) => {
   return {
     ...store.cars,
+    isFinished: store.packages.isFinished,
+    packages: store.packages.packages,
     isLoadingList: store.packages.isLoadingList,
     availablePackages: store.packages.availablePackages,
     getPackage: store.packages.getPackage,
@@ -327,17 +352,14 @@ const mapDispatchToProps = (dispatch) => {
     _clearMessages: () => {
       return dispatch(clearMessages());
     },
-    _getAvailablePackages: (car) => {
-      return dispatch(getAvailablePackages(car));
-    },
-    _addToCar: (data) => {
-      return dispatch(addToCar(data));
-    },
-    _setPackage: (pack) => {
-      return dispatch(setPackage(pack));
+    _addPackageToCar: (data) => {
+      return dispatch(addPackageToCar(data));
     },
     _getPackages: () => {
       return dispatch(getPackages());
+    },
+    _removeFromCar: (data) => {
+      return dispatch(removeFromCar(data));
     },
   };
 };

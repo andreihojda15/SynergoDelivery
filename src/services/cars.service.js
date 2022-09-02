@@ -118,17 +118,35 @@ export default class CarsService {
   // simulate add package to car
   static addToCar(data) {
     return new Promise((resolve, reject) => {
+      let newData = {
+        pack: {
+          ...data.pack,
+          carID: data.car.guid,
+        },
+        car: {
+          ...data.car,
+          packageIds: [...data.car.packageIds, data.pack.guid],
+        },
+      };
       setTimeout(() => {
-        return resolve(data);
+        return resolve(newData);
       }, 1000);
     });
   }
 
   // simulate fail add package to car
-  static addToCarFail(p, car) {
+  static addToCarFail(data) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         reject("400 Bad Request: Couldn't add package to car");
+      }, 1000);
+    });
+  }
+
+  static removeFromCar(data) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(data);
       }, 1000);
     });
   }

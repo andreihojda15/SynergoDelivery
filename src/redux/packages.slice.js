@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import PackagesService from "../services/packages.service";
+import { addPackageToCar } from "./common.thunks";
 
 // First, create the thunk
 export const getPackages = createAsyncThunk(
@@ -25,38 +26,6 @@ export const addPackage = createAsyncThunk(
       return fulfillWithValue(res);
     } catch (err) {
       console.log(`Error: ${JSON.stringify(err)}`);
-      return rejectWithValue(err);
-    }
-  }
-);
-
-export const getAvailablePackages = createAsyncThunk(
-  "getAvailablePackages",
-  async (car, { rejectWithValue, fulfillWithValue }) => {
-    try {
-      const response = await PackagesService.getAvailablePackages(car);
-      console.log(
-        `--- successful response for available packages: ${JSON.stringify(
-          response
-        )}`
-      );
-      return fulfillWithValue(response);
-    } catch (err) {
-      console.log(`--- error response: ${JSON.stringify(err)}`);
-      return rejectWithValue(err);
-    }
-  }
-);
-
-export const setPackage = createAsyncThunk(
-  "setPackage",
-  async (pack, { rejectWithValue, fulfillWithValue }) => {
-    try {
-      const response = await PackagesService.setPackage(pack);
-      console.log(`--- successful response: ${JSON.stringify(response)}`);
-      return fulfillWithValue(response);
-    } catch (err) {
-      console.log(`--- error response: ${JSON.stringify(err)}`);
       return rejectWithValue(err);
     }
   }
@@ -128,55 +97,28 @@ const packagesSlice = createSlice({
       state.isLoading = false;
     });
 
-    builder.addCase(getAvailablePackages.pending, (state, action) => {
-      console.log("--- get available packages pending...");
-      state.isLoadingList = true;
-      state.availablePackages = [];
-      state.errorMessage = "";
-      state.successMessage = "";
-    });
-
-    builder.addCase(getAvailablePackages.fulfilled, (state, action) => {
-      console.log("--- get available packages fulfilled...");
-      state.isLoadingList = false;
+    builder.addCase(addPackageToCar.pending, (state, action) => {
+      console.log("--- add package to car pending...");
       state.isError = false;
-      state.availablePackages = action.payload || [];
-      state.successMessage =
-        action.payload.length === 0
-          ? "No packages found."
-          : "Successfully retrieved packages.";
-    });
-
-    builder.addCase(getAvailablePackages.rejected, (state, action) => {
-      console.log("--- get available packages rejected...");
-      state.isLoadingList = false;
-      state.isError = true;
-      state.availablePackages = [];
-      state.errorMessage = "Unable to retrieve available packages";
-    });
-
-    builder.addCase(setPackage.rejected, (state, action) => {
-      console.log("--- set package rejected...");
-      state.isLoadingList = false;
-      state.isError = true;
-      state.errorMessage = "Unable to retrieve package";
-    });
-
-    builder.addCase(setPackage.pending, (state, action) => {
-      console.log("--- set package pending...");
       state.isLoadingList = true;
-      state.errorMessage = "";
-      state.successMessage = "";
     });
 
-    builder.addCase(setPackage.fulfilled, (state, action) => {
-      console.log("--- set package fulfilled...");
+    builder.addCase(addPackageToCar.fulfilled, (state, action) => {
+      console.log("--- add package to car fulfilled...");
+      state.isError = false;
+      let indexOfUpdatedPackage = state.packages.findIndex(
+        (pack) => pack.guid === action.payload.pack.guid
+      );
+      if (indexOfUpdatedPackage !== -1) {
+        state.packages.splice(indexOfUpdatedPackage, 1, action.payload.pack);
+      }
       state.isLoadingList = false;
-      state.packages.find((pack) => pack.guid === action.payload.guid).carID =
-        "set";
-      state.errorMessage = "";
-      state.successMessage = "Succesfully retrieved package";
-      debugger;
+    });
+
+    builder.addCase(addPackageToCar.rejected, (state, action) => {
+      console.log("--- add package to car rejected...");
+      state.isError = true;
+      state.isLoadingList = false;
     });
   },
 });

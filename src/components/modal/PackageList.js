@@ -10,10 +10,9 @@ class PackageList extends React.Component {
   constructor(props) {
     super(props);
 
+    let availablePackages = this.props.getAvailablePackages();
     this.state = {
-      packages: {
-        ...this.props.packages,
-      },
+      packages: [...availablePackages],
       car: {
         ...this.props.car,
       },
@@ -22,14 +21,24 @@ class PackageList extends React.Component {
 
   componentDidMount() {
     this.props.unsetReadyForAdd();
-    this.props.getAvailablePackages(this.state.car);
+    this.props.unsetReadyForDelete();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.isLoading && !this.props.isLoading) {
+      this.setState({
+        packages: [...this.props.getAvailablePackages()],
+      });
+    }
   }
 
   assignToCar = (p) => {
     this.props.readyForAdd(p);
   };
 
-  deleteFromCar = (p, car) => {};
+  deleteFromCar = (p) => {
+    this.props.readyForDelete(p);
+  };
 
   render() {
     return (
@@ -85,45 +94,50 @@ class PackageList extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.packages.map((p, i) => (
-                  <tr key={p.guid}>
-                    <td>{i + 1}</td>
-                    <td>{p.awb}</td>
-                    <td>{p.senderName}</td>
-                    <td>{p.senderPhoneNumber}</td>
-                    <td>{p.departureAdress}</td>
-                    <td>{p.departureDate}</td>
-                    <td>{p.recipientName}</td>
-                    <td>{p.recipientPhoneNumber}</td>
-                    <td>{p.deliveryAdress}</td>
-                    <td
-                      style={{
-                        width: "20rem",
-                      }}
-                    >
-                      <Button
-                        variant="success"
-                        size="sm"
+                {this.state.packages.map((p, i) => {
+                  return (
+                    <tr key={p.guid}>
+                      <td>{i + 1}</td>
+                      <td>{p.awb}</td>
+                      <td>{p.senderName}</td>
+                      <td>{p.senderPhoneNumber}</td>
+                      <td>{p.departureAdress}</td>
+                      <td>{p.departureDate}</td>
+                      <td>{p.recipientName}</td>
+                      <td>{p.recipientPhoneNumber}</td>
+                      <td>{p.deliveryAdress}</td>
+                      <td
                         style={{
-                          margin: "2px",
+                          width: "20rem",
                         }}
-                        onClick={() => this.assignToCar(p)}
                       >
-                        Add to car
-                      </Button>
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        style={{
-                          margin: "2px",
-                        }}
-                        onClick={() => this.deleteFromCar(p, this.state.car)}
-                      >
-                        Remove from car
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+                        {p.carID !== undefined ? (
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            style={{
+                              margin: "2px",
+                            }}
+                            onClick={() => this.deleteFromCar(p)}
+                          >
+                            Remove from car
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="success"
+                            size="sm"
+                            style={{
+                              margin: "2px",
+                            }}
+                            onClick={() => this.assignToCar(p)}
+                          >
+                            Add to car
+                          </Button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
           )}
@@ -134,12 +148,14 @@ class PackageList extends React.Component {
 }
 
 PackageList.propTypes = {
-  _getAvailablePackages: PropTypes.func,
-  packages: PropTypes.arrayOf(PropTypes.object),
-  car: PropTypes.object,
-  isLoading: PropTypes.bool,
-  handleClose: PropTypes.func,
-  _addToCar: PropTypes.func,
+  getAvailablePackages: PropTypes.func.isRequired,
+  car: PropTypes.object.isRequired,
+  unsetReadyForAdd: PropTypes.func.isRequired,
+  unsetReadyForDelete: PropTypes.func.isRequired,
+  readyForAdd: PropTypes.func,
+  readyForDelete: PropTypes.func,
+  isLoading: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default PackageList;

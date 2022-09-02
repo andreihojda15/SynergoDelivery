@@ -49,9 +49,6 @@ class PackageList extends React.Component {
         backdrop={"static"}
         show={true}
         onHide={this.props.handleClose}
-        style={{
-          marginTop: "100px",
-        }}
       >
         <Modal.Header
           className="modalHeader"

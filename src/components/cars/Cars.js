@@ -9,7 +9,6 @@ import {
   editCar,
   getCars,
   clearMessages,
-  removeFromCar,
 } from "../../redux/cars.slice";
 
 import { getPackages } from "../../redux/packages.slice";
@@ -21,7 +20,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import "../../style/common.css";
 import { uuid4 } from "uuid4";
-import { addPackageToCar } from "../../redux/common.thunks";
+import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
 
 /**
  * Car model:
@@ -170,10 +169,10 @@ class Cars extends React.Component {
   };
 
   setReadyForDelete = (p) => {
-    this.setState({
-      readyForDelete: true,
-      packageSelectedForManage: this.props.packages.find(
-        (item) => item.guid === this.state.packageSelectedForManage.guid
+    this.props._removeFromCar({
+      pack: p,
+      car: this.props.cars.find(
+        (item) => item.guid === this.state.carSelectedForManage.guid
       ),
     });
   };

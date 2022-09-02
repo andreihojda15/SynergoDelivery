@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CarsService from "../services/cars.service";
-import { addPackageToCar } from "./common.thunks";
+import { addPackageToCar, removeFromCar } from "./common.thunks";
 
 // First, create the thunk
 export const getCars = createAsyncThunk(
@@ -36,20 +36,6 @@ export const editCar = createAsyncThunk(
   async (car, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response = await CarsService.editCar(car);
-      console.log(`--- successful response: ${JSON.stringify(response)}`);
-      return fulfillWithValue(response);
-    } catch (err) {
-      console.log(`--- error response: ${JSON.stringify(err)}`);
-      return rejectWithValue(err);
-    }
-  }
-);
-
-export const removeFromCar = createAsyncThunk(
-  "removeFromCar",
-  async (data, { rejectWithValue, fulfillWithValue }) => {
-    try {
-      const response = await CarsService.removeFromCar(data);
       console.log(`--- successful response: ${JSON.stringify(response)}`);
       return fulfillWithValue(response);
     } catch (err) {
@@ -161,12 +147,17 @@ const carsSlice = createSlice({
       const idx = state.cars
         .find((car) => car.guid === action.payload.car.guid)
         .packageIds.findIndex((pack) => pack === action.payload.pack.guid);
-
       if (idx !== -1) {
         state.cars
           .find((car) => car.guid === action.payload.car.guid)
           .packageIds.splice(idx, 1);
       }
+    });
+
+    builder.addCase(removeFromCar.rejected, (state, action) => {
+      console.log("--- remove package from car rejected...");
+      state.isError = true;
+      state.isLoadingList = false;
     });
 
     builder.addCase(editCar.pending, (state, action) => {

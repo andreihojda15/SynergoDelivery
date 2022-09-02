@@ -145,8 +145,20 @@ export default class CarsService {
 
   static removeFromCar(data) {
     return new Promise((resolve, reject) => {
+      let modified = {
+        pack: {
+          ...data.pack,
+          carID: undefined,
+        },
+        car: {
+          ...data.car,
+          packageIds: data.car.packageIds.filter(
+            (item) => item !== data.pack.guid
+          ),
+        },
+      };
       setTimeout(() => {
-        resolve(data);
+        resolve(modified);
       }, 1000);
     });
   }

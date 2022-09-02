@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import PackagesService from "../services/packages.service";
-import { addPackageToCar } from "./common.thunks";
+import { addPackageToCar, removeFromCar } from "./common.thunks";
 
 // First, create the thunk
 export const getPackages = createAsyncThunk(
@@ -118,6 +118,30 @@ const packagesSlice = createSlice({
     builder.addCase(addPackageToCar.rejected, (state, action) => {
       console.log("--- add package to car rejected...");
       state.isError = true;
+      state.isLoadingList = false;
+    });
+
+    builder.addCase(removeFromCar.pending, (state, action) => {
+      console.log("--- remove package from car pending...");
+      state.isError = false;
+      state.isLoadingList = true;
+    });
+
+    builder.addCase(removeFromCar.rejected, (state, action) => {
+      console.log("--- remove package from car rejected...");
+      state.isError = true;
+      state.isLoadingList = false;
+    });
+
+    builder.addCase(removeFromCar.fulfilled, (state, action) => {
+      console.log("--- remove package from car fulfilled...");
+      state.isError = false;
+      let indexOfUpdatedPackage = state.packages.findIndex(
+        (pack) => pack.guid === action.payload.pack.guid
+      );
+      if (indexOfUpdatedPackage !== -1) {
+        state.packages.splice(indexOfUpdatedPackage, 1, action.payload.pack);
+      }
       state.isLoadingList = false;
     });
   },

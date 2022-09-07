@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import PackagesService from "../services/packages.service";
+import { addPackageToCar, removeFromCar } from "./common.thunks";
 
 // First, create the thunk
 export const getPackages = createAsyncThunk(
@@ -35,15 +36,17 @@ const packagesSlice = createSlice({
   name: "packages",
   initialState: {
     isLoading: false,
+    isLoadingList: false,
     packages: [],
-    errorMessage: '',
-    successMessage: '',  
+    availablePackages: [],
+    errorMessage: "",
+    successMessage: "",
   },
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
     clearMessages: (state, action) => {
-      state.errorMessage = '';
-      state.successMessage = '';
+      state.errorMessage = "";
+      state.successMessage = "";
     },
   },
   extraReducers: (builder) => {
@@ -52,8 +55,8 @@ const packagesSlice = createSlice({
       console.log("--- get packages pending...");
       state.isLoading = true;
       state.packages = [];
-      state.errorMessage = '';
-      state.successMessage = '';
+      state.errorMessage = "";
+      state.successMessage = "";
     });
 
     builder.addCase(getPackages.fulfilled, (state, action) => {
@@ -61,7 +64,10 @@ const packagesSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
       state.packages = action.payload || [];
-      state.successMessage = action.payload.length === 0 ? 'No packages found.' : 'Successfully retrieved packages.';
+      state.successMessage =
+        action.payload.length === 0
+          ? "No packages found."
+          : "Successfully retrieved packages.";
     });
 
     builder.addCase(getPackages.rejected, (state, action) => {
@@ -69,7 +75,7 @@ const packagesSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
       state.packages = [];
-      state.errorMessage = 'Unable to retrieve packages';
+      state.errorMessage = "Unable to retrieve packages";
     });
 
     builder.addCase(addPackage.pending, (state, action) => {
@@ -90,10 +96,58 @@ const packagesSlice = createSlice({
       state.isError = true;
       state.isLoading = false;
     });
+
+    builder.addCase(addPackageToCar.pending, (state, action) => {
+      console.log("--- add package to car pending...");
+      state.isError = false;
+      state.isLoadingList = true;
+    });
+
+    builder.addCase(addPackageToCar.fulfilled, (state, action) => {
+      console.log("--- add package to car fulfilled...");
+      state.isError = false;
+      let indexOfUpdatedPackage = state.packages.findIndex(
+        (pack) => pack.guid === action.payload.pack.guid
+      );
+      if (indexOfUpdatedPackage !== -1) {
+        state.packages.splice(indexOfUpdatedPackage, 1, action.payload.pack);
+      }
+      state.isLoadingList = false;
+    });
+
+    builder.addCase(addPackageToCar.rejected, (state, action) => {
+      console.log("--- add package to car rejected...");
+      state.isError = true;
+      state.isLoadingList = false;
+    });
+
+    builder.addCase(removeFromCar.pending, (state, action) => {
+      console.log("--- remove package from car pending...");
+      state.isError = false;
+      state.isLoadingList = true;
+    });
+
+    builder.addCase(removeFromCar.rejected, (state, action) => {
+      console.log("--- remove package from car rejected...");
+      state.isError = true;
+      state.isLoadingList = false;
+    });
+
+    builder.addCase(removeFromCar.fulfilled, (state, action) => {
+      console.log("--- remove package from car fulfilled...");
+      state.isError = false;
+      let indexOfUpdatedPackage = state.packages.findIndex(
+        (pack) => pack.guid === action.payload.pack.guid
+      );
+      if (indexOfUpdatedPackage !== -1) {
+        state.packages.splice(indexOfUpdatedPackage, 1, action.payload.pack);
+      }
+      state.isLoadingList = false;
+    });
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { clearMessages } = packagesSlice.actions
+export const { clearMessages } = packagesSlice.actions;
 
 export default packagesSlice.reducer;

@@ -115,21 +115,51 @@ export default class CarsService {
     });
   }
 
-  // simulate delete
-  static deleteCar(car) {
+  // simulate add package to car
+  static addToCar(data) {
     return new Promise((resolve, reject) => {
+      let newData = {
+        pack: {
+          ...data.pack,
+          carID: data.car.guid,
+        },
+        car: {
+          ...data.car,
+          packageIds: [...data.car.packageIds, data.pack.guid],
+        },
+      };
       setTimeout(() => {
-        return resolve(car);
-      }, 2000);
+        return resolve(newData);
+      }, 1000);
     });
   }
 
-  // simulate delete failed
-  static deleteCarFail(car) {
+  // simulate fail add package to car
+  static addToCarFail(data) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        return reject(`400 Bad Request: Couldn't delete car`);
-      }, 2000);
+        reject("400 Bad Request: Couldn't add package to car");
+      }, 1000);
+    });
+  }
+
+  static removeFromCar(data) {
+    return new Promise((resolve, reject) => {
+      let modified = {
+        pack: {
+          ...data.pack,
+          carID: undefined,
+        },
+        car: {
+          ...data.car,
+          packageIds: data.car.packageIds.filter(
+            (item) => item !== data.pack.guid
+          ),
+        },
+      };
+      setTimeout(() => {
+        resolve(modified);
+      }, 1000);
     });
   }
 }

@@ -10,12 +10,17 @@ import {
   getCars,
   clearMessages,
 } from "../../redux/cars.slice";
+
+import { getPackages } from "../../redux/packages.slice";
+
 import AddOrEditCar from "../modal/AddOrEditCar";
+import PackageList from "../modal/PackageList";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import "../../style/common.css";
 import { uuid4 } from "uuid4";
+import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
 
 /**
  * Car model:
@@ -41,6 +46,11 @@ class Cars extends React.Component {
       showAddOrEditModal: false,
       carSelectedForEdit: undefined,
       errorMessage: undefined,
+      showManagePackages: false,
+      carSelectedForManage: undefined,
+      packageSelectedForManage: undefined,
+      readyForAdd: false,
+      readyForDelete: false,
     };
   }
 
@@ -66,6 +76,23 @@ class Cars extends React.Component {
         }
       });
     }
+    if (this.props.packages.length === 0) {
+      this.props._getPackages();
+    }
+  };
+
+  getAvailablePackages = () => {
+    if (this.state.carSelectedForManage) {
+      let result = this.props.packages.filter(
+        (pack) =>
+          pack.carID === undefined ||
+          this.props.cars
+            .find((item) => item.guid === this.state.carSelectedForManage.guid)
+            .packageIds.includes(pack.guid)
+      );
+      return result;
+    }
+    return [];
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -102,10 +129,58 @@ class Cars extends React.Component {
     });
   };
 
+  onManagePackages = (car) => {
+    this.setState({
+      showManagePackages: true,
+      carSelectedForManage: this.props.cars.find(
+        (item) => item.guid === car.guid
+      ),
+    });
+  };
+
+  onCloseManagePackagesModal = () => {
+    this.setState({
+      showManagePackages: false,
+      carSelectedForManage: undefined,
+    });
+  };
+
   onCloseAddOrEditModal = () => {
     this.setState({
       showAddOrEditModal: false,
       carSelectedForEdit: undefined,
+    });
+  };
+
+  setReadyForAdd = (p) => {
+    this.props._addPackageToCar({
+      pack: p,
+      car: this.props.cars.find(
+        (item) => item.guid === this.state.carSelectedForManage.guid
+      ),
+    });
+  };
+
+  unsetReadyForAdd = () => {
+    this.setState({
+      readyForAdd: false,
+      packageSelectedForManage: undefined,
+    });
+  };
+
+  setReadyForDelete = (p) => {
+    this.props._removeFromCar({
+      pack: p,
+      car: this.props.cars.find(
+        (item) => item.guid === this.state.carSelectedForManage.guid
+      ),
+    });
+  };
+
+  unsetReadyForDelete = () => {
+    this.setState({
+      readyForDelete: false,
+      packageSelectedForManage: undefined,
     });
   };
 
@@ -158,6 +233,24 @@ class Cars extends React.Component {
                         }}
                       />
                     )}
+                    {this.state.showManagePackages && (
+                      <PackageList
+                        getAvailablePackages={this.getAvailablePackages}
+                        car={
+                          this.state.carSelectedForManage ?? {
+                            guid: uuid4(),
+                            registrationNumber: "",
+                            status: "",
+                          }
+                        }
+                        unsetReadyForAdd={this.unsetReadyForAdd}
+                        unsetReadyForDelete={this.unsetReadyForDelete}
+                        readyForAdd={this.setReadyForAdd}
+                        readyForDelete={this.setReadyForDelete}
+                        isLoading={this.props.isLoadingList}
+                        handleClose={this.onCloseManagePackagesModal}
+                      />
+                    )}
                     <Table
                       className="tableData"
                       striped
@@ -187,6 +280,7 @@ class Cars extends React.Component {
                               <Button
                                 size="sm"
                                 variant="primary"
+                                style={{ marginTop: 5 }}
                                 onClick={() => {
                                   this.onEditCar(car);
                                 }}
@@ -197,11 +291,21 @@ class Cars extends React.Component {
                               <Button
                                 size="sm"
                                 variant="primary"
+                                style={{ marginTop: 5 }}
                                 onClick={() => {
                                   this.props.onDelete(car);
                                 }}
                               >
                                 Delete
+                              </Button>
+                              &nbsp;{" "}
+                              <Button
+                                style={{ marginTop: 5 }}
+                                size="sm"
+                                variant="info"
+                                onClick={() => this.onManagePackages(car)}
+                              >
+                                Manage packages
                               </Button>
                             </td>
                           </tr>
@@ -223,6 +327,13 @@ class Cars extends React.Component {
 const mapStateToProps = (store) => {
   return {
     ...store.cars,
+    isFinished: store.packages.isFinished,
+    packages: store.packages.packages,
+    isLoadingList: store.packages.isLoadingList,
+    availablePackages: store.packages.availablePackages,
+    getPackage: store.packages.getPackage,
+    errorMessagePackage: store.packages.errorMessage,
+    successMessagePackage: store.packages.successMessage,
   };
 };
 
@@ -239,6 +350,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     _clearMessages: () => {
       return dispatch(clearMessages());
+    },
+    _addPackageToCar: (data) => {
+      return dispatch(addPackageToCar(data));
+    },
+    _getPackages: () => {
+      return dispatch(getPackages());
+    },
+    _removeFromCar: (data) => {
+      return dispatch(removeFromCar(data));
     },
   };
 };

@@ -114,4 +114,52 @@ export default class CarsService {
       }, 1000);
     });
   }
+
+  // simulate add package to car
+  static addToCar(data) {
+    return new Promise((resolve, reject) => {
+      let newData = {
+        pack: {
+          ...data.pack,
+          carID: data.car.guid,
+        },
+        car: {
+          ...data.car,
+          packageIds: [...data.car.packageIds, data.pack.guid],
+        },
+      };
+      setTimeout(() => {
+        return resolve(newData);
+      }, 1000);
+    });
+  }
+
+  // simulate fail add package to car
+  static addToCarFail(data) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject("400 Bad Request: Couldn't add package to car");
+      }, 1000);
+    });
+  }
+
+  static removeFromCar(data) {
+    return new Promise((resolve, reject) => {
+      let modified = {
+        pack: {
+          ...data.pack,
+          carID: undefined,
+        },
+        car: {
+          ...data.car,
+          packageIds: data.car.packageIds.filter(
+            (item) => item !== data.pack.guid
+          ),
+        },
+      };
+      setTimeout(() => {
+        resolve(modified);
+      }, 1000);
+    });
+  }
 }

@@ -211,7 +211,7 @@ const mapDispatchToProps = (dispatch) => {
 Packages.propTypes = {
   packages: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       senderName: PropTypes.string,
       senderPhoneNumber: PropTypes.string,
       departureAdress: PropTypes.string,

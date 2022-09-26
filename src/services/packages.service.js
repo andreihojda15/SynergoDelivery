@@ -124,11 +124,49 @@ export const PACKAGES = [
 export default class PackagesService {
   // simulate success
   static getPackages() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(PACKAGES);
-      }, 1000);
-    });
+
+    const apiUrl = 'http://localhost:49085/api/packages';
+
+return    sericeToGet.get('/packages');
+
+    return fetch(apiUrl,
+        {
+          crossDomain:true,
+          method: 'GET',
+          headers: {
+            'Content-Type':'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods':'GET'
+          }
+        }
+        // {mode:'cors'}
+    )
+        .then(response => { return response.json();
+        });
+    // .then((data) => console.log('This is your data', data));
+
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     resolve(PACKAGES);
+    //   }, 1000);
+    // });
+  }
+
+  get(apiPackages) {
+    return etch('http://localhost:49085/api' + apiUrl,
+        {
+          crossDomain:true,
+          method: 'GET',
+          headers: {
+            'Content-Type':'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods':'GET'
+          }
+        }
+        // {mode:'cors'}
+    )
+        .then(response => { return response.json();
+        });
   }
 
   // simulate fail

@@ -16,7 +16,7 @@ import {
 
 /**
  * Package model:
- *  guid
+ *  id
  *  senderName
  *  senderPhoneNumber
  *  departureAddress

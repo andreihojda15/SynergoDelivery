@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import CarsService from "../services/cars.service";
 import PackagesService from "../services/packages.service";
 import { addPackageToCar, removeFromCar } from "./common.thunks";
 
@@ -8,6 +9,20 @@ export const getPackages = createAsyncThunk(
   async (_, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response = await PackagesService.getPackages();
+      // console.log(`--- successful response: ${response}`);
+      return fulfillWithValue(response);
+    } catch (err) {
+      console.log(`--- error response: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
+  }
+);
+
+export const getAvailablePackages = createAsyncThunk(
+  "getAvailablePackages",
+  async (id, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await CarsService.getAvailablePackages(id);
       // console.log(`--- successful response: ${response}`);
       return fulfillWithValue(response);
     } catch (err) {
@@ -78,6 +93,33 @@ const packagesSlice = createSlice({
       state.errorMessage = "Unable to retrieve packages";
     });
 
+    builder.addCase(getAvailablePackages.pending, (state, action) => {
+      console.log("--- get available packages pending...");
+      state.isLoading = true;
+      state.availablePackages = [];
+      state.errorMessage = "";
+      state.successMessage = "";
+    });
+
+    builder.addCase(getAvailablePackages.fulfilled, (state, action) => {
+      console.log("--- get available packages fulfilled...");
+      state.isLoading = false;
+      state.isError = false;
+      state.availablePackages = action.payload || [];
+      state.successMessage =
+        action.payload.length === 0
+          ? "No packages found."
+          : "Successfully retrieved packages.";
+    });
+
+    builder.addCase(getAvailablePackages.rejected, (state, action) => {
+      console.log("--- get available packages rejected...");
+      state.isLoading = false;
+      state.isError = true;
+      state.availablePackages = [];
+      state.errorMessage = "Unable to retrieve packages";
+    });
+
     builder.addCase(addPackage.pending, (state, action) => {
       console.log("--- add package pending...");
       state.isError = false;
@@ -107,7 +149,7 @@ const packagesSlice = createSlice({
       console.log("--- add package to car fulfilled...");
       state.isError = false;
       let indexOfUpdatedPackage = state.packages.findIndex(
-        (pack) => pack.guid === action.payload.pack.guid
+        (pack) => pack.id === action.payload.pack.id
       );
       if (indexOfUpdatedPackage !== -1) {
         state.packages.splice(indexOfUpdatedPackage, 1, action.payload.pack);
@@ -137,7 +179,7 @@ const packagesSlice = createSlice({
       console.log("--- remove package from car fulfilled...");
       state.isError = false;
       let indexOfUpdatedPackage = state.packages.findIndex(
-        (pack) => pack.guid === action.payload.pack.guid
+        (pack) => pack.id === action.payload.pack.id
       );
       if (indexOfUpdatedPackage !== -1) {
         state.packages.splice(indexOfUpdatedPackage, 1, action.payload.pack);

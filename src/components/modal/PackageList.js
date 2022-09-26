@@ -5,14 +5,16 @@ import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 import PropTypes from "prop-types";
 import "../../style/common.css";
+import { getAvailablePackages } from "../../redux/packages.slice";
+import { connect } from "react-redux";
 
 class PackageList extends React.Component {
   constructor(props) {
     super(props);
 
-    let availablePackages = this.props.getAvailablePackages();
+    // let availablePackages = this.props.getAvailablePackages();
+    this.props._getAvailablePackages(this.props.car.id);
     this.state = {
-      packages: [...availablePackages],
       car: {
         ...this.props.car,
       },
@@ -26,9 +28,7 @@ class PackageList extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.isLoading && !this.props.isLoading) {
-      this.setState({
-        packages: [...this.props.getAvailablePackages()],
-      });
+      // this.props._getAvailablePackages(this.props.car.id)
     }
   }
 
@@ -91,9 +91,9 @@ class PackageList extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.packages.map((p, i) => {
+                {this.props.availablePackages.map((p, i) => {
                   return (
-                    <tr key={p.guid}>
+                    <tr key={p.id}>
                       <td>{i + 1}</td>
                       <td>{p.awb}</td>
                       <td>{p.senderName}</td>
@@ -108,7 +108,7 @@ class PackageList extends React.Component {
                           width: "20rem",
                         }}
                       >
-                        {p.carId !== undefined ? (
+                        {p.carId !== undefined && p.carId !== null ? (
                           <Button
                             variant="primary"
                             size="sm"
@@ -144,8 +144,22 @@ class PackageList extends React.Component {
   }
 }
 
+const mapStateToProps = (store) => {
+  return {
+    ...store.packages,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    _getAvailablePackages: (id) => {
+      return dispatch(getAvailablePackages(id));
+    }
+  };
+};
+
 PackageList.propTypes = {
-  getAvailablePackages: PropTypes.func.isRequired,
+  // getAvailablePackages: PropTypes.func.isRequired,
   car: PropTypes.object.isRequired,
   unsetReadyForAdd: PropTypes.func.isRequired,
   unsetReadyForDelete: PropTypes.func.isRequired,
@@ -155,4 +169,5 @@ PackageList.propTypes = {
   handleClose: PropTypes.func.isRequired,
 };
 
-export default PackageList;
+// export default PackageList;
+export default connect(mapStateToProps, mapDispatchToProps)(PackageList);

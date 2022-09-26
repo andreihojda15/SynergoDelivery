@@ -11,7 +11,7 @@ import {
   clearMessages,
 } from "../../redux/cars.slice";
 
-import { getPackages } from "../../redux/packages.slice";
+import { getAvailablePackages, getPackages } from "../../redux/packages.slice";
 
 import AddOrEditCar from "../modal/AddOrEditCar";
 import PackageList from "../modal/PackageList";
@@ -24,11 +24,11 @@ import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
 
 /**
  * Car model:
- *  guid
+ *  id
  *  registrationNumber
  *  status // available, not available
- *  packageIds // array of package guids
- *  driverId // driver guid
+ *  packageIds // array of package ids
+ *  driverId // driver id
  *
  *  Table columns
  *  #
@@ -82,17 +82,18 @@ class Cars extends React.Component {
   };
 
   getAvailablePackages = () => {
-    if (this.state.carSelectedForManage) {
-      let result = this.props.packages.filter(
-        (pack) =>
-          pack.carId === undefined ||
-          this.props.cars
-            .find((item) => item.guid === this.state.carSelectedForManage.guid)
-            .packageIds.includes(pack.guid)
-      );
-      return result;
-    }
-    return [];
+    return this.props._getAvailablePackages(this.state.carSelectedForManage.id);
+    // if (this.state.carSelectedForManage) {
+    //   let result = this.props.packages.filter(
+    //     (pack) => {
+    //       return pack.carId === undefined ||
+    //         pack.carId === null ||
+    //         pack.carId === this.state.carSelectedForManage.id
+    //     }
+    //   );
+    //   return result;
+    // }
+    // return [];
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -133,7 +134,7 @@ class Cars extends React.Component {
     this.setState({
       showManagePackages: true,
       carSelectedForManage: this.props.cars.find(
-        (item) => item.guid === car.guid
+        (item) => item.id === car.id
       ),
     });
   };
@@ -156,7 +157,7 @@ class Cars extends React.Component {
     this.props._addPackageToCar({
       pack: p,
       car: this.props.cars.find(
-        (item) => item.guid === this.state.carSelectedForManage.guid
+        (item) => item.id === this.state.carSelectedForManage.id
       ),
     });
   };
@@ -172,7 +173,7 @@ class Cars extends React.Component {
     this.props._removeFromCar({
       pack: p,
       car: this.props.cars.find(
-        (item) => item.guid === this.state.carSelectedForManage.guid
+        (item) => item.id === this.state.carSelectedForManage.id
       ),
     });
   };
@@ -210,7 +211,7 @@ class Cars extends React.Component {
                         handleClose={this.onCloseAddOrEditModal}
                         car={
                           this.state.carSelectedForEdit ?? {
-                            guid: uuid4(),
+                            id: uuid4(),
                             registrationNumber: "",
                             status: "",
                           }
@@ -221,24 +222,25 @@ class Cars extends React.Component {
                         handleSave={(car) => {
                           this.state.carSelectedForEdit
                             ? this.props._editCar(car).then((response) => {
-                                if (!response.error) {
-                                  this.onCloseAddOrEditModal();
-                                }
-                              })
+                              if (!response.error) {
+                                this.onCloseAddOrEditModal();
+                              }
+                            })
                             : this.props._addCar(car).then((response) => {
-                                if (!response.error) {
-                                  this.onCloseAddOrEditModal();
-                                }
-                              });
+                              if (!response.error) {
+                                this.onCloseAddOrEditModal();
+                              }
+                            });
                         }}
                       />
                     )}
                     {this.state.showManagePackages && (
                       <PackageList
-                        getAvailablePackages={this.getAvailablePackages}
+                        // getAvailablePackages={this.getAvailablePackages}
+                        // availablePacks={this.props.availablePackages}
                         car={
                           this.state.carSelectedForManage ?? {
-                            guid: uuid4(),
+                            id: uuid4(),
                             registrationNumber: "",
                             status: "",
                           }
@@ -270,12 +272,12 @@ class Cars extends React.Component {
                       </thead>
                       <tbody>
                         {this.props.cars.map((car, i) => (
-                          <tr key={car.guid}>
+                          <tr key={car.id}>
                             <td>{i + 1}</td>
                             <td>{car.registrationNumber}</td>
                             <td>{car.status}</td>
-                            <td>{car.packageIds?.length}</td>
-                            <td>{car.driverId ? "Yes" : "No"}</td>
+                            <td>{this.props.packages.filter(pack => pack.carId === car.id).length}</td>
+                            <td>{this.props.drivers.filter(driver => driver.carId === car.id).length !== 0 ? "Yes" : "No"}</td>
                             <td>
                               <Button
                                 size="sm"
@@ -327,6 +329,7 @@ class Cars extends React.Component {
 const mapStateToProps = (store) => {
   return {
     ...store.cars,
+    drivers: store.drivers.drivers,
     isFinished: store.packages.isFinished,
     packages: store.packages.packages,
     isLoadingList: store.packages.isLoadingList,
@@ -360,17 +363,18 @@ const mapDispatchToProps = (dispatch) => {
     _removeFromCar: (data) => {
       return dispatch(removeFromCar(data));
     },
+    _getAvailablePackages: (id) => {
+      return dispatch(getAvailablePackages(id));
+    }
   };
 };
 
 Cars.propTypes = {
   cars: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       registrationNumber: PropTypes.string,
       status: PropTypes.string,
-      packageIds: PropTypes.arrayOf(PropTypes.string),
-      driverId: PropTypes.string,
     })
   ),
   _getCars: PropTypes.func,

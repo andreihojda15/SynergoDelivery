@@ -121,7 +121,7 @@ export default class CarsService {
       let newData = {
         pack: {
           ...data.pack,
-          carID: data.car.guid,
+          carId: data.car.guid,
         },
         car: {
           ...data.car,
@@ -148,7 +148,7 @@ export default class CarsService {
       let modified = {
         pack: {
           ...data.pack,
-          carID: undefined,
+          carId: undefined,
         },
         car: {
           ...data.car,

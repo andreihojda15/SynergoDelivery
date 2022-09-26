@@ -98,17 +98,17 @@ class PackageList extends React.Component {
                       <td>{p.awb}</td>
                       <td>{p.senderName}</td>
                       <td>{p.senderPhoneNumber}</td>
-                      <td>{p.departureAdress}</td>
+                      <td>{p.departureAddress}</td>
                       <td>{p.departureDate}</td>
                       <td>{p.recipientName}</td>
-                      <td>{p.recipientPhoneNumber}</td>
-                      <td>{p.deliveryAdress}</td>
+                      <td>{p.recipientPhone}</td>
+                      <td>{p.deliveryAddress}</td>
                       <td
                         style={{
                           width: "20rem",
                         }}
                       >
-                        {p.carID !== undefined ? (
+                        {p.carId !== undefined ? (
                           <Button
                             variant="primary"
                             size="sm"

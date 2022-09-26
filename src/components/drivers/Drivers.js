@@ -237,14 +237,14 @@ class Drivers extends Component {
                                 driver.carId ?
                                   <Button
                                     size="sm"
-                                    variant="secondary"
+                                    variant="success"
                                   >
                                     Available
                                   </Button>
                                   :
-                                  <Button disabled={driver.carId}
+                                  <Button
                                     size="sm"
-                                    variant="secondary"
+                                    variant="success"
                                     onClick={() => {
                                       this.onAvailableCars(driver);
                                     }}

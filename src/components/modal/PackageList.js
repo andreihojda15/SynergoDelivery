@@ -24,7 +24,7 @@ class PackageList extends React.Component {
     this.props.unsetReadyForDelete();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.isLoading && !this.props.isLoading) {
       this.setState({
         packages: [...this.props.getAvailablePackages()],

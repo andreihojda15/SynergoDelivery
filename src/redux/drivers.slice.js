@@ -164,29 +164,29 @@ const driversSlice = createSlice({
 		});
 
 		builder.addCase(addCarToDriver.pending, (state, action) => {
-      console.log("--- add driver to car pending...");
-      state.isLoadingDriverToCar = true;
-      state.errorMessage = "";
-      state.successMessage = "";
-    });
+			console.log("--- add driver to car pending...");
+			state.isLoadingDriverToCar = true;
+			state.errorMessage = "";
+			state.successMessage = "";
+		});
 
-    builder.addCase(addCarToDriver.fulfilled, (state, action) => {
-      console.log("--- add car to driver fulfilled...");
-      state.isLoadingDriverToCar = false;
-      let indexOfUpdatedDriver = state.drivers.findIndex(
-        (driver) => driver.guid === action.payload.driver.guid
-      );
-      if (indexOfUpdatedDriver !== -1) {
-        state.drivers.splice(indexOfUpdatedDriver, 1, action.payload.driver);
-        state.successMessage = `Successfully added car to driver ${action.payload.driver.name}.`;
-      }
-    });
+		builder.addCase(addCarToDriver.fulfilled, (state, action) => {
+			console.log("--- add car to driver fulfilled...");
+			state.isLoadingDriverToCar = false;
+			let indexOfUpdatedDriver = state.drivers.findIndex(
+				(driver) => driver.guid === action.payload.driver.guid
+			);
+			if (indexOfUpdatedDriver !== -1) {
+				state.drivers.splice(indexOfUpdatedDriver, 1, action.payload.driver);
+				state.successMessage = `Successfully added car to driver ${action.payload.driver.name}.`;
+			}
+		});
 
-    builder.addCase(addCarToDriver.rejected, (state, action) => {
-      console.log("--- add car to driver rejected...");
-      state.isLoadingDriverToCar = false;
-      state.errorMessage = "Unable to add car to driver.";
-    });
+		builder.addCase(addCarToDriver.rejected, (state, action) => {
+			console.log("--- add car to driver rejected...");
+			state.isLoadingDriverToCar = false;
+			state.errorMessage = "Unable to add car to driver.";
+		});
 	},
 })
 

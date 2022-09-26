@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ModalBody, ModalHeader, ModalTitle, Table } from "react-bootstrap";
-import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 
 class AvailableCars extends Component {
@@ -11,11 +11,11 @@ class AvailableCars extends Component {
 
     let availableCars = this.props.getAvailableCars();
     this.state = {
-      cars: [...availableCars]
+      cars: [...availableCars],
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.isLoading && !this.props.isLoading) {
       this.setState({
         cars: [...this.props.getAvailableCars()],
@@ -23,9 +23,8 @@ class AvailableCars extends Component {
     }
   }
 
-
   handleAssign = (car) => {
-    return this.props.addCarToDriver({car, driver: this.props.driver});
+    return this.props.addCarToDriver({ car, driver: this.props.driver });
   }
 
   render() {
@@ -34,7 +33,7 @@ class AvailableCars extends Component {
         <ModalHeader className="modalHeader" closeButton>
           <ModalTitle>Available Cars</ModalTitle>
         </ModalHeader>
-        <ModalBody className="modalBody">
+        <ModalBody style={{ display: "flex" }} className="modalBody">
           {this.props.isLoading ? (
             <Spinner className="spinner" animation="border" variant="info" />
           ) : (

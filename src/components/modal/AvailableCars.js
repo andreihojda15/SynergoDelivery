@@ -6,7 +6,7 @@ import Spinner from "react-bootstrap/Spinner";
 
 class AvailableCars extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     let availableCars = this.props.getAvailableCars();
@@ -15,14 +15,14 @@ class AvailableCars extends Component {
     }
   }
 
-    render() {
-        return (
-          <Modal backdrop={"static"} show={true} onHide={this.props.handleClose}>
-            <ModalHeader className="modalHeader" closeButton>
-              <ModalTitle>Available Cars</ModalTitle>
-            </ModalHeader>
-            <ModalBody className="modalBody">
-            {this.props.isLoading ? (
+  render() {
+    return (
+      <Modal backdrop={"static"} show={true} onHide={this.props.handleClose}>
+        <ModalHeader className="modalHeader" closeButton>
+          <ModalTitle>Available Cars</ModalTitle>
+        </ModalHeader>
+        <ModalBody className="modalBody">
+          {this.props.isLoading ? (
             <Spinner className="spinner" animation="border" variant="info" />
           ) : (
             <Table
@@ -44,24 +44,24 @@ class AvailableCars extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.cars.map((p, i) => {
+                {this.state.cars.map((c, i) => {
                   return (
-                    <tr key={p.guid}>
+                    <tr key={c.guid}>
                       <td>{i + 1}</td>
-                      <td>{p.registrationNumber}</td>
-                      <td>{p.status}</td>
+                      <td>{c.registrationNumber}</td>
+                      <td>{c.status}</td>
                       <td><Button variant="success">Assign</Button></td>
                     </tr>
                   );
                 })}
               </tbody>
             </Table>
-          )} 
-              
-            </ModalBody>
-          </Modal>
-        );
-      }
+          )}
+
+        </ModalBody>
+      </Modal>
+    );
+  }
 }
 
 export default AvailableCars;

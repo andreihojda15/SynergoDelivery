@@ -72,7 +72,13 @@ class Drivers extends Component {
   onEditDriver = (driver) => {
     this.setState({
       showAddOrEditModal: true,
-      driverSelectedForEdit: driver,
+      driverSelectedForEdit: {
+        guid: driver.guid,
+        name: driver.name,
+        phoneNumber: driver.phoneNumber,
+        carId: driver.carId,
+        status: driver.carId ? "Busy" : "Available",
+      },
     });
   };
 
@@ -101,7 +107,7 @@ class Drivers extends Component {
     this.retrieveDrivers();
     // this.retrieveCars();
   }
-  
+
   retrieveCars = () => {
     // if (this.props.cars.length === 0) {
     //   this.props._getCars()
@@ -131,7 +137,7 @@ class Drivers extends Component {
 
   onAvailableCars = () => {
     this.setState({
-      showAvailableCarsModal: true,      
+      showAvailableCarsModal: true,
     })
   }
 
@@ -159,7 +165,7 @@ class Drivers extends Component {
         }
       });
     }
-    if(this.props.cars.length === 0){
+    if (this.props.cars.length === 0) {
       this.props._getCars();
     }
   };
@@ -195,6 +201,7 @@ class Drivers extends Component {
                       guid: uuid4(),
                       name: "",
                       phoneNumber: "",
+                      status: "",
                     }
                   }
                   title={this.state.driverSelectedForEdit ? "Edit Driver" : "Add Driver"}
@@ -242,26 +249,26 @@ class Drivers extends Component {
                             <td>{driver.phoneNumber}</td>
                             <td>{driver.carId ? "Busy" : "Available"}
 
-                             {
-                              driver.carId ? 
-                            <Button
-                             size="sm"
-                             variant="secondary"
-                            >
-                              Available               
-                            </Button>
-                            :
-                            <Button disabled={driver.carId}
-                             size="sm"
-                             variant="secondary"
-                             onClick={() => {
-                              this.onAvailableCars();
-                             }}
-                            >
-                             Assign to car
-                            </Button>
-                            }  
-                                
+                              {
+                                driver.carId ?
+                                  <Button
+                                    size="sm"
+                                    variant="secondary"
+                                  >
+                                    Available
+                                  </Button>
+                                  :
+                                  <Button disabled={driver.carId}
+                                    size="sm"
+                                    variant="secondary"
+                                    onClick={() => {
+                                      this.onAvailableCars();
+                                    }}
+                                  >
+                                    Assign to car
+                                  </Button>
+                              }
+
                             </td>
                             <td>
                               <Button
@@ -303,12 +310,12 @@ class Drivers extends Component {
                     })
                   }}
                 />)}
-                {this.state.showAvailableCarsModal && (
-                  <AvailableCars
+              {this.state.showAvailableCarsModal && (
+                <AvailableCars
                   handleClose={this.onCloseAvailableCarsModal}
-                  getAvailableCars = {this.getAvailableCars}
-                  />
-                )}
+                  getAvailableCars={this.getAvailableCars}
+                />
+              )}
             </Card>
           </>
 
@@ -356,7 +363,7 @@ Drivers.propTypes = {
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
       carId: PropTypes.string,
-
+      status: PropTypes.string,
     })
   ),
   _getDrivers: PropTypes.func,

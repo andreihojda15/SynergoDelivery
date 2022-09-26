@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import {ModalHeader,ModalTitle, ModalBody, FormLabel, FormControl, Table } from "react-bootstrap";
+import { ModalBody, ModalHeader, ModalTitle, Table } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import Modal from "react-bootstrap/Modal";
 
 class AvailableCars extends Component {
 
@@ -50,7 +50,7 @@ class AvailableCars extends Component {
                       <td>{i + 1}</td>
                       <td>{p.registrationNumber}</td>
                       <td>{p.status}</td>
-                      
+                      <td><Button variant="success">Assign</Button></td>
                     </tr>
                   );
                 })}

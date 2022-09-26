@@ -1,25 +1,21 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { Table } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Spinner from "react-bootstrap/Spinner";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
-import Card from "react-bootstrap/Card";
-import AddOrEditDrivers from "../modal/AddOrEditDrivers";
-import DeleteDriver from "../modal/DeleteDriver";
-import AvailableCars from "../modal/AvailableCars";
-import "../../style/common.css";
-import {
-  getDrivers,
-  addDriver,
-  editDriver,
-  deleteDriver,
-  clearMessages,
-} from '../../redux/drivers.slice';
-import getCars from "../../redux/cars.slice"
 import uuid4 from "uuid4";
+import { getCars } from "../../redux/cars.slice";
+import {
+  addDriver, clearMessages, deleteDriver, editDriver, getDrivers
+} from '../../redux/drivers.slice';
+import "../../style/common.css";
+import AddOrEditDrivers from "../modal/AddOrEditDrivers";
+import AvailableCars from "../modal/AvailableCars";
+import DeleteDriver from "../modal/DeleteDriver";
 
 
 
@@ -164,8 +160,7 @@ class Drivers extends Component {
       });
     }
     if(this.props.cars.length === 0){
-      debugger
-      this.props._getCars()
+      this.props._getCars();
     }
   };
 
@@ -350,7 +345,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     _getCars: () => {
       return dispatch(getCars());
-    },
+    }
   };
 };
 

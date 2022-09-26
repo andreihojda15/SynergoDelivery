@@ -275,7 +275,7 @@ class Cars extends React.Component {
                             <td>{car.registrationNumber}</td>
                             <td>{car.status}</td>
                             <td>{car.packageIds?.length}</td>
-                            <td>{car.driverId ? "Yes" : "No"}</td>
+                            <td>{car.driverId ? "No" : "Yes"}</td>
                             <td>
                               <Button
                                 size="sm"

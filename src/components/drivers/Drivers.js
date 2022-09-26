@@ -9,6 +9,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import AddOrEditDrivers from "../modal/AddOrEditDrivers";
 import DeleteDriver from "../modal/DeleteDriver";
+import AvailableCars from "../modal/AvailableCars";
 import "../../style/common.css";
 import {
   getDrivers,
@@ -17,6 +18,7 @@ import {
   deleteDriver,
   clearMessages,
 } from '../../redux/drivers.slice';
+import getCars from "../../redux/cars.slice"
 import uuid4 from "uuid4";
 
 
@@ -45,6 +47,7 @@ class Drivers extends Component {
       driverSelectedForEdit: undefined,
       showDeleteModal: false,
       driverSelectedForDelete: undefined,
+      showAvailableCarsModal: false,
       errorMessage: undefined,
 
     };
@@ -100,7 +103,47 @@ class Drivers extends Component {
 
   componentDidMount() {
     this.retrieveDrivers();
+    // this.retrieveCars();
   }
+  
+  retrieveCars = () => {
+    // if (this.props.cars.length === 0) {
+    //   this.props._getCars()
+    //   // this.setState({
+    //   //   errorMessage: undefined,
+    //   // });
+    //   // this.props._getCars().then((res) => {
+    //   //   if (res.error) {
+    //   //     this.setState({
+    //   //       errorMessage: "Error when retrieving cars",
+    //   //     });
+    //   //   }
+    //   //   if (res.payload.length === 0) {
+    //   //     this.setState({
+    //   //       errorMessage: "No cars have been retrieved",
+    //   //     });
+    //   //   }
+    //   // });
+    // }
+  };
+
+  getAvailableCars = () => {
+    return this.props.cars.filter((car) => {
+      return car.driverId === undefined;
+    })
+  }
+
+  onAvailableCars = () => {
+    this.setState({
+      showAvailableCarsModal: true,      
+    })
+  }
+
+  onCloseAvailableCarsModal = () => {
+    this.setState({
+      showAvailableCarsModal: false,
+    });
+  };
 
   retrieveDrivers = () => {
     if (this.props.drivers.length === 0) {
@@ -119,6 +162,10 @@ class Drivers extends Component {
           });
         }
       });
+    }
+    if(this.props.cars.length === 0){
+      debugger
+      this.props._getCars()
     }
   };
 
@@ -198,7 +245,29 @@ class Drivers extends Component {
                             <td>{i + 1}</td>
                             <td>{driver.name}</td>
                             <td>{driver.phoneNumber}</td>
-                            <td>{driver.carId ? "Busy" : "Available"}</td>
+                            <td>{driver.carId ? "Busy" : "Available"}
+
+                             {
+                              driver.carId ? 
+                            <Button
+                             size="sm"
+                             variant="secondary"
+                            >
+                              Available               
+                            </Button>
+                            :
+                            <Button disabled={driver.carId}
+                             size="sm"
+                             variant="secondary"
+                             onClick={() => {
+                              this.onAvailableCars();
+                             }}
+                            >
+                             Assign to car
+                            </Button>
+                            }  
+                                
+                            </td>
                             <td>
                               <Button
                                 size="sm"
@@ -239,6 +308,12 @@ class Drivers extends Component {
                     })
                   }}
                 />)}
+                {this.state.showAvailableCarsModal && (
+                  <AvailableCars
+                  handleClose={this.onCloseAvailableCarsModal}
+                  getAvailableCars = {this.getAvailableCars}
+                  />
+                )}
             </Card>
           </>
 
@@ -252,6 +327,7 @@ class Drivers extends Component {
 const mapStateToProps = (store) => {
   return {
     ...store.drivers,
+    ...store.cars,
   };
 };
 
@@ -272,7 +348,9 @@ const mapDispatchToProps = (dispatch) => {
     _clearMessages: () => {
       return dispatch(clearMessages());
     },
-
+    _getCars: () => {
+      return dispatch(getCars());
+    },
   };
 };
 
@@ -286,10 +364,11 @@ Drivers.propTypes = {
 
     })
   ),
-  _getDriverss: PropTypes.func,
+  _getDrivers: PropTypes.func,
   _addDriver: PropTypes.func,
   _editDriver: PropTypes.func,
   _deleteDriver: PropTypes.func,
+  _getCars: PropTypes.func,
   isLoading: PropTypes.bool,
 };
 

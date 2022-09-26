@@ -103,7 +103,7 @@ export default class DriversService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         return resolve(driver);
-      }, 2000);
+      }, 1000);
     });
   }
 
@@ -112,7 +112,7 @@ export default class DriversService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         return reject(`400 Bad Request: Couldn't edit driver`);
-      }, 2000);
+      }, 1000);
     });
   }
 
@@ -121,7 +121,7 @@ export default class DriversService {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             return resolve(driver);
-          }, 2000);
+          }, 1000);
         });
       }
     
@@ -130,7 +130,7 @@ export default class DriversService {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             return reject(`400 Bad Request: Couldn't delete driver`);
-          }, 2000);
+          }, 1000);
         });
       }
 }

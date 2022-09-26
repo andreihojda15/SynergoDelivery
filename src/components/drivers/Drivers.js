@@ -86,6 +86,7 @@ class Drivers extends Component {
 
   assignCarToDriver = (c) => {
     this.props._addCarToDriver(c);
+    this.onCloseAvailableCarsModal();
   }
 
   onDeleteDriver = (driver) => {

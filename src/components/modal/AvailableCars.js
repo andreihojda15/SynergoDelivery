@@ -29,14 +29,14 @@ class AvailableCars extends Component {
 
   render() {
     return (
-      <Modal backdrop={"static"} show={true} onHide={this.props.handleClose}>
+      <Modal style={{ marginTop: "100px" }} backdrop={"static"} show={this.props.driver.carId === undefined} onHide={this.props.handleClose}>
         <ModalHeader className="modalHeader" closeButton>
           <ModalTitle>Available Cars</ModalTitle>
         </ModalHeader>
-        <ModalBody style={{ display: "flex" }} className="modalBody">
+        <ModalBody style={{ display: "flex", justifyContent: 'center' }} className="modalBody">
           {this.props.isLoading ? (
             <Spinner className="spinner" animation="border" variant="info" />
-          ) : (
+          ) : this.state.cars.length !== 0 ? (
             <Table
               className="tableList"
               striped
@@ -68,7 +68,7 @@ class AvailableCars extends Component {
                 })}
               </tbody>
             </Table>
-          )}
+          ) : <div>No cars available!</div>}
 
         </ModalBody>
       </Modal>

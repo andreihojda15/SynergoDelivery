@@ -275,7 +275,7 @@ class Cars extends React.Component {
                             <td>{car.registrationNumber}</td>
                             <td>{car.status}</td>
                             <td>{car.packageIds?.length}</td>
-                            <td>{car.driverId ? "No" : "Yes"}</td>
+                            <td>{car.status === 'Available' ? "No" : "Yes"}</td>
                             <td>
                               <Button
                                 size="sm"
@@ -370,7 +370,6 @@ Cars.propTypes = {
       registrationNumber: PropTypes.string,
       status: PropTypes.string,
       packageIds: PropTypes.arrayOf(PropTypes.string),
-      driverId: PropTypes.string,
     })
   ),
   _getCars: PropTypes.func,

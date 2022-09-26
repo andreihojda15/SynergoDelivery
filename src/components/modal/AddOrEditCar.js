@@ -124,7 +124,6 @@ AddOrEditCar.propTypes = {
     registrationNumber: PropTypes.string,
     status: PropTypes.string,
     packageIds: PropTypes.arrayOf(PropTypes.string),
-    driverId: PropTypes.string,
   }),
   handleClose: PropTypes.func,
   handleSave: PropTypes.func,

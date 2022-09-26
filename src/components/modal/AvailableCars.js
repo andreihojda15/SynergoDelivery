@@ -15,6 +15,19 @@ class AvailableCars extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.isLoading && !this.props.isLoading) {
+      this.setState({
+        cars: [...this.props.getAvailableCars()],
+      });
+    }
+  }
+
+
+  handleAssign = (car) => {
+    return this.props.addCarToDriver({car, driver: this.props.driver});
+  }
+
   render() {
     return (
       <Modal backdrop={"static"} show={true} onHide={this.props.handleClose}>
@@ -50,7 +63,7 @@ class AvailableCars extends Component {
                       <td>{i + 1}</td>
                       <td>{c.registrationNumber}</td>
                       <td>{c.status}</td>
-                      <td><Button variant="success">Assign</Button></td>
+                      <td><Button onClick={() => this.handleAssign(c)} variant="success">Assign</Button></td>
                     </tr>
                   );
                 })}

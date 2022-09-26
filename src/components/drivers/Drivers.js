@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import uuid4 from "uuid4";
 import { getCars } from "../../redux/cars.slice";
+import { addCarToDriver } from "../../redux/common.thunks";
 import {
   addDriver, clearMessages, deleteDriver, editDriver, getDrivers
 } from '../../redux/drivers.slice';
@@ -43,9 +44,10 @@ class Drivers extends Component {
       driverSelectedForEdit: undefined,
       showDeleteModal: false,
       driverSelectedForDelete: undefined,
+      driverSelectedForAssign: undefined,
       showAvailableCarsModal: false,
       errorMessage: undefined,
-
+      readyToAssign: false,
     };
   }
 
@@ -82,6 +84,10 @@ class Drivers extends Component {
     });
   };
 
+  assignCarToDriver = (c) => {
+    this.props._addCarToDriver(c);
+  }
+
   onDeleteDriver = (driver) => {
     this.setState({
       showDeleteModal: true,
@@ -105,39 +111,18 @@ class Drivers extends Component {
 
   componentDidMount() {
     this.retrieveDrivers();
-    // this.retrieveCars();
   }
-
-  retrieveCars = () => {
-    // if (this.props.cars.length === 0) {
-    //   this.props._getCars()
-    //   // this.setState({
-    //   //   errorMessage: undefined,
-    //   // });
-    //   // this.props._getCars().then((res) => {
-    //   //   if (res.error) {
-    //   //     this.setState({
-    //   //       errorMessage: "Error when retrieving cars",
-    //   //     });
-    //   //   }
-    //   //   if (res.payload.length === 0) {
-    //   //     this.setState({
-    //   //       errorMessage: "No cars have been retrieved",
-    //   //     });
-    //   //   }
-    //   // });
-    // }
-  };
 
   getAvailableCars = () => {
     return this.props.cars.filter((car) => {
-      return car.driverId === undefined;
+      return car.status === 'Not Available';
     })
   }
 
-  onAvailableCars = () => {
+  onAvailableCars = (driver) => {
     this.setState({
       showAvailableCarsModal: true,
+      driverSelectedForAssign: driver,
     })
   }
 
@@ -248,7 +233,6 @@ class Drivers extends Component {
                             <td>{driver.name}</td>
                             <td>{driver.phoneNumber}</td>
                             <td>{driver.carId ? "Busy" : "Available"}
-
                               {
                                 driver.carId ?
                                   <Button
@@ -262,7 +246,7 @@ class Drivers extends Component {
                                     size="sm"
                                     variant="secondary"
                                     onClick={() => {
-                                      this.onAvailableCars();
+                                      this.onAvailableCars(driver);
                                     }}
                                   >
                                     Assign to car
@@ -314,6 +298,9 @@ class Drivers extends Component {
                 <AvailableCars
                   handleClose={this.onCloseAvailableCarsModal}
                   getAvailableCars={this.getAvailableCars}
+                  driver={this.state.driverSelectedForAssign}
+                  addCarToDriver={this.assignCarToDriver}
+                  isLoading={this.props.isLoadingDriverToCar}
                 />
               )}
             </Card>
@@ -352,7 +339,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     _getCars: () => {
       return dispatch(getCars());
-    }
+    },
+    _addCarToDriver: (data) => {
+      return dispatch(addCarToDriver(data));
+    },
   };
 };
 

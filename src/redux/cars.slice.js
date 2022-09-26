@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CarsService from "../services/cars.service";
-import { addPackageToCar, removeFromCar } from "./common.thunks";
+import { addPackageToCar, removeFromCar, addCarToDriver } from "./common.thunks";
 
 // First, create the thunk
 export const getCars = createAsyncThunk(
@@ -50,6 +50,7 @@ const carsSlice = createSlice({
   initialState: {
     isLoading: false,
     isLoadingList: false,
+    isLoadingDriverToCar: false,
     isEditingCar: false,
     cars: [],
     errorMessage: "",
@@ -183,6 +184,31 @@ const carsSlice = createSlice({
       console.log("--- edit car rejected...");
       state.isEditingCar = false;
       state.errorMessage = "Unable to edit car.";
+    });
+
+    builder.addCase(addCarToDriver.pending, (state, action) => {
+      console.log("--- add driver to car pending...");
+      state.isLoadingDriverToCar = true;
+      state.errorMessage = "";
+      state.successMessage = "";
+    });
+
+    builder.addCase(addCarToDriver.fulfilled, (state, action) => {
+      console.log("--- add driver to car fulfilled...");
+      state.isLoadingDriverToCar = false;
+      let indexOfUpdatedCar = state.cars.findIndex(
+        (car) => car.guid === action.payload.car.guid
+      );
+      if (indexOfUpdatedCar !== -1) {
+        state.cars.splice(indexOfUpdatedCar, 1, action.payload.car);
+        state.successMessage = `Successfully added driver to car ${action.payload.car.registrationNumber}.`;
+      }
+    });
+
+    builder.addCase(addCarToDriver.rejected, (state, action) => {
+      console.log("--- add driver to car rejected...");
+      state.isLoadingDriverToCar = false;
+      state.errorMessage = "Unable to add driver to car.";
     });
   },
 });

@@ -48,7 +48,6 @@ class AddOrEditDrivers extends Component {
 							}}
 							validationSchema={driverSchema}
 							onSubmit={(values) => {
-								debugger
 								return this.props.handleSave(values
 								);
 							}}

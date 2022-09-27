@@ -97,7 +97,7 @@ export default class CarsService {
     });
   }
 
-  // simulate add
+  // simulate edit
   static editCar(car) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

@@ -16,11 +16,25 @@ export default class GenericService {
   }
 
   static async post(relativePath, data) {
-    debugger
     const response = await fetch(`${apiUrl}/${relativePath}`,
       {
         crossDomain: true,
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET'
+        },
+        body: JSON.stringify(data),
+      });
+    return await response.json();
+  }
+
+  static async put(relativePath, data) {
+    const response = await fetch(`${apiUrl}/${relativePath}`,
+      {
+        crossDomain: true,
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',

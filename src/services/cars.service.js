@@ -89,11 +89,7 @@ export default class CarsService {
 
   // simulate edit
   static editCar(car) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(car);
-      }, 1000);
-    });
+    return GenericService.put(`cars/${car.id}`, car)
   }
 
   // simulate edit failed

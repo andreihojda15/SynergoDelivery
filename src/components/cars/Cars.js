@@ -379,7 +379,6 @@ class Cars extends React.Component {
                         // this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
                       }
                     })
-
                   }}
                 />
               )};

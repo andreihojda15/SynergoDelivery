@@ -90,7 +90,7 @@ class Cars extends React.Component {
     if (this.state.carSelectedForManage) {
       let result = this.props.packages.filter(
         (pack) =>
-          pack.carID === undefined ||
+          pack.carId === undefined ||
           this.props.cars
             .find((item) => item.guid === this.state.carSelectedForManage.guid)
             .packageIds.includes(pack.guid)

@@ -156,4 +156,13 @@ export default class CarsService {
       }, 1000);
     });
   }
+
+  static deleteCar(car) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(car);
+      }, 1000);
+    });
+  }
+
 }

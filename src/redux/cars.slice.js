@@ -45,6 +45,20 @@ export const editCar = createAsyncThunk(
   }
 );
 
+export const deleteCar = createAsyncThunk(
+  "deleteCar",
+  async (car, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await CarsService.deleteCar(car);
+      console.log(`--- successful response: ${JSON.stringify(response)}`);
+      return fulfillWithValue(response);
+    } catch (err) {
+      console.log(`--- error response: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
+  }
+);
+
 const carsSlice = createSlice({
   name: "cars",
   initialState: {
@@ -184,28 +198,28 @@ const carsSlice = createSlice({
       state.errorMessage = "Unable to edit car.";
     });
 
-    // builder.addCase(deleteCar.pending, (state, action) => {
-    //   console.log("--- delete car pending...");
-    //   state.isDeletedCar = true;
-    //   state.errorMessage = '';
-    //   state.successMessage = '';
-    // });
+    builder.addCase(deleteCar.pending, (state, action) => {
+      console.log("--- delete car pending...");
+      state.isDeletedCar = true;
+      state.errorMessage = '';
+      state.successMessage = '';
+    });
 
-    // builder.addCase(deleteCar.fulfilled, (state, action) => {
-    //   console.log("--- delete car fulfilled...");
-    //   state.isDeletedCar = false;
-    //   let indexOfDeletedCar = state.cars.findIndex((car) => car.guid === action.payload.guid);
-    //   if (indexOfDeletedCar !== -1) {
-    //     state.cars.splice(indexOfDeletedCar, 1);
-    //     state.successMessage = `Successfully deleted the car`;
-    //   }
-    // });
+    builder.addCase(deleteCar.fulfilled, (state, action) => {
+      console.log("--- delete car fulfilled...");
+      state.isDeletedCar = false;
+      let indexOfDeletedCar = state.cars.findIndex((car) => car.id === action.payload.id);
+      if (indexOfDeletedCar !== -1) {
+        state.cars.splice(indexOfDeletedCar, 1);
+        state.successMessage = `Successfully deleted the car`;
+      }
+    });
 
-    // builder.addCase(deleteCar.rejected, (state, action) => {
-    //   console.log("--- delete car rejected...");
-    //   state.isDeletedCar = false;
-    //   state.errorMessage = 'Unable to delete car.';
-    // });
+    builder.addCase(deleteCar.rejected, (state, action) => {
+      console.log("--- delete car rejected...");
+      state.isDeletedCar = false;
+      state.errorMessage = 'Unable to delete car.';
+    });
 
   },
 

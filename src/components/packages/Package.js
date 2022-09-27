@@ -16,7 +16,7 @@ import {
 
 /**
  * Package model:
- *  guid
+ *  id
  *  senderName
  *  senderPhoneNumber
  *  departureAddress
@@ -25,7 +25,7 @@ import {
  *  deliveryAddress
  *  deliveryDate // can be undefined
  *  recipientName
- *  recipientPhoneNumber
+ *  recipientPhone
  *  carId // can be undefined
  *
  * Derived properties:
@@ -147,12 +147,12 @@ class Packages extends Component {
                       let assignedToCar;
                       if (
                         p.deliveryDate === undefined &&
-                        p.carID === undefined
+                        p.carId === undefined
                       ) {
                         packageStatus = "sent";
                         assignedToCar = "no";
                       }
-                      if (p.deliveryDate === undefined && p.carID) {
+                      if (p.deliveryDate === undefined && p.carId) {
                         packageStatus = "in delivery";
                         assignedToCar = "yes";
                       }
@@ -161,16 +161,16 @@ class Packages extends Component {
                         assignedToCar = "no";
                       }
                       return (
-                        <tr key={p.guid}>
+                        <tr key={p.id}>
                           <td>{i + 1}</td>
                           <td>{p.awb}</td>
                           <td>{p.senderName}</td>
                           <td>{p.senderPhoneNumber}</td>
-                          <td>{p.departureAdress}</td>
-                          <td>{p.departureDate}</td>
+                          <td>{p.departureAddress}</td>
+                          <td>{new Date(p.departureDate[0], p.departureDate[1], p.departureDate[2]).toLocaleDateString()}</td>
                           <td>{p.recipientName}</td>
-                          <td>{p.recipientPhoneNumber}</td>
-                          <td>{p.deliveryAdress}</td>
+                          <td>{p.recipientPhone}</td>
+                          <td>{p.deliveryAddress}</td>
                           <td>{assignedToCar}</td>
                           <td>{packageStatus}</td>
                         </tr>
@@ -211,17 +211,18 @@ const mapDispatchToProps = (dispatch) => {
 Packages.propTypes = {
   packages: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       senderName: PropTypes.string,
       senderPhoneNumber: PropTypes.string,
-      departureAdress: PropTypes.string,
-      departureDate: PropTypes.string,
+      departureAddress: PropTypes.string,
+      departureDate: PropTypes.array,
       awb: PropTypes.string,
-      deliveryAdress: PropTypes.string,
-      deliveryDate: PropTypes.string,
+      deliveryAddress: PropTypes.string,
+      deliveryDate: PropTypes.array,
       recipientName: PropTypes.string,
-      recipientPhoneNumber: PropTypes.string,
-      carID: PropTypes.string,
+      recipientPhone: PropTypes.string,
+      customerId: PropTypes.number,
+      carId: PropTypes.number,
       packageStatus: PropTypes.string,
       assignedToCar: PropTypes.string,
     })

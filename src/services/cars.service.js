@@ -1,6 +1,8 @@
+import GenericService from "./generic.service";
+
 export const CARS = [
   {
-    guid: "d1c51f3b-f13f-407f-b6e2-46c5bbc747ad",
+    id: "d1c51f3b-f13f-407f-b6e2-46c5bbc747ad",
     registrationNumber: "NSG 586",
     status: "Available",
     packageIds: [
@@ -9,43 +11,43 @@ export const CARS = [
     ],
   },
   {
-    guid: "62ee4afa-b261-4f0a-9581-386cf9e0c4c0",
+    id: "62ee4afa-b261-4f0a-9581-386cf9e0c4c0",
     registrationNumber: "586 5GX",
     status: "Not Available",
     packageIds: [],
   },
   {
-    guid: "c1f0c515-4862-434c-91bb-b477504f5161",
+    id: "c1f0c515-4862-434c-91bb-b477504f5161",
     registrationNumber: "KUL 576",
     status: "Available",
     packageIds: ["6ce585e6-9a7b-41ba-aa7a-57988914e82f"],
   },
   {
-    guid: "0e063045-c96a-4d34-8cc5-4ca2223616dc",
+    id: "0e063045-c96a-4d34-8cc5-4ca2223616dc",
     registrationNumber: "LLO 542",
     status: "Available",
     packageIds: ["60de2190-26d6-4ac4-a8ed-359e028dc3e8"],
   },
   {
-    guid: "49ce9298-161a-4a04-82c0-31640f05dc31",
+    id: "49ce9298-161a-4a04-82c0-31640f05dc31",
     registrationNumber: "UYR 869",
     status: "Available",
     packageIds: ["3731ba01-57b5-4742-a64d-0de061b382be"],
   },
   {
-    guid: "be37bda1-0b19-43da-b874-ac359926737c",
+    id: "be37bda1-0b19-43da-b874-ac359926737c",
     registrationNumber: "FDS 45C",
     status: "Not Available",
     packageIds: [],
   },
   {
-    guid: "80575920-8b09-42be-90ae-e7000e9c0384",
+    id: "80575920-8b09-42be-90ae-e7000e9c0384",
     registrationNumber: "693 KLS",
     status: "Not Available",
     packageIds: [],
   },
   {
-    guid: "bad6d196-a0f1-47bb-8e95-69ace085bcee",
+    id: "bad6d196-a0f1-47bb-8e95-69ace085bcee",
     registrationNumber: "GMNS5699",
     status: "Not Available",
     packageIds: [],
@@ -55,11 +57,11 @@ export const CARS = [
 export default class CarsService {
   // simulate success
   static getCars() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(CARS);
-      }, 1000);
-    });
+    return GenericService.get('cars');
+  }
+
+  static getAvailablePackages(id) {
+    return GenericService.get(`cars/availablePackages/${id}`);
   }
 
   // simulate fail
@@ -89,7 +91,7 @@ export default class CarsService {
     });
   }
 
-  // simulate add
+  // simulate edit
   static editCar(car) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -113,11 +115,11 @@ export default class CarsService {
       let newData = {
         pack: {
           ...data.pack,
-          carID: data.car.guid,
+          carId: data.car.id,
         },
         car: {
           ...data.car,
-          packageIds: [...data.car.packageIds, data.pack.guid],
+          packageIds: [...data.car.packageIds, data.pack.id],
         },
       };
       setTimeout(() => {
@@ -140,12 +142,12 @@ export default class CarsService {
       let modified = {
         pack: {
           ...data.pack,
-          carID: undefined,
+          carId: undefined,
         },
         car: {
           ...data.car,
           packageIds: data.car.packageIds.filter(
-            (item) => item !== data.pack.guid
+            (item) => item !== data.pack.id
           ),
         },
       };

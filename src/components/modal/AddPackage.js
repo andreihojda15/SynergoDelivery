@@ -23,7 +23,7 @@ const packageSchema = Yup.object().shape({
     .required("Required!")
     .min(2, "Too short!")
     .matches(/^[0-9 +-]*$/, "Please enter a valid phone number"),
-  departureAdress: Yup.string()
+  departureAddress: Yup.string()
     .required("Required!")
     .min(2, "Too short!")
     .matches(/^[0-9A-Za-z- ]*$/, "Please enter a valid address"),
@@ -32,11 +32,11 @@ const packageSchema = Yup.object().shape({
     .required("Required!")
     .min(2, "Too short!")
     .matches(/^[A-Za-z- ]*$/, "Please enter a valid name"),
-  recipientPhoneNumber: Yup.string()
+  recipientPhone: Yup.string()
     .required("Required!")
     .min(2, "Too short!")
     .matches(/^[0-9 +-]*$/, "Please enter a valid phone number"),
-  deliveryAdress: Yup.string()
+  deliveryAddress: Yup.string()
     .required("Required!")
     .min(2, "Too short!")
     .matches(/^[0-9A-Za-z- ]*$/, "Please enter a valid address"),
@@ -55,26 +55,26 @@ class AddPackage extends Component {
               awb: "",
               senderName: "",
               senderPhoneNumber: "+1",
-              departureAdress: "",
+              departureAddress: "",
               departureDate: "",
               recipientName: "",
-              recipientPhoneNumber: "",
-              deliveryAdress: "",
+              recipientPhone: "",
+              deliveryAddress: "",
             }}
             validationSchema={packageSchema}
             onSubmit={(values) => {
               return this.props._addPackage({
-                guid: uuid4(),
+                id: uuid4(),
                 awb: values.awb,
                 senderName: values.senderName,
                 senderPhoneNumber: values.senderPhoneNumber,
-                departureAdress: values.departureAdress,
+                departureAddress: values.departureAddress,
                 departureDate: new Date(
                   values.departureDate
                 ).toLocaleDateString(),
                 recipientName: values.recipientName,
-                recipientPhoneNumber: values.recipientPhoneNumber,
-                deliveryAdress: values.deliveryAdress,
+                recipientPhone: values.recipientPhone,
+                deliveryAddress: values.deliveryAddress,
               });
             }}
           >
@@ -136,13 +136,13 @@ class AddPackage extends Component {
                   <Form.Control
                     type="text"
                     placeholder="Departure"
-                    name="departureAdress"
-                    value={values.departureAdress}
-                    isValid={touched.departureAdress && !errors.departureAdress}
+                    name="departureAddress"
+                    value={values.departureAddress}
+                    isValid={touched.departureAddress && !errors.departureAddress}
                     onChange={handleChange}
                   />
-                  {errors.departureAdress && touched.departureAdress ? (
-                    <div className="errorDiv">{errors.departureAdress}</div>
+                  {errors.departureAddress && touched.departureAddress ? (
+                    <div className="errorDiv">{errors.departureAddress}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formDepDate">
@@ -178,18 +178,18 @@ class AddPackage extends Component {
                   <Form.Control
                     type="text"
                     placeholder="Phone"
-                    name="recipientPhoneNumber"
-                    value={values.recipientPhoneNumber}
+                    name="recipientPhone"
+                    value={values.recipientPhone}
                     isValid={
-                      touched.recipientPhoneNumber &&
-                      !errors.recipientPhoneNumber
+                      touched.recipientPhone &&
+                      !errors.recipientPhone
                     }
                     onChange={handleChange}
                   />
-                  {errors.recipientPhoneNumber &&
-                  touched.recipientPhoneNumber ? (
+                  {errors.recipientPhone &&
+                  touched.recipientPhone ? (
                     <div className="errorDiv">
-                      {errors.recipientPhoneNumber}
+                      {errors.recipientPhone}
                     </div>
                   ) : null}
                 </Form.Group>
@@ -198,13 +198,13 @@ class AddPackage extends Component {
                   <Form.Control
                     type="text"
                     placeholder="Address"
-                    name="deliveryAdress"
-                    value={values.deliveryAdress}
-                    isValid={touched.deliveryAdress && !errors.deliveryAdress}
+                    name="deliveryAddress"
+                    value={values.deliveryAddress}
+                    isValid={touched.deliveryAddress && !errors.deliveryAddress}
                     onChange={handleChange}
                   />
-                  {errors.deliveryAdress && touched.deliveryAdress ? (
-                    <div className="errorDiv">{errors.deliveryAdress}</div>
+                  {errors.deliveryAddress && touched.deliveryAddress ? (
+                    <div className="errorDiv">{errors.deliveryAddress}</div>
                   ) : null}
                 </Form.Group>
                 <div style={{ display: "flex", justifyContent: "center" }}>

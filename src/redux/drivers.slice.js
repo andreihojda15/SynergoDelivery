@@ -127,7 +127,7 @@ const driversSlice = createSlice({
 		builder.addCase(editDriver.fulfilled, (state, action) => {
 			console.log("--- edit driver fulfilled...");
 			state.isEditingDriver = false;
-			let indexOfUpdatedDriver = state.drivers.findIndex((driver) => driver.guid === action.payload.guid);
+			let indexOfUpdatedDriver = state.drivers.findIndex((driver) => driver.id === action.payload.id);
 			if (indexOfUpdatedDriver !== -1) {
 				state.drivers.splice(indexOfUpdatedDriver, 1, action.payload);
 				state.successMessage = `Successfully updated driver`;
@@ -150,7 +150,7 @@ const driversSlice = createSlice({
 		builder.addCase(deleteDriver.fulfilled, (state, action) => {
 			console.log("--- delete driver fulfilled...");
 			state.isDeletingDriver = false;
-			let indexOfDeletedDriver = state.drivers.findIndex((driver) => driver.guid === action.payload.guid);
+			let indexOfDeletedDriver = state.drivers.findIndex((driver) => driver.id === action.payload.id);
 			if (indexOfDeletedDriver !== -1) {
 				state.drivers.splice(indexOfDeletedDriver, 1);
 				state.successMessage = `Successfully deleted driver`;
@@ -174,7 +174,7 @@ const driversSlice = createSlice({
 			console.log("--- add car to driver fulfilled...");
 			state.isLoadingDriverToCar = false;
 			let indexOfUpdatedDriver = state.drivers.findIndex(
-				(driver) => driver.guid === action.payload.driver.guid
+				(driver) => driver.id === action.payload.driver.id
 			);
 			if (indexOfUpdatedDriver !== -1) {
 				state.drivers.splice(indexOfUpdatedDriver, 1, action.payload.driver);

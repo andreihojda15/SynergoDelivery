@@ -8,10 +8,11 @@ import {
   addCar,
   editCar,
   getCars,
+  // deleteCar,
   clearMessages,
 } from "../../redux/cars.slice";
 
-import { getPackages } from "../../redux/packages.slice";
+import { getAvailablePackages, getPackages } from "../../redux/packages.slice";
 
 import AddOrEditCar from "../modal/AddOrEditCar";
 import PackageList from "../modal/PackageList";
@@ -24,11 +25,11 @@ import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
 
 /**
  * Car model:
- *  guid
+ *  id
  *  registrationNumber
  *  status // available, not available
- *  packageIds // array of package guids
- *  driverId // driver guid
+ *  packageIds // array of package ids
+ *  driverId // driver id
  *
  *  Table columns
  *  #
@@ -42,16 +43,20 @@ class Cars extends React.Component {
   constructor(props) {
     super(props);
 
+
     this.state = {
       showAddOrEditModal: false,
       carSelectedForEdit: undefined,
       errorMessage: undefined,
+      showDeleteCar: false,
+      carSelectedForDelete: undefined,
       showManagePackages: false,
       carSelectedForManage: undefined,
       packageSelectedForManage: undefined,
       readyForAdd: false,
       readyForDelete: false,
     };
+
   }
 
   componentDidMount() {
@@ -82,17 +87,18 @@ class Cars extends React.Component {
   };
 
   getAvailablePackages = () => {
-    if (this.state.carSelectedForManage) {
-      let result = this.props.packages.filter(
-        (pack) =>
-          pack.carID === undefined ||
-          this.props.cars
-            .find((item) => item.guid === this.state.carSelectedForManage.guid)
-            .packageIds.includes(pack.guid)
-      );
-      return result;
-    }
-    return [];
+    return this.props._getAvailablePackages(this.state.carSelectedForManage.id);
+    // if (this.state.carSelectedForManage) {
+    //   let result = this.props.packages.filter(
+    //     (pack) => {
+    //       return pack.carId === undefined ||
+    //         pack.carId === null ||
+    //         pack.carId === this.state.carSelectedForManage.id
+    //     }
+    //   );
+    //   return result;
+    // }
+    // return [];
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -122,6 +128,13 @@ class Cars extends React.Component {
     });
   };
 
+  onDelete = (car) => {
+    this.setState({
+      showDeleteCar: true,
+      carSelectedForDelete: car,
+    })
+  }
+
   onAddCar = () => {
     this.setState({
       showAddOrEditModal: true,
@@ -133,7 +146,7 @@ class Cars extends React.Component {
     this.setState({
       showManagePackages: true,
       carSelectedForManage: this.props.cars.find(
-        (item) => item.guid === car.guid
+        (item) => item.id === car.id
       ),
     });
   };
@@ -152,11 +165,19 @@ class Cars extends React.Component {
     });
   };
 
+
+  onDeleteModal = (car) => {
+    this.setState({
+      showDeleteCar: false,
+      carSelectedForDelete: car,
+    })
+  }
+
   setReadyForAdd = (p) => {
     this.props._addPackageToCar({
       pack: p,
       car: this.props.cars.find(
-        (item) => item.guid === this.state.carSelectedForManage.guid
+        (item) => item.id === this.state.carSelectedForManage.id
       ),
     });
   };
@@ -172,7 +193,7 @@ class Cars extends React.Component {
     this.props._removeFromCar({
       pack: p,
       car: this.props.cars.find(
-        (item) => item.guid === this.state.carSelectedForManage.guid
+        (item) => item.id === this.state.carSelectedForManage.id
       ),
     });
   };
@@ -186,6 +207,7 @@ class Cars extends React.Component {
 
   render() {
     console.log(`--- render: ${this.state.showAddOrEditModal}`);
+
     return (
       <>
         {this.props.isLoading ? (
@@ -195,22 +217,50 @@ class Cars extends React.Component {
             <Card bg="dark" text="white" className="cardTable">
               <Card.Header style={{ textAlign: "center" }}>
                 List of Cars
+                <Button variant="success" onClick={this.onAddCar}>
+                  Add Car
+                </Button>
               </Card.Header>
+              {this.state.showAddOrEditModal && (
+                <AddOrEditCar
+                  isLoading={this.props.isEditingCar}
+                  handleClose={this.onCloseAddOrEditModal}
+                  car={
+                    this.state.carSelectedForEdit ?? {
+                      id: uuid4(),
+                      registrationNumber: "",
+                      status: "",
+                    }
+                  }
+                  title={this.state.carSelectedForEdit ? "Edit Car" : "Add Car"}
+                  handleSave={(car) => {
+                    this.state.carSelectedForEdit
+                      ? this.props._editCar(car).then((response) => {
+                        if (!response.error) {
+                          this.onCloseAddOrEditModal();
+                        }
+                      })
+                      : this.props._addCar(car).then((response) => {
+                        if (!response.error) {
+                          this.onCloseAddOrEditModal();
+                        }
+                      });
+                  }}
+                />
+              )}
+
               <Card.Body style={{ textAlign: "center" }} className="cardBody">
                 {this.state.errorMessage ? (
                   <p className="errorText">{this.state.errorMessage}</p>
                 ) : (
                   <>
-                    <Button variant="success" onClick={this.onAddCar}>
-                      Add Car
-                    </Button>
                     {this.state.showAddOrEditModal && (
                       <AddOrEditCar
                         isLoading={this.props.isEditingCar}
                         handleClose={this.onCloseAddOrEditModal}
                         car={
                           this.state.carSelectedForEdit ?? {
-                            guid: uuid4(),
+                            id: uuid4(),
                             registrationNumber: "",
                             status: "",
                           }
@@ -235,10 +285,11 @@ class Cars extends React.Component {
                     )}
                     {this.state.showManagePackages && (
                       <PackageList
-                        getAvailablePackages={this.getAvailablePackages}
+                        // getAvailablePackages={this.getAvailablePackages}
+                        // availablePacks={this.props.availablePackages}
                         car={
                           this.state.carSelectedForManage ?? {
-                            guid: uuid4(),
+                            id: uuid4(),
                             registrationNumber: "",
                             status: "",
                           }
@@ -270,12 +321,12 @@ class Cars extends React.Component {
                       </thead>
                       <tbody>
                         {this.props.cars.map((car, i) => (
-                          <tr key={car.guid}>
+                          <tr key={car.id}>
                             <td>{i + 1}</td>
                             <td>{car.registrationNumber}</td>
                             <td>{car.status}</td>
-                            <td>{car.packageIds?.length}</td>
-                            <td>{car.status === 'Available' ? "No" : "Yes"}</td>
+                            <td>{this.props.packages.filter(pack => pack.carId === car.id).length}</td>
+                            <td>{this.props.drivers.filter(driver => driver.carId === car.id).length !== 0 ? "Yes" : "No"}</td>
                             <td>
                               <Button
                                 size="sm"
@@ -293,7 +344,7 @@ class Cars extends React.Component {
                                 variant="primary"
                                 style={{ marginTop: 5 }}
                                 onClick={() => {
-                                  this.props.onDelete(car);
+                                  this.onDelete(car);
                                 }}
                               >
                                 Delete
@@ -315,18 +366,37 @@ class Cars extends React.Component {
                   </>
                 )}
               </Card.Body>
+              {/* {this.state.showDeleteCar && (
+                <DeleteCar
+                  show={this.state.showDeleteCar}
+                  handleClose={() => this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })}
+                  car={this.state.carSelectedForDelete}
+                  handleSave={(car) => {
+                    this.props._deleteCar(car).then((response) => {
+                      if (!response.error) {
+                        this.onDeleteModal();
+                        // this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
+                      }
+                    })
+
+                  }}
+                />
+              )}; */}
             </Card>
             <ToastContainer theme="dark" />
           </>
         )}
+
       </>
     );
+
   }
 }
 
 const mapStateToProps = (store) => {
   return {
     ...store.cars,
+    drivers: store.drivers.drivers,
     isFinished: store.packages.isFinished,
     packages: store.packages.packages,
     isLoadingList: store.packages.isLoadingList,
@@ -348,6 +418,9 @@ const mapDispatchToProps = (dispatch) => {
     _editCar: (car) => {
       return dispatch(editCar(car));
     },
+    // _deleteCar: (car) => {
+    //   return dispatch(deleteCar(car));
+    // },
     _clearMessages: () => {
       return dispatch(clearMessages());
     },
@@ -360,22 +433,26 @@ const mapDispatchToProps = (dispatch) => {
     _removeFromCar: (data) => {
       return dispatch(removeFromCar(data));
     },
+    _getAvailablePackages: (id) => {
+      return dispatch(getAvailablePackages(id));
+    }
   };
 };
 
 Cars.propTypes = {
   cars: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       registrationNumber: PropTypes.string,
       status: PropTypes.string,
-      packageIds: PropTypes.arrayOf(PropTypes.string),
     })
   ),
   _getCars: PropTypes.func,
   _addCar: PropTypes.func,
   _editCar: PropTypes.func,
+  _deleteCar: PropTypes.func,
   isLoading: PropTypes.bool,
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cars);

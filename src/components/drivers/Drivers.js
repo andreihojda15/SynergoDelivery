@@ -22,10 +22,10 @@ import DeleteDriver from "../modal/DeleteDriver";
 
 /**
  * Driver model:
- *  guid
+ *  id
  *  name
  *  phoneNumber
- *  carId // car guid, can be undefined => status: busy / available
+ *  carId // car id, can be undefined => status: busy / available
  *
  *  Table columns
  *  #
@@ -75,7 +75,7 @@ class Drivers extends Component {
     this.setState({
       showAddOrEditModal: true,
       driverSelectedForEdit: {
-        guid: driver.guid,
+        id: driver.id,
         name: driver.name,
         phoneNumber: driver.phoneNumber,
         carId: driver.carId,
@@ -184,7 +184,7 @@ class Drivers extends Component {
                   handleClose={this.onCloseAddOrEditModal}
                   driver={
                     this.state.driverSelectedForEdit ?? {
-                      guid: uuid4(),
+                      id: uuid4(),
                       name: "",
                       phoneNumber: "",
                       status: "",
@@ -229,7 +229,7 @@ class Drivers extends Component {
                       </thead>
                       <tbody>
                         {this.props.drivers.map((driver, i) => (
-                          <tr key={driver.guid}>
+                          <tr key={driver.id}>
                             <td>{i + 1}</td>
                             <td>{driver.name}</td>
                             <td>{driver.phoneNumber}</td>
@@ -350,10 +350,10 @@ const mapDispatchToProps = (dispatch) => {
 Drivers.propTypes = {
   drivers: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      carId: PropTypes.string,
+      carId: PropTypes.number,
       status: PropTypes.string,
     })
   ),

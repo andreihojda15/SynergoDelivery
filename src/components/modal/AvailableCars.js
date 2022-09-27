@@ -58,7 +58,7 @@ class AvailableCars extends Component {
               <tbody>
                 {this.state.cars.map((c, i) => {
                   return (
-                    <tr key={c.guid}>
+                    <tr key={c.id}>
                       <td>{i + 1}</td>
                       <td>{c.registrationNumber}</td>
                       <td>{c.status}</td>

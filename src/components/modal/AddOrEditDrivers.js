@@ -114,7 +114,7 @@ class AddOrEditDrivers extends Component {
 
 AddOrEditDrivers.propTypes = {
 	driver: PropTypes.exact({
-		guid: PropTypes.string.isRequired,
+		id: PropTypes.string.isRequired,
 		name: PropTypes.string,
 		phoneNumber: PropTypes.string,
 		status: PropTypes.string,

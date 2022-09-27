@@ -52,6 +52,7 @@ const carsSlice = createSlice({
     isLoadingList: false,
     isLoadingDriverToCar: false,
     isEditingCar: false,
+    isDeletingCar: false,
     cars: [],
     errorMessage: "",
     successMessage: "",
@@ -63,6 +64,7 @@ const carsSlice = createSlice({
       state.successMessage = "";
     },
   },
+
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(getCars.pending, (state, action) => {
@@ -94,20 +96,17 @@ const carsSlice = createSlice({
 
     builder.addCase(addCar.pending, (state, action) => {
       console.log("--- add car pending...");
-      state.isError = false;
       state.isLoading = true;
     });
 
     builder.addCase(addCar.fulfilled, (state, action) => {
       console.log("--- add car fulfilled...");
-      state.isError = false;
       state.isLoading = false;
       state.cars.push(action.payload); // state.cars = [...state.cars, action.payload]
     });
 
     builder.addCase(addCar.rejected, (state, action) => {
       console.log("--- add car rejected...");
-      state.isError = true;
       state.isLoading = false;
     });
 
@@ -122,7 +121,7 @@ const carsSlice = createSlice({
       state.isError = false;
       state.isLoadingList = false;
       let indexOfUpdatedCar = state.cars.findIndex(
-        (car) => car.guid === action.payload.car.guid
+        (car) => car.id === action.payload.car.id
       );
       if (indexOfUpdatedCar !== -1) {
         state.cars.splice(indexOfUpdatedCar, 1, action.payload.car);
@@ -146,11 +145,11 @@ const carsSlice = createSlice({
       state.isError = false;
       state.isLoadingList = false;
       const idx = state.cars
-        .find((car) => car.guid === action.payload.car.guid)
-        .packageIds.findIndex((pack) => pack === action.payload.pack.guid);
+        .find((car) => car.id === action.payload.car.id)
+        .packageIds.findIndex((pack) => pack === action.payload.pack.id);
       if (idx !== -1) {
         state.cars
-          .find((car) => car.guid === action.payload.car.guid)
+          .find((car) => car.id === action.payload.car.id)
           .packageIds.splice(idx, 1);
       }
     });
@@ -172,7 +171,7 @@ const carsSlice = createSlice({
       console.log("--- edit car fulfilled...");
       state.isEditingCar = false;
       let indexOfUpdatedCar = state.cars.findIndex(
-        (car) => car.guid === action.payload.guid
+        (car) => car.id === action.payload.id
       );
       if (indexOfUpdatedCar !== -1) {
         state.cars.splice(indexOfUpdatedCar, 1, action.payload);
@@ -197,7 +196,7 @@ const carsSlice = createSlice({
       console.log("--- add driver to car fulfilled...");
       state.isLoadingDriverToCar = false;
       let indexOfUpdatedCar = state.cars.findIndex(
-        (car) => car.guid === action.payload.car.guid
+        (car) => car.id === action.payload.car.id
       );
       if (indexOfUpdatedCar !== -1) {
         state.cars.splice(indexOfUpdatedCar, 1, action.payload.car);
@@ -210,7 +209,31 @@ const carsSlice = createSlice({
       state.isLoadingDriverToCar = false;
       state.errorMessage = "Unable to add driver to car.";
     });
+    // builder.addCase(deleteCar.pending, (state, action) => {
+    //   console.log("--- delete car pending...");
+    //   state.isDeletedCar = true;
+    //   state.errorMessage = '';
+    //   state.successMessage = '';
+    // });
+
+    // builder.addCase(deleteCar.fulfilled, (state, action) => {
+    //   console.log("--- delete car fulfilled...");
+    //   state.isDeletedCar = false;
+    //   let indexOfDeletedCar = state.cars.findIndex((car) => car.id === action.payload.id);
+    //   if (indexOfDeletedCar !== -1) {
+    //     state.cars.splice(indexOfDeletedCar, 1);
+    //     state.successMessage = `Successfully deleted the car`;
+    //   }
+    // });
+
+    // builder.addCase(deleteCar.rejected, (state, action) => {
+    //   console.log("--- delete car rejected...");
+    //   state.isDeletedCar = false;
+    //   state.errorMessage = 'Unable to delete car.';
+    // });
+
   },
+
 });
 
 // Action creators are generated for each case reducer function

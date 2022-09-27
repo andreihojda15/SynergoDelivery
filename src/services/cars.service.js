@@ -75,11 +75,7 @@ export default class CarsService {
 
   // simulate add
   static addCar(car) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(car);
-      }, 1000);
-    });
+    return GenericService.post('cars', car);
   }
 
   // simulate add failed

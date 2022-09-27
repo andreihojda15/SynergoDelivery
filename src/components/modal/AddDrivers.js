@@ -47,7 +47,7 @@ class AddDrivers extends Component {
             validationSchema={driverSchema}
             onSubmit={(values) => {
               return this.props._addDrivers({
-                guid: uuid4(),
+                id: uuid4(),
                 name: values.name,
                 phoneNumber: values.phoneNumber,
               });

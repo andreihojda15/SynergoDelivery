@@ -2,7 +2,7 @@ import GenericService from "./generic.service";
 
 export const PACKAGES = [
   {
-    guid: "b39b0daa-82af-4617-bf30-49bd915fa46f",
+    id: "b39b0daa-82af-4617-bf30-49bd915fa46f",
     senderName: "Wilfred Warner",
     senderPhoneNumber: "+1 224-523-0893",
     departureAddress: "2631 Medical Center Drive",
@@ -17,7 +17,7 @@ export const PACKAGES = [
     assignedToCar: undefined,
   },
   {
-    guid: "f184efc5-7281-473e-baff-044600955b71",
+    id: "f184efc5-7281-473e-baff-044600955b71",
     senderName: "Britney Walker",
     senderPhoneNumber: "+1 315-407-5174",
     departureAddress: "1588 Brentwood Drive",
@@ -32,7 +32,7 @@ export const PACKAGES = [
     assignedToCar: undefined,
   },
   {
-    guid: "6ce585e6-9a7b-41ba-aa7a-57988914e82f",
+    id: "6ce585e6-9a7b-41ba-aa7a-57988914e82f",
     senderName: "Shane Alvarado",
     senderPhoneNumber: "+1 582-282-7917",
     departureAddress: "4984 Timberbrook Lane",
@@ -47,7 +47,7 @@ export const PACKAGES = [
     assignedToCar: undefined,
   },
   {
-    guid: "60de2190-26d6-4ac4-a8ed-359e028dc3e8",
+    id: "60de2190-26d6-4ac4-a8ed-359e028dc3e8",
     senderName: "Robin Mccallum",
     senderPhoneNumber: "+1 531-776-3643",
     departureAddress: "4467 Frank Avenue",
@@ -62,7 +62,7 @@ export const PACKAGES = [
     assignedToCar: undefined,
   },
   {
-    guid: "3731ba01-57b5-4742-a64d-0de061b382be",
+    id: "3731ba01-57b5-4742-a64d-0de061b382be",
     senderName: "Eilidh Dupont",
     senderPhoneNumber: "+1 312-864-8013",
     departureAddress: "1293 Dogwood Lane",
@@ -77,7 +77,7 @@ export const PACKAGES = [
     assignedToCar: undefined,
   },
   {
-    guid: "3731ba01-57b5-4742-a64d-0de061b382b0",
+    id: "3731ba01-57b5-4742-a64d-0de061b382b0",
     senderName: "Phillipa Skinner",
     senderPhoneNumber: "+1 223-343-0977",
     departureAddress: "2819 Blane Street",
@@ -92,7 +92,7 @@ export const PACKAGES = [
     assignedToCar: undefined,
   },
   {
-    guid: "3731ba01-57b5-4742-a64d-0de061b382b1",
+    id: "3731ba01-57b5-4742-a64d-0de061b382b1",
     senderName: "Alfred Lin",
     senderPhoneNumber: "+1 309-690-4682",
     departureAddress: "4089 Powder House Road",
@@ -107,7 +107,7 @@ export const PACKAGES = [
     assignedToCar: undefined,
   },
   {
-    guid: "3731ba01-57b5-4742-a64d-0de061b382b2",
+    id: "3731ba01-57b5-4742-a64d-0de061b382b2",
     senderName: "Otto Lovell",
     senderPhoneNumber: "+1 214-849-2375",
     departureAddress: "506 Alexander Drive",

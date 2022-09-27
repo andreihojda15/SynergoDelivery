@@ -9,10 +9,10 @@ import { getDrivers, addDrivers } from "../../redux/drivers.slice";
 
 /**
  * Driver model:
- *  guid
+ *  id
  *  name
  *  phoneNumber
- *  carId // car guid, can be undefined => status: busy / available
+ *  carId // car id, can be undefined => status: busy / available
  *
  *  Table columns
  *  #
@@ -87,7 +87,7 @@ class Drivers extends Component {
                       </thead>
                       <tbody>
                         {this.props.drivers.map((item, i) => (
-                          <tr key={item.guid}>
+                          <tr key={item.id}>
                             <td>{i + 1}</td>
                             <td>{item.name}</td>
                             <td>{item.phoneNumber}</td>
@@ -127,7 +127,7 @@ const mapDispatchToProps = (dispatch) => {
 Drivers.propTypes = {
   drivers: PropTypes.arrayOf(
     PropTypes.exact({
-      guid: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
       carId: PropTypes.string,

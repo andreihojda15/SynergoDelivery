@@ -64,7 +64,7 @@ class AddPackage extends Component {
             validationSchema={packageSchema}
             onSubmit={(values) => {
               return this.props._addPackage({
-                guid: uuid4(),
+                id: uuid4(),
                 awb: values.awb,
                 senderName: values.senderName,
                 senderPhoneNumber: values.senderPhoneNumber,

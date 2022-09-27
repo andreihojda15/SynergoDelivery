@@ -120,7 +120,7 @@ const carsSlice = createSlice({
       state.isError = false;
       state.isLoadingList = false;
       let indexOfUpdatedCar = state.cars.findIndex(
-        (car) => car.guid === action.payload.car.guid
+        (car) => car.id === action.payload.car.id
       );
       if (indexOfUpdatedCar !== -1) {
         state.cars.splice(indexOfUpdatedCar, 1, action.payload.car);
@@ -144,11 +144,11 @@ const carsSlice = createSlice({
       state.isError = false;
       state.isLoadingList = false;
       const idx = state.cars
-        .find((car) => car.guid === action.payload.car.guid)
-        .packageIds.findIndex((pack) => pack === action.payload.pack.guid);
+        .find((car) => car.id === action.payload.car.id)
+        .packageIds.findIndex((pack) => pack === action.payload.pack.id);
       if (idx !== -1) {
         state.cars
-          .find((car) => car.guid === action.payload.car.guid)
+          .find((car) => car.id === action.payload.car.id)
           .packageIds.splice(idx, 1);
       }
     });
@@ -170,7 +170,7 @@ const carsSlice = createSlice({
       console.log("--- edit car fulfilled...");
       state.isEditingCar = false;
       let indexOfUpdatedCar = state.cars.findIndex(
-        (car) => car.guid === action.payload.guid
+        (car) => car.id === action.payload.id
       );
       if (indexOfUpdatedCar !== -1) {
         state.cars.splice(indexOfUpdatedCar, 1, action.payload);

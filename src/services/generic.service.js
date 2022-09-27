@@ -27,6 +27,9 @@ export default class GenericService {
         },
         body: JSON.stringify(data),
       });
+    if(response.status === 500) {
+      return Promise.reject('500');
+    }
     return await response.json();
   }
 
@@ -35,6 +38,21 @@ export default class GenericService {
       {
         crossDomain: true,
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET'
+        },
+        body: JSON.stringify(data),
+      });
+    return await response.json();
+  }
+
+  static async delete(relativePath, data) {
+    const response = await fetch(`${apiUrl}/${relativePath}`,
+      {
+        crossDomain: true,
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',

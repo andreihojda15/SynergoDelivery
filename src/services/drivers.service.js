@@ -1,3 +1,6 @@
+import GenericService from "./generic.service";
+
+
 export const DRIVERS = [
   {
     id: "eb3aebe1-e3ee-4524-b87b-d62fd7f3ba71",
@@ -64,11 +67,7 @@ export const DRIVERS = [
 export default class DriversService {
   // simulate success
   static getDrivers() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(DRIVERS);
-      }, 1000);
-    });
+    return GenericService.get('drivers');
   }
 
   // simulate fail

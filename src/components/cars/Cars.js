@@ -8,7 +8,7 @@ import {
   addCar,
   editCar,
   getCars,
-  deleteCar,
+  // deleteCar,
   clearMessages,
 } from "../../redux/cars.slice";
 
@@ -22,7 +22,6 @@ import Card from "react-bootstrap/Card";
 import "../../style/common.css";
 import { uuid4 } from "uuid4";
 import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
-import DeleteCar from "../modal/DeleteCar";
 
 /**
  * Car model:
@@ -225,7 +224,7 @@ class Cars extends React.Component {
                   handleClose={this.onCloseAddOrEditModal}
                   car={
                     this.state.carSelectedForEdit ?? {
-                      id: uuid4(),
+                      guid: uuid4(),
                       registrationNumber: "",
                       status: "",
                     }
@@ -323,6 +322,7 @@ class Cars extends React.Component {
                             <td>{car.status}</td>
                             <td>{this.props.packages.filter(pack => pack.carId === car.id).length}</td>
                             <td>{this.props.drivers.filter(driver => driver.carId === car.id).length !== 0 ? "Yes" : "No"}</td>
+
                             <td>
                               <Button
                                 size="sm"
@@ -379,6 +379,7 @@ class Cars extends React.Component {
                         // this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
                       }
                     })
+
                   }}
                 />
               )}
@@ -418,9 +419,9 @@ const mapDispatchToProps = (dispatch) => {
     _editCar: (car) => {
       return dispatch(editCar(car));
     },
-    _deleteCar: (car) => {
-      return dispatch(deleteCar(car));
-    },
+    // _deleteCar: (car) => {
+    //   return dispatch(deleteCar(car));
+    // },
     _clearMessages: () => {
       return dispatch(clearMessages());
     },

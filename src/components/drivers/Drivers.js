@@ -233,12 +233,12 @@ class Drivers extends Component {
                             <td>{i + 1}</td>
                             <td>{driver.name}</td>
                             <td>{driver.phoneNumber}</td>
-                            <td>{driver.carId ? "Busy" : "Available"}
+                            <td>
                               {
                                 driver.carId ?
                                   <Button
                                     size="sm"
-                                    variant="success"
+                                    variant="primary"
                                   >
                                     Available
                                   </Button>

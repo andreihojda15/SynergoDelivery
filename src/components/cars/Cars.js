@@ -8,7 +8,7 @@ import {
   addCar,
   editCar,
   getCars,
-  // deleteCar,
+  deleteCar,
   clearMessages,
 } from "../../redux/cars.slice";
 
@@ -22,6 +22,7 @@ import Card from "react-bootstrap/Card";
 import "../../style/common.css";
 import { uuid4 } from "uuid4";
 import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
+import DeleteCar from "../modal/DeleteCar";
 
 /**
  * Car model:
@@ -366,7 +367,7 @@ class Cars extends React.Component {
                   </>
                 )}
               </Card.Body>
-              {/* {this.state.showDeleteCar && (
+              {this.state.showDeleteCar && (
                 <DeleteCar
                   show={this.state.showDeleteCar}
                   handleClose={() => this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })}
@@ -378,10 +379,9 @@ class Cars extends React.Component {
                         // this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
                       }
                     })
-
                   }}
                 />
-              )}; */}
+              )};
             </Card>
             <ToastContainer theme="dark" />
           </>
@@ -418,9 +418,9 @@ const mapDispatchToProps = (dispatch) => {
     _editCar: (car) => {
       return dispatch(editCar(car));
     },
-    // _deleteCar: (car) => {
-    //   return dispatch(deleteCar(car));
-    // },
+    _deleteCar: (car) => {
+      return dispatch(deleteCar(car));
+    },
     _clearMessages: () => {
       return dispatch(clearMessages());
     },

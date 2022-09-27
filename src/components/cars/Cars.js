@@ -218,9 +218,6 @@ class Cars extends React.Component {
             <Card bg="dark" text="white" className="cardTable">
               <Card.Header style={{ textAlign: "center" }}>
                 List of Cars
-                <Button variant="success" onClick={this.onAddCar}>
-                  Add Car
-                </Button>
               </Card.Header>
               {this.state.showAddOrEditModal && (
                 <AddOrEditCar
@@ -286,8 +283,6 @@ class Cars extends React.Component {
                     )}
                     {this.state.showManagePackages && (
                       <PackageList
-                        // getAvailablePackages={this.getAvailablePackages}
-                        // availablePacks={this.props.availablePackages}
                         car={
                           this.state.carSelectedForManage ?? {
                             id: uuid4(),
@@ -367,6 +362,11 @@ class Cars extends React.Component {
                   </>
                 )}
               </Card.Body>
+              <Card.Footer className="cardFooter">
+                <Button variant="success" onClick={this.onAddCar}>
+                  Add Car
+                </Button>
+              </Card.Footer>
               {this.state.showDeleteCar && (
                 <DeleteCar
                   show={this.state.showDeleteCar}
@@ -381,7 +381,7 @@ class Cars extends React.Component {
                     })
                   }}
                 />
-              )};
+              )}
             </Card>
             <ToastContainer theme="dark" />
           </>

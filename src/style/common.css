@@ -12,12 +12,17 @@
 
 .cardBody{
   overflow: auto;
-  padding: 10px 10rem;
+  padding: 100px 10rem;
+}
+
+.cardFooter {
+  display: flex;
+  flex-direction: row-reverse;
 }
 
 .tableData {
   width: 60vw;
-  height: 60vh;
+  height: 20vh;
 }
 
 .modalBody, .modalHeader, .modalFooter{

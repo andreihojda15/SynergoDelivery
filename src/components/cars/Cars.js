@@ -8,13 +8,14 @@ import {
   addCar,
   editCar,
   getCars,
-  // deleteCar,
+  deleteCar,
   clearMessages,
 } from "../../redux/cars.slice";
 
 import { getAvailablePackages, getPackages } from "../../redux/packages.slice";
 
 import AddOrEditCar from "../modal/AddOrEditCar";
+import DeletecCar from "../modal/DeleteCar";
 import PackageList from "../modal/PackageList";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
@@ -368,7 +369,7 @@ class Cars extends React.Component {
                 </Button>
               </Card.Footer>
               {this.state.showDeleteCar && (
-                <DeleteCar
+                <DeletecCar
                   show={this.state.showDeleteCar}
                   handleClose={() => this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })}
                   car={this.state.carSelectedForDelete}
@@ -419,9 +420,9 @@ const mapDispatchToProps = (dispatch) => {
     _editCar: (car) => {
       return dispatch(editCar(car));
     },
-    // _deleteCar: (car) => {
-    //   return dispatch(deleteCar(car));
-    // },
+    _deleteCar: (car) => {
+      return dispatch(deleteCar(car));
+    },
     _clearMessages: () => {
       return dispatch(clearMessages());
     },

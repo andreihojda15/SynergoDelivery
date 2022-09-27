@@ -69,6 +69,9 @@ export default class DriversService {
   static getDrivers() {
     return GenericService.get('drivers');
   }
+  static getAvailableCars(id) {
+    return GenericService.get(`drivers/availableCars/${id}`);
+  }
 
   // simulate fail
   static getDriversFail() {

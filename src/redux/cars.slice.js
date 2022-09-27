@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CarsService from "../services/cars.service";
-import { addPackageToCar, removeFromCar } from "./common.thunks";
+import { addPackageToCar, removeFromCar, addCarToDriver } from "./common.thunks";
 
 // First, create the thunk
 export const getCars = createAsyncThunk(
@@ -50,6 +50,7 @@ const carsSlice = createSlice({
   initialState: {
     isLoading: false,
     isLoadingList: false,
+    isLoadingDriverToCar: false,
     isEditingCar: false,
     isDeletingCar: false,
     cars: [],
@@ -184,6 +185,30 @@ const carsSlice = createSlice({
       state.errorMessage = "Unable to edit car.";
     });
 
+    builder.addCase(addCarToDriver.pending, (state, action) => {
+      console.log("--- add driver to car pending...");
+      state.isLoadingDriverToCar = true;
+      state.errorMessage = "";
+      state.successMessage = "";
+    });
+
+    builder.addCase(addCarToDriver.fulfilled, (state, action) => {
+      console.log("--- add driver to car fulfilled...");
+      state.isLoadingDriverToCar = false;
+      let indexOfUpdatedCar = state.cars.findIndex(
+        (car) => car.id === action.payload.car.id
+      );
+      if (indexOfUpdatedCar !== -1) {
+        state.cars.splice(indexOfUpdatedCar, 1, action.payload.car);
+        state.successMessage = `Successfully added driver to car ${action.payload.car.registrationNumber}.`;
+      }
+    });
+
+    builder.addCase(addCarToDriver.rejected, (state, action) => {
+      console.log("--- add driver to car rejected...");
+      state.isLoadingDriverToCar = false;
+      state.errorMessage = "Unable to add driver to car.";
+    });
     // builder.addCase(deleteCar.pending, (state, action) => {
     //   console.log("--- delete car pending...");
     //   state.isDeletedCar = true;
@@ -194,7 +219,7 @@ const carsSlice = createSlice({
     // builder.addCase(deleteCar.fulfilled, (state, action) => {
     //   console.log("--- delete car fulfilled...");
     //   state.isDeletedCar = false;
-    //   let indexOfDeletedCar = state.cars.findIndex((car) => car.guid === action.payload.guid);
+    //   let indexOfDeletedCar = state.cars.findIndex((car) => car.id === action.payload.id);
     //   if (indexOfDeletedCar !== -1) {
     //     state.cars.splice(indexOfDeletedCar, 1);
     //     state.successMessage = `Successfully deleted the car`;

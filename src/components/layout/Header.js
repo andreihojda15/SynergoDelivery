@@ -17,13 +17,14 @@ class Header extends React.Component {
               className="logo"
             />
             <div className="linkContainer">
-              <Link className="link" to="/packages">
+
+              <Link className="link" to="/packages" >
                 Packages
               </Link>
-              <Link className="link" to="/cars">
+              <Link className="link" to="/cars" >
                 Cars
               </Link>
-              <Link className="link" to="/drivers">
+              <Link className="link" to="/drivers" >
                 Drivers
               </Link>
             </div>

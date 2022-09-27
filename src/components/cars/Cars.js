@@ -227,7 +227,7 @@ class Cars extends React.Component {
                   handleClose={this.onCloseAddOrEditModal}
                   car={
                     this.state.carSelectedForEdit ?? {
-                      guid: uuid4(),
+                      id: uuid4(),
                       registrationNumber: "",
                       status: "",
                     }

@@ -79,14 +79,14 @@ class AddOrEditCar extends React.Component {
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formSender">
                     <Form.Label>Status</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="status"
-                      name="status"
+                    <Form.Select name="status"
                       value={values.status}
                       isValid={touched.status && !errors.status}
-                      onChange={handleChange}
-                    />
+                      onChange={handleChange} aria-label="Status select">
+                      <option>Select status</option>
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </Form.Select>
                     {errors.status && touched.status ? (
                       <div className="errorDiv">{errors.status}</div>
                     ) : null}
@@ -124,7 +124,6 @@ AddOrEditCar.propTypes = {
     registrationNumber: PropTypes.string,
     status: PropTypes.string,
     packageIds: PropTypes.arrayOf(PropTypes.string),
-    driverId: PropTypes.string,
   }),
   handleClose: PropTypes.func,
   handleSave: PropTypes.func,

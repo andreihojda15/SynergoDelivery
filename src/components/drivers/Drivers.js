@@ -1,11 +1,24 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { connect } from "react-redux";
-import Spinner from "react-bootstrap/Spinner";
+import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Spinner from "react-bootstrap/Spinner";
+import { connect } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import uuid4 from "uuid4";
+import { getCars } from "../../redux/cars.slice";
+import { addCarToDriver } from "../../redux/common.thunks";
+import {
+  addDriver, clearMessages, deleteDriver, editDriver, getDrivers
+} from '../../redux/drivers.slice';
 import "../../style/common.css";
-import { getDrivers, addDrivers } from "../../redux/drivers.slice";
+import AddOrEditDrivers from "../modal/AddOrEditDrivers";
+import AvailableCars from "../modal/AvailableCars";
+import DeleteDriver from "../modal/DeleteDriver";
+
+
 
 /**
  * Driver model:
@@ -25,14 +38,100 @@ class Drivers extends Component {
   constructor(props) {
     super(props);
 
+
     this.state = {
+      showAddOrEditModal: false,
+      driverSelectedForEdit: undefined,
+      showDeleteModal: false,
+      driverSelectedForDelete: undefined,
+      driverSelectedForAssign: undefined,
+      showAvailableCarsModal: false,
       errorMessage: undefined,
+      readyToAssign: false,
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.errorMessage && this.props.errorMessage) {
+      toast.error(this.props.errorMessage, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      });
+
+      this.props._clearMessages();
+    }
+
+    if (!prevProps.successMessage && this.props.successMessage) {
+      toast.success(this.props.successMessage, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      });
+
+      this.props._clearMessages();
+    }
+  }
+
+  onEditDriver = (driver) => {
+    this.setState({
+      showAddOrEditModal: true,
+      driverSelectedForEdit: {
+        id: driver.id,
+        name: driver.name,
+        phoneNumber: driver.phoneNumber,
+        carId: driver.carId,
+        status: driver.carId ? "Busy" : "Available",
+      },
+    });
+  };
+
+  assignCarToDriver = (c) => {
+    this.props._addCarToDriver(c);
+    this.onCloseAvailableCarsModal();
+  }
+
+  onDeleteDriver = (driver) => {
+    this.setState({
+      showDeleteModal: true,
+      driverSelectedForDelete: driver,
+    })
+  }
+
+  onAddDriver = () => {
+    this.setState({
+      showAddOrEditModal: true,
+      driverSelectedForEdit: undefined,
+    });
+  };
+
+  onCloseAddOrEditModal = () => {
+    this.setState({
+      showAddOrEditModal: false,
+      driverSelectedForEdit: undefined,
+    });
   }
 
   componentDidMount() {
     this.retrieveDrivers();
   }
+
+  getAvailableCars = () => {
+    return this.props.cars.filter((car) => {
+      return car.status === 'Not Available';
+    })
+  }
+
+  onAvailableCars = (driver) => {
+    this.setState({
+      showAvailableCarsModal: true,
+      driverSelectedForAssign: driver,
+    })
+  }
+
+  onCloseAvailableCarsModal = () => {
+    this.setState({
+      showAvailableCarsModal: false,
+    });
+  };
 
   retrieveDrivers = () => {
     if (this.props.drivers.length === 0) {
@@ -52,9 +151,20 @@ class Drivers extends Component {
         }
       });
     }
+    if (this.props.cars.length === 0) {
+      this.props._getCars();
+    }
+  };
+
+  onCloseDeleteModal = () => {
+    this.setState({
+      showDeleteModal: false,
+      driverSelectedForDelete: undefined,
+    });
   };
 
   render() {
+    console.log(`--- render: ${this.state.showAddOrEditModal}`);
     return (
       <>
         {this.props.isLoading ? (
@@ -64,7 +174,38 @@ class Drivers extends Component {
             <Card bg="dark" text="white" className="cardTable">
               <Card.Header style={{ textAlign: "center" }}>
                 List of Drivers
+                <Button variant="success" size="lg" onClick={this.onAddDriver}>
+                  Add Driver
+                </Button>
               </Card.Header>
+              {this.state.showAddOrEditModal && (
+                <AddOrEditDrivers
+                  isLoading={this.props.isEditingDriver}
+                  handleClose={this.onCloseAddOrEditModal}
+                  driver={
+                    this.state.driverSelectedForEdit ?? {
+                      id: uuid4(),
+                      name: "",
+                      phoneNumber: "",
+                      status: "",
+                    }
+                  }
+                  title={this.state.driverSelectedForEdit ? "Edit Driver" : "Add Driver"}
+                  handleSave={(driver) => {
+                    this.state.driverSelectedForEdit
+                      ? this.props._editDriver(driver).then((response) => {
+                        if (!response.error) {
+                          this.onCloseAddOrEditModal();
+                        }
+                      })
+                      : this.props._addDriver(driver).then((response) => {
+                        if (!response.error) {
+                          this.onCloseAddOrEditModal();
+                        }
+                      });
+                  }}
+                />
+              )}
               <Card.Body style={{ textAlign: "center" }} className="cardBody">
                 {this.state.errorMessage ? (
                   <p className="errorText">{this.state.errorMessage}</p>
@@ -83,15 +224,58 @@ class Drivers extends Component {
                           <th>Name</th>
                           <th>Phone Number</th>
                           <th>Status</th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {this.props.drivers.map((item, i) => (
-                          <tr key={item.id}>
+                        {this.props.drivers.map((driver, i) => (
+                          <tr key={driver.id}>
                             <td>{i + 1}</td>
-                            <td>{item.name}</td>
-                            <td>{item.phoneNumber}</td>
-                            <td>{item.carId ? "Busy" : "Available"}</td>
+                            <td>{driver.name}</td>
+                            <td>{driver.phoneNumber}</td>
+                            <td>{driver.carId ? "Busy" : "Available"}
+                              {
+                                driver.carId ?
+                                  <Button
+                                    size="sm"
+                                    variant="success"
+                                  >
+                                    Available
+                                  </Button>
+                                  :
+                                  <Button
+                                    size="sm"
+                                    variant="success"
+                                    onClick={() => {
+                                      this.onAvailableCars(driver);
+                                    }}
+                                  >
+                                    Assign to car
+                                  </Button>
+                              }
+
+                            </td>
+                            <td>
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                onClick={() => {
+                                  this.onEditDriver(driver);
+                                }}
+                              >
+                                Edit
+                              </Button>{" "}
+                              &nbsp;{" "}
+                              <Button
+                                size="sm"
+                                variant="primary"
+                                onClick={() => {
+                                  this.onDeleteDriver(driver);
+                                }}
+                              >
+                                Delete
+                              </Button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -99,9 +283,32 @@ class Drivers extends Component {
                   </>
                 )}
               </Card.Body>
+              {this.state.showDeleteModal && (
+                <DeleteDriver
+                  handleClose={this.onCloseDeleteModal}
+                  driver={this.state.driverSelectedForDelete}
+                  handleSave={(driver) => {
+                    this.props._deleteDriver(driver).then((response) => {
+                      if (!response.error) {
+                        this.onCloseDeleteModal();
+                      }
+                    })
+                  }}
+                />)}
+              {this.state.showAvailableCarsModal && (
+                <AvailableCars
+                  handleClose={this.onCloseAvailableCarsModal}
+                  getAvailableCars={this.getAvailableCars}
+                  driver={this.state.driverSelectedForAssign}
+                  addCarToDriver={this.assignCarToDriver}
+                  isLoading={this.props.isLoadingDriverToCar}
+                />
+              )}
             </Card>
           </>
+
         )}
+        <ToastContainer theme="dark" />
       </>
     );
   }
@@ -110,6 +317,7 @@ class Drivers extends Component {
 const mapStateToProps = (store) => {
   return {
     ...store.drivers,
+    ...store.cars,
   };
 };
 
@@ -118,8 +326,23 @@ const mapDispatchToProps = (dispatch) => {
     _getDrivers: () => {
       return dispatch(getDrivers());
     },
-    _addDrivers: (pack) => {
-      return dispatch(addDrivers(pack));
+    _addDriver: (driver) => {
+      return dispatch(addDriver(driver));
+    },
+    _editDriver: (driver) => {
+      return dispatch(editDriver(driver));
+    },
+    _deleteDriver: (driver) => {
+      return dispatch(deleteDriver(driver));
+    },
+    _clearMessages: () => {
+      return dispatch(clearMessages());
+    },
+    _getCars: () => {
+      return dispatch(getCars());
+    },
+    _addCarToDriver: (data) => {
+      return dispatch(addCarToDriver(data));
     },
   };
 };
@@ -130,10 +353,15 @@ Drivers.propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      carId: PropTypes.string,
+      carId: PropTypes.number,
+      status: PropTypes.string,
     })
   ),
   _getDrivers: PropTypes.func,
+  _addDriver: PropTypes.func,
+  _editDriver: PropTypes.func,
+  _deleteDriver: PropTypes.func,
+  _getCars: PropTypes.func,
   isLoading: PropTypes.bool,
 };
 

@@ -23,13 +23,13 @@ import DeleteDriver from "../modal/DeleteDriver";
  * Driver model:
  *  id
  *  name
- *  phone
+ *  phoneNumber
  *  carId // car id, can be undefined => status: busy / available
  *
  *  Table columns
  *  #
  *  Name
- *  Phone number
+ *  phoneNumber number
  *  Status
  */
 
@@ -76,7 +76,7 @@ class Drivers extends Component {
       driverSelectedForEdit: {
         id: driver.id,
         name: driver.name,
-        phone: driver.phone,
+        phoneNumber: driver.phoneNumber,
         carId: driver.carId,
         status: driver.carId ? "Busy" : "Available",
       },
@@ -181,7 +181,7 @@ class Drivers extends Component {
                   driver={
                     this.state.driverSelectedForEdit ?? {
                       name: "",
-                      phone: "",
+                      phoneNumber: "",
                       status: "",
                     }
                   }
@@ -217,7 +217,7 @@ class Drivers extends Component {
                         <tr>
                           <th>#</th>
                           <th>Name</th>
-                          <th>Phone Number</th>
+                          <th>phoneNumber Number</th>
                           <th>Status</th>
                           <th>Actions</th>
                         </tr>
@@ -227,7 +227,7 @@ class Drivers extends Component {
                           <tr key={driver.id}>
                             <td>{i + 1}</td>
                             <td>{driver.name}</td>
-                            <td>{driver.phone}</td>
+                            <td>{driver.phoneNumber}</td>
                             <td>
                               {
                                 driver.carId ?
@@ -351,7 +351,7 @@ Drivers.propTypes = {
     PropTypes.exact({
       id: PropTypes.number.isRequired,
       name: PropTypes.string,
-      phone: PropTypes.string,
+      phoneNumber: PropTypes.string,
       carId: PropTypes.number,
       status: PropTypes.string,
     })

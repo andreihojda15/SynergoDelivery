@@ -10,15 +10,15 @@ import {
 } from "../../redux/cars.slice";
 
 import { getAvailablePackages, getPackages } from "../../redux/packages.slice";
-
 import Card from "react-bootstrap/Card";
 import Spinner from "react-bootstrap/Spinner";
 import "react-toastify/dist/ReactToastify.css";
 import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
 import "../../style/common.css";
 import AddOrEditCar from "../modal/AddOrEditCar";
-import DeleteCar from "../modal/DeleteCar";
 import PackageList from "../modal/PackageList";
+import DeleteCar from "../modal/DeleteCar";
+
 
 /**
  * Car model:
@@ -317,6 +317,7 @@ class Cars extends React.Component {
                             <td>{car.status}</td>
                             <td>{this.props.packages.filter(pack => pack.carId === car.id).length}</td>
                             <td>{this.props.drivers.filter(driver => driver.carId === car.id).length !== 0 ? "Yes" : "No"}</td>
+
                             <td>
                               <Button
                                 size="sm"
@@ -373,6 +374,7 @@ class Cars extends React.Component {
                         // this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
                       }
                     })
+
                   }}
                 />
               )}

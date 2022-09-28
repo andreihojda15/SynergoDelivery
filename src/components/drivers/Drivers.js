@@ -353,7 +353,7 @@ const mapDispatchToProps = (dispatch) => {
 Drivers.propTypes = {
   drivers: PropTypes.arrayOf(
     PropTypes.exact({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
       carId: PropTypes.number,

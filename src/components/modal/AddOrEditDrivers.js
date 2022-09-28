@@ -15,7 +15,7 @@ const driverSchema = Yup.object().shape({
 	phoneNumber: Yup.string()
 		.required("Required!")
 		.min(2, "Too short!")
-		.matches(/^[0-9 +-]*$/, "Please enter a valid phoneNumber number"),
+		.matches(/^[0-9 +-]*$/, "Please enter a valid phone number"),
 });
 
 
@@ -75,11 +75,11 @@ class AddOrEditDrivers extends Component {
 											<div className="errorDiv">{errors.name}</div>
 										) : null}
 									</Form.Group>
-									<Form.Group className="mb-3" controlId="formphoneNumber">
-										<Form.Label>phoneNumber Number</Form.Label>
+									<Form.Group className="mb-3" controlId="formPhoneNumber">
+										<Form.Label>Phone Number</Form.Label>
 										<Form.Control
 											type="text"
-											placeholder="phoneNumber Number"
+											placeholder="Phone Number"
 											name="phoneNumber"
 											value={values.phoneNumber}
 											isValid={touched.phoneNumber && !errors.phoneNumber}

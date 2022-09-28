@@ -29,7 +29,7 @@ import DeleteDriver from "../modal/DeleteDriver";
  *  Table columns
  *  #
  *  Name
- *  phoneNumber number
+ *  Phone number
  *  Status
  */
 
@@ -217,7 +217,7 @@ class Drivers extends Component {
                         <tr>
                           <th>#</th>
                           <th>Name</th>
-                          <th>phoneNumber Number</th>
+                          <th>Phone Number</th>
                           <th>Status</th>
                           <th>Actions</th>
                         </tr>

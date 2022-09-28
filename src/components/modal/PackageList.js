@@ -27,7 +27,7 @@ class PackageList extends React.Component {
   }
 
   assignToCar = (p) => {
-    this.props.readyForAdd(p);
+    this.props._managePackages({ pack: p, car: this.props.car });
   };
 
   deleteFromCar = (p) => {
@@ -157,10 +157,6 @@ const mapDispatchToProps = (dispatch) => {
 
 PackageList.propTypes = {
   car: PropTypes.object.isRequired,
-  unsetReadyForAdd: PropTypes.func.isRequired,
-  unsetReadyForDelete: PropTypes.func.isRequired,
-  readyForAdd: PropTypes.func,
-  readyForDelete: PropTypes.func,
   isLoading: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };

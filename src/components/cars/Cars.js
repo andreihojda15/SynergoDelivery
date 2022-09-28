@@ -49,9 +49,6 @@ class Cars extends React.Component {
       carSelectedForDelete: undefined,
       showManagePackages: false,
       carSelectedForManage: undefined,
-      packageSelectedForManage: undefined,
-      readyForAdd: false,
-      readyForDelete: false,
     };
 
   }
@@ -159,29 +156,6 @@ class Cars extends React.Component {
     })
   }
 
-  setReadyForAdd = (p) => {
-    this.props._addPackageToCar({
-      pack: p,
-      car: this.props.cars.find(
-        (item) => item.id === this.state.carSelectedForManage.id
-      ),
-    });
-  };
-
-  unsetReadyForAdd = () => {
-    this.setState({
-      readyForAdd: false,
-      packageSelectedForManage: undefined,
-    });
-  };
-
-  unsetReadyForDelete = () => {
-    this.setState({
-      readyForDelete: false,
-      packageSelectedForManage: undefined,
-    });
-  };
-
   render() {
     console.log(`--- render: ${this.state.showAddOrEditModal}`);
 
@@ -264,9 +238,6 @@ class Cars extends React.Component {
                             status: "",
                           }
                         }
-                        unsetReadyForAdd={this.unsetReadyForAdd}
-                        unsetReadyForDelete={this.unsetReadyForDelete}
-                        readyForAdd={this.setReadyForAdd}
                         isLoading={this.props.isLoadingList}
                         handleClose={this.onCloseManagePackagesModal}
                       />

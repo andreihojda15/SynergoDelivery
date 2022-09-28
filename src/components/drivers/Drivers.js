@@ -7,7 +7,6 @@ import Spinner from "react-bootstrap/Spinner";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import uuid4 from "uuid4";
 import { getCars } from "../../redux/cars.slice";
 import { addCarToDriver } from "../../redux/common.thunks";
 import {
@@ -24,7 +23,7 @@ import DeleteDriver from "../modal/DeleteDriver";
  * Driver model:
  *  id
  *  name
- *  phoneNumber
+ *  phone
  *  carId // car id, can be undefined => status: busy / available
  *
  *  Table columns
@@ -77,7 +76,7 @@ class Drivers extends Component {
       driverSelectedForEdit: {
         id: driver.id,
         name: driver.name,
-        phoneNumber: driver.phoneNumber,
+        phone: driver.phone,
         carId: driver.carId,
         status: driver.carId ? "Busy" : "Available",
       },
@@ -174,7 +173,6 @@ class Drivers extends Component {
             <Card bg="dark" text="white" className="cardTable">
               <Card.Header style={{ textAlign: "center" }}>
                 List of Drivers
-
               </Card.Header>
               {this.state.showAddOrEditModal && (
                 <AddOrEditDrivers
@@ -182,9 +180,8 @@ class Drivers extends Component {
                   handleClose={this.onCloseAddOrEditModal}
                   driver={
                     this.state.driverSelectedForEdit ?? {
-                      id: uuid4(),
                       name: "",
-                      phoneNumber: "",
+                      phone: "",
                       status: "",
                     }
                   }
@@ -230,7 +227,7 @@ class Drivers extends Component {
                           <tr key={driver.id}>
                             <td>{i + 1}</td>
                             <td>{driver.name}</td>
-                            <td>{driver.phoneNumber}</td>
+                            <td>{driver.phone}</td>
                             <td>
                               {
                                 driver.carId ?
@@ -309,7 +306,6 @@ class Drivers extends Component {
               )}
             </Card>
           </>
-
         )}
         <ToastContainer theme="dark" />
       </>
@@ -355,7 +351,7 @@ Drivers.propTypes = {
     PropTypes.exact({
       id: PropTypes.number.isRequired,
       name: PropTypes.string,
-      phoneNumber: PropTypes.string,
+      phone: PropTypes.string,
       carId: PropTypes.number,
       status: PropTypes.string,
     })

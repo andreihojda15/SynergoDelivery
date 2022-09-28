@@ -173,8 +173,6 @@ export default class CarsService {
     return new Promise((resolve, reject) => {
       let deleted = GenericService.delete(`cars/${car.id}`);
       setTimeout(() => {
-        debugger
-
         resolve(deleted);
       }, 1000);
     })

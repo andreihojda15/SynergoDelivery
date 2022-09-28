@@ -12,7 +12,7 @@ const driverSchema = Yup.object().shape({
 		.required("Required!")
 		.min(2, "Too short!")
 		.matches(/^[A-Za-z- ]*$/, "Please enter a valid name"),
-	phoneNumber: Yup.string()
+	phone: Yup.string()
 		.required("Required!")
 		.min(2, "Too short!")
 		.matches(/^[0-9 +-]*$/, "Please enter a valid phone number"),
@@ -75,18 +75,18 @@ class AddOrEditDrivers extends Component {
 											<div className="errorDiv">{errors.name}</div>
 										) : null}
 									</Form.Group>
-									<Form.Group className="mb-3" controlId="formPhoneNumber">
+									<Form.Group className="mb-3" controlId="formphone">
 										<Form.Label>Phone Number</Form.Label>
 										<Form.Control
 											type="text"
 											placeholder="Phone Number"
-											name="phoneNumber"
-											value={values.phoneNumber}
-											isValid={touched.phoneNumber && !errors.phoneNumber}
+											name="phone"
+											value={values.phone}
+											isValid={touched.phone && !errors.phone}
 											onChange={handleChange}
 										/>
-										{errors.phoneNumber && touched.phoneNumber ? (
-											<div className="errorDiv">{errors.phoneNumber}</div>
+										{errors.phone && touched.phone ? (
+											<div className="errorDiv">{errors.phone}</div>
 										) : null}
 									</Form.Group>
 									<div style={{ display: "flex", justifyContent: "center" }}>
@@ -114,11 +114,11 @@ class AddOrEditDrivers extends Component {
 
 AddOrEditDrivers.propTypes = {
 	driver: PropTypes.exact({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.number,
 		name: PropTypes.string,
-		phoneNumber: PropTypes.string,
+		phone: PropTypes.string,
 		status: PropTypes.string,
-		carId: PropTypes.string,
+		carId: PropTypes.number,
 	}),
 	handleClose: PropTypes.func,
 	handleSave: PropTypes.func,

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CarsService from "../services/cars.service";
-import { addPackageToCar, removeFromCar, addCarToDriver } from "./common.thunks";
+import { addCarToDriver, addPackageToCar } from "./common.thunks";
 
 // First, create the thunk
 export const getCars = createAsyncThunk(
@@ -147,32 +147,6 @@ const carsSlice = createSlice({
 
     builder.addCase(addPackageToCar.rejected, (state, action) => {
       console.log("--- add package to car rejected...");
-      state.isError = true;
-      state.isLoadingList = false;
-    });
-
-    builder.addCase(removeFromCar.pending, (state, action) => {
-      console.log("--- remove package from car pending...");
-      state.isError = false;
-      state.isLoadingList = true;
-    });
-
-    builder.addCase(removeFromCar.fulfilled, (state, action) => {
-      console.log("--- remove package from car fulfilled...");
-      state.isError = false;
-      state.isLoadingList = false;
-      const idx = state.cars
-        .find((car) => car.id === action.payload.car.id)
-        .packageIds.findIndex((pack) => pack === action.payload.pack.id);
-      if (idx !== -1) {
-        state.cars
-          .find((car) => car.id === action.payload.car.id)
-          .packageIds.splice(idx, 1);
-      }
-    });
-
-    builder.addCase(removeFromCar.rejected, (state, action) => {
-      console.log("--- remove package from car rejected...");
       state.isError = true;
       state.isLoadingList = false;
     });

@@ -149,32 +149,10 @@ export default class CarsService {
     });
   }
 
-  static removeFromCar(data) {
-    return new Promise((resolve, reject) => {
-      let modified = {
-        pack: {
-          ...data.pack,
-          carId: undefined,
-        },
-        car: {
-          ...data.car,
-          packageIds: data.car.packageIds.filter(
-            (item) => item !== data.pack.id
-          ),
-        },
-      };
-      setTimeout(() => {
-        resolve(modified);
-      }, 1000);
-    });
-  }
-
   static deleteCar(car) {
     return new Promise((resolve, reject) => {
       let deleted = GenericService.delete(`cars/${car.id}`);
       setTimeout(() => {
-        debugger
-
         resolve(deleted);
       }, 1000);
     })

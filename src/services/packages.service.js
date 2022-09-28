@@ -154,4 +154,8 @@ export default class PackagesService {
       }, 1000);
     });
   }
+
+  static managePackages(data) {
+    return GenericService.put(`cars/managePackages/${data.car.id}?packageId=${data.pack.id}`);
+  }
 }

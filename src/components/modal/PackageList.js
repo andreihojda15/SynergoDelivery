@@ -5,14 +5,13 @@ import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 import PropTypes from "prop-types";
 import "../../style/common.css";
-import { getAvailablePackages } from "../../redux/packages.slice";
+import { getAvailablePackages, managePackages } from "../../redux/packages.slice";
 import { connect } from "react-redux";
 
 class PackageList extends React.Component {
   constructor(props) {
     super(props);
 
-    // let availablePackages = this.props.getAvailablePackages();
     this.props._getAvailablePackages(this.props.car.id);
     this.state = {
       car: {
@@ -21,14 +20,9 @@ class PackageList extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.unsetReadyForAdd();
-    this.props.unsetReadyForDelete();
-  }
-
   componentDidUpdate(prevProps) {
-    if (prevProps.isLoading && !this.props.isLoading) {
-      // this.props._getAvailablePackages(this.props.car.id)
+    if (prevProps.isManaged && !this.props.isManaged) {
+      this.props._getAvailablePackages(this.props.car.id)
     }
   }
 
@@ -37,7 +31,7 @@ class PackageList extends React.Component {
   };
 
   deleteFromCar = (p) => {
-    this.props.readyForDelete(p);
+    this.props._managePackages({ pack: p, car: this.props.car });
   };
 
   render() {
@@ -154,12 +148,14 @@ const mapDispatchToProps = (dispatch) => {
   return {
     _getAvailablePackages: (id) => {
       return dispatch(getAvailablePackages(id));
-    }
+    },
+    _managePackages: (data) => {
+      return dispatch(managePackages(data));
+    },
   };
 };
 
 PackageList.propTypes = {
-  // getAvailablePackages: PropTypes.func.isRequired,
   car: PropTypes.object.isRequired,
   unsetReadyForAdd: PropTypes.func.isRequired,
   unsetReadyForDelete: PropTypes.func.isRequired,

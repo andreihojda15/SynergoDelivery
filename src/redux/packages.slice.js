@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CarsService from "../services/cars.service";
 import PackagesService from "../services/packages.service";
-import { addPackageToCar, removeFromCar } from "./common.thunks";
+import { addPackageToCar } from "./common.thunks";
 
 // First, create the thunk
 export const getPackages = createAsyncThunk(
@@ -32,6 +32,20 @@ export const getAvailablePackages = createAsyncThunk(
   }
 );
 
+export const managePackages = createAsyncThunk(
+  "managePackages",
+  async (data, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await PackagesService.managePackages(data);
+      // console.log(`--- successful response: ${response}`);
+      return fulfillWithValue(response);
+    } catch (err) {
+      console.log(`--- error response: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
+  }
+);
+
 export const addPackage = createAsyncThunk(
   "addPackage",
   async (pack, { rejectWithValue, fulfillWithValue }) => {
@@ -52,6 +66,7 @@ const packagesSlice = createSlice({
   initialState: {
     isLoading: false,
     isLoadingList: false,
+    isManaged: false,
     packages: [],
     availablePackages: [],
     errorMessage: "",
@@ -163,28 +178,28 @@ const packagesSlice = createSlice({
       state.isLoadingList = false;
     });
 
-    builder.addCase(removeFromCar.pending, (state, action) => {
-      console.log("--- remove package from car pending...");
+    builder.addCase(managePackages.pending, (state, action) => {
+      console.log("--- manage package pending...");
       state.isError = false;
-      state.isLoadingList = true;
+      state.isManaged = true;
     });
 
-    builder.addCase(removeFromCar.rejected, (state, action) => {
-      console.log("--- remove package from car rejected...");
+    builder.addCase(managePackages.rejected, (state, action) => {
+      console.log("--- manage package rejected...");
       state.isError = true;
-      state.isLoadingList = false;
+      state.isManaged = false;
     });
 
-    builder.addCase(removeFromCar.fulfilled, (state, action) => {
-      console.log("--- remove package from car fulfilled...");
+    builder.addCase(managePackages.fulfilled, (state, action) => {
+      console.log("--- manage package fulfilled...");
       state.isError = false;
       let indexOfUpdatedPackage = state.packages.findIndex(
-        (pack) => pack.id === action.payload.pack.id
+        (pack) => pack.id === action.payload.id
       );
       if (indexOfUpdatedPackage !== -1) {
-        state.packages.splice(indexOfUpdatedPackage, 1, action.payload.pack);
+        state.packages.splice(indexOfUpdatedPackage, 1, action.payload);
       }
-      state.isLoadingList = false;
+      state.isManaged = false;
     });
   },
 });

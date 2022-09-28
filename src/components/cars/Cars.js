@@ -9,15 +9,15 @@ import {
   getCars
 } from "../../redux/cars.slice";
 
-import { getAvailablePackages, getPackages } from "../../redux/packages.slice";
 import Card from "react-bootstrap/Card";
 import Spinner from "react-bootstrap/Spinner";
 import "react-toastify/dist/ReactToastify.css";
-import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
+import { addPackageToCar } from "../../redux/common.thunks";
+import { getAvailablePackages, getPackages } from "../../redux/packages.slice";
 import "../../style/common.css";
 import AddOrEditCar from "../modal/AddOrEditCar";
-import PackageList from "../modal/PackageList";
 import DeleteCar from "../modal/DeleteCar";
+import PackageList from "../modal/PackageList";
 
 
 /**
@@ -85,17 +85,6 @@ class Cars extends React.Component {
 
   getAvailablePackages = () => {
     return this.props._getAvailablePackages(this.state.carSelectedForManage.id);
-    // if (this.state.carSelectedForManage) {
-    //   let result = this.props.packages.filter(
-    //     (pack) => {
-    //       return pack.carId === undefined ||
-    //         pack.carId === null ||
-    //         pack.carId === this.state.carSelectedForManage.id
-    //     }
-    //   );
-    //   return result;
-    // }
-    // return [];
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -183,15 +172,6 @@ class Cars extends React.Component {
     this.setState({
       readyForAdd: false,
       packageSelectedForManage: undefined,
-    });
-  };
-
-  setReadyForDelete = (p) => {
-    this.props._removeFromCar({
-      pack: p,
-      car: this.props.cars.find(
-        (item) => item.id === this.state.carSelectedForManage.id
-      ),
     });
   };
 
@@ -287,7 +267,6 @@ class Cars extends React.Component {
                         unsetReadyForAdd={this.unsetReadyForAdd}
                         unsetReadyForDelete={this.unsetReadyForDelete}
                         readyForAdd={this.setReadyForAdd}
-                        readyForDelete={this.setReadyForDelete}
                         isLoading={this.props.isLoadingList}
                         handleClose={this.onCloseManagePackagesModal}
                       />
@@ -425,9 +404,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     _getPackages: () => {
       return dispatch(getPackages());
-    },
-    _removeFromCar: (data) => {
-      return dispatch(removeFromCar(data));
     },
     _getAvailablePackages: (id) => {
       return dispatch(getAvailablePackages(id));

@@ -116,12 +116,15 @@ const carsSlice = createSlice({
     builder.addCase(addCar.fulfilled, (state, action) => {
       console.log("--- add car fulfilled...");
       state.isLoading = false;
+      state.successMessage = 'Successfully added cars';
       state.cars.push(action.payload); // state.cars = [...state.cars, action.payload]
     });
 
     builder.addCase(addCar.rejected, (state, action) => {
       console.log("--- add car rejected...");
       state.isLoading = false;
+      state.isError = true;
+      state.errorMessage = 'Unable to add car';
     });
 
     builder.addCase(addPackageToCar.pending, (state, action) => {

@@ -57,11 +57,21 @@ export const CARS = [
 export default class CarsService {
   // simulate success
   static getCars() {
-    return GenericService.get('cars');
+    return new Promise((resolve, reject) => {
+      let cars = GenericService.get('cars');
+      setTimeout(() => {
+        resolve(cars);
+      }, 1000);
+    })
   }
 
   static getAvailablePackages(id) {
-    return GenericService.get(`cars/availablePackages/${id}`);
+    return new Promise((resolve, reject) => {
+      let packages = GenericService.get(`cars/availablePackages/${id}`);
+      setTimeout(() => {
+        resolve(packages);
+      }, 1000);
+    })
   }
 
   // simulate fail
@@ -76,10 +86,16 @@ export default class CarsService {
   // simulate add
   static addCar(car) {
     return new Promise((resolve, reject) => {
+      let addedCar;
+      try {
+        addedCar = GenericService.post('cars', car);
+      } catch (e) {
+        reject(e);
+      }
       setTimeout(() => {
-        return resolve(car);
+        resolve(addedCar);
       }, 1000);
-    });
+    })
   }
 
   // simulate add failed
@@ -93,11 +109,7 @@ export default class CarsService {
 
   // simulate edit
   static editCar(car) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(car);
-      }, 1000);
-    });
+    return GenericService.put(`cars/${car.id}`, car)
   }
 
   // simulate edit failed
@@ -159,10 +171,13 @@ export default class CarsService {
 
   static deleteCar(car) {
     return new Promise((resolve, reject) => {
+      let deleted = GenericService.delete(`cars/${car.id}`);
       setTimeout(() => {
-        resolve(car);
+        debugger
+
+        resolve(deleted);
       }, 1000);
-    });
+    })
   }
 
 }

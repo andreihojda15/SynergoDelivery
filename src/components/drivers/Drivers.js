@@ -174,9 +174,7 @@ class Drivers extends Component {
             <Card bg="dark" text="white" className="cardTable">
               <Card.Header style={{ textAlign: "center" }}>
                 List of Drivers
-                <Button variant="success" size="lg" onClick={this.onAddDriver}>
-                  Add Driver
-                </Button>
+
               </Card.Header>
               {this.state.showAddOrEditModal && (
                 <AddOrEditDrivers
@@ -283,6 +281,11 @@ class Drivers extends Component {
                   </>
                 )}
               </Card.Body>
+              <Card.Footer className="cardFooter">
+                <Button variant="success" onClick={this.onAddDriver}>
+                  Add Driver
+                </Button>
+              </Card.Footer>
               {this.state.showDeleteModal && (
                 <DeleteDriver
                   handleClose={this.onCloseDeleteModal}
@@ -350,7 +353,7 @@ const mapDispatchToProps = (dispatch) => {
 Drivers.propTypes = {
   drivers: PropTypes.arrayOf(
     PropTypes.exact({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
       carId: PropTypes.number,

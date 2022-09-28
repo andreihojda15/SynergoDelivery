@@ -1,28 +1,24 @@
-import React from "react";
-import { ToastContainer, toast } from "react-toastify";
 import PropTypes from "prop-types";
-import Table from "react-bootstrap/Table";
+import React from "react";
 import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
 import { connect } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
 import {
-  addCar,
-  editCar,
-  getCars,
-  deleteCar,
-  clearMessages,
+  addCar, clearMessages, deleteCar, editCar,
+  getCars
 } from "../../redux/cars.slice";
 
 import { getAvailablePackages, getPackages } from "../../redux/packages.slice";
-
+import Card from "react-bootstrap/Card";
+import Spinner from "react-bootstrap/Spinner";
+import "react-toastify/dist/ReactToastify.css";
+import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
+import "../../style/common.css";
 import AddOrEditCar from "../modal/AddOrEditCar";
 import PackageList from "../modal/PackageList";
-import "react-toastify/dist/ReactToastify.css";
-import Spinner from "react-bootstrap/Spinner";
-import Card from "react-bootstrap/Card";
-import "../../style/common.css";
-import { uuid4 } from "uuid4";
-import { addPackageToCar, removeFromCar } from "../../redux/common.thunks";
 import DeleteCar from "../modal/DeleteCar";
+
 
 /**
  * Car model:
@@ -218,9 +214,6 @@ class Cars extends React.Component {
             <Card bg="dark" text="white" className="cardTable">
               <Card.Header style={{ textAlign: "center" }}>
                 List of Cars
-                <Button variant="success" onClick={this.onAddCar}>
-                  Add Car
-                </Button>
               </Card.Header>
               {this.state.showAddOrEditModal && (
                 <AddOrEditCar
@@ -228,7 +221,6 @@ class Cars extends React.Component {
                   handleClose={this.onCloseAddOrEditModal}
                   car={
                     this.state.carSelectedForEdit ?? {
-                      id: uuid4(),
                       registrationNumber: "",
                       status: "",
                     }
@@ -261,7 +253,6 @@ class Cars extends React.Component {
                         handleClose={this.onCloseAddOrEditModal}
                         car={
                           this.state.carSelectedForEdit ?? {
-                            id: uuid4(),
                             registrationNumber: "",
                             status: "",
                           }
@@ -286,11 +277,9 @@ class Cars extends React.Component {
                     )}
                     {this.state.showManagePackages && (
                       <PackageList
-                        // getAvailablePackages={this.getAvailablePackages}
-                        // availablePacks={this.props.availablePackages}
                         car={
                           this.state.carSelectedForManage ?? {
-                            id: uuid4(),
+                            id: Math.round(Math.random()*100),
                             registrationNumber: "",
                             status: "",
                           }
@@ -328,6 +317,7 @@ class Cars extends React.Component {
                             <td>{car.status}</td>
                             <td>{this.props.packages.filter(pack => pack.carId === car.id).length}</td>
                             <td>{this.props.drivers.filter(driver => driver.carId === car.id).length !== 0 ? "Yes" : "No"}</td>
+
                             <td>
                               <Button
                                 size="sm"
@@ -367,6 +357,11 @@ class Cars extends React.Component {
                   </>
                 )}
               </Card.Body>
+              <Card.Footer className="cardFooter">
+                <Button variant="success" onClick={this.onAddCar}>
+                  Add Car
+                </Button>
+              </Card.Footer>
               {this.state.showDeleteCar && (
                 <DeleteCar
                   show={this.state.showDeleteCar}
@@ -379,9 +374,10 @@ class Cars extends React.Component {
                         // this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
                       }
                     })
+
                   }}
                 />
-              )};
+              )}
             </Card>
             <ToastContainer theme="dark" />
           </>

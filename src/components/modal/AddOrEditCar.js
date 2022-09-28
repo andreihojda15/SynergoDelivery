@@ -120,7 +120,7 @@ class AddOrEditCar extends React.Component {
 
 AddOrEditCar.propTypes = {
   car: PropTypes.exact({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number,
     registrationNumber: PropTypes.string,
     status: PropTypes.string,
     packageIds: PropTypes.arrayOf(PropTypes.string),

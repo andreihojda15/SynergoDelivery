@@ -182,7 +182,7 @@ class Drivers extends Component {
                   handleClose={this.onCloseAddOrEditModal}
                   driver={
                     this.state.driverSelectedForEdit ?? {
-                      id: uuid4(),
+                      
                       name: "",
                       phoneNumber: "",
                       status: "",

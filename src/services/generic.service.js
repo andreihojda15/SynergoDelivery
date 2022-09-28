@@ -23,7 +23,7 @@ export default class GenericService {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET'
+          'Access-Control-Allow-Methods': 'POST'
         },
         body: JSON.stringify(data),
       });
@@ -41,7 +41,7 @@ export default class GenericService {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET'
+          'Access-Control-Allow-Methods': 'PUT'
         },
         body: JSON.stringify(data),
       });
@@ -56,7 +56,7 @@ export default class GenericService {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET'
+          'Access-Control-Allow-Methods': 'DELETE'
         },
         body: JSON.stringify(data),
       });

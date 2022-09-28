@@ -46,6 +46,34 @@ export const addPackage = createAsyncThunk(
   }
 );
 
+export const deletePackage = createAsyncThunk(
+  "deletePackage",
+  async (pack, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const res = await PackagesService.deletePackage(pack);
+      console.log(`Delete successfuly`);
+      return fulfillWithValue(res);
+    } catch (err) {
+      console.log(`Error: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
+  }
+);
+
+export const editPackage = createAsyncThunk(
+  "editPackage",
+  async (pack, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const res = await PackagesService.editPackage(pack);
+      console.log(`Edit successfuly`);
+      return fulfillWithValue(res);
+    } catch (err) {
+      console.log(`Error: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
+  }
+);
+
 // Then, handle actions in your reducers:
 const packagesSlice = createSlice({
   name: "packages",
@@ -185,6 +213,57 @@ const packagesSlice = createSlice({
         state.packages.splice(indexOfUpdatedPackage, 1, action.payload.pack);
       }
       state.isLoadingList = false;
+    });
+    builder.addCase(deletePackage.pending, (state, action) => {
+      console.log("--- delete package pending...");
+      state.isDelPackage = true;
+      state.errorMessage = "";
+      state.successMessage = "";
+    });
+
+    builder.addCase(deletePackage.fulfilled, (state, action) => {
+      //debugger;
+      console.log("--- delete package fulfilled...");
+      state.isDelPackage = false;
+      let indexOfUpdatedPack = state.packages.findIndex(
+        (pack) => pack.id === action.payload.id
+      );
+      if (indexOfUpdatedPack !== -1) {
+        state.packages.splice(indexOfUpdatedPack, 1);
+        state.successMessage = `Successfully deleted package.`;
+      }
+    });
+
+    builder.addCase(deletePackage.rejected, (state, action) => {
+      console.log("--- delete package rejected...");
+      state.isDelPackage = false;
+      state.errorMessage = "Unable to delete package.";
+    });
+
+    builder.addCase(editPackage.pending, (state, action) => {
+      console.log("--- edit package pending...");
+      state.isEditingPackage = true;
+      state.errorMessage = "";
+      state.successMessage = "";
+    });
+
+    builder.addCase(editPackage.fulfilled, (state, action) => {
+      //debugger;
+      console.log("--- edit package fulfilled...");
+      state.isEditingPackage = false;
+      let indexOfUpdatedPack = state.packages.findIndex(
+        (pack) => pack.id === action.payload.id
+      );
+      if (indexOfUpdatedPack !== -1) {
+        state.packages.splice(indexOfUpdatedPack, 1, action.payload);
+        state.successMessage = `Successfully updated package.`;
+      }
+    });
+
+    builder.addCase(editPackage.rejected, (state, action) => {
+      console.log("--- edit package rejected...");
+      state.isEditingPackage = false;
+      state.errorMessage = "Unable to edit package.";
     });
   },
 });

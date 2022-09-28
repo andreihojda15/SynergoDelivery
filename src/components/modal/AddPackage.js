@@ -45,7 +45,7 @@ const packageSchema = Yup.object().shape({
 class AddPackage extends Component {
   render() {
     return (
-      <Modal show={this.props.show} onHide={this.props.handleClose}>
+      <Modal show={true} onHide={this.props.handleClose}>
         <Modal.Header className="modalHeader" closeButton>
           <Modal.Title>Add Package</Modal.Title>
         </Modal.Header>

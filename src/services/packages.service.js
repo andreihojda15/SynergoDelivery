@@ -137,7 +137,6 @@ export default class PackagesService {
     });
   }
 
-  // simulate add
   static addPackage(pack) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -148,6 +147,40 @@ export default class PackagesService {
 
   // simulate add failed
   static addPackageFail(pack) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return reject(`400 Bad Request: Couldn't add package`);
+      }, 1000);
+    });
+  }
+
+  static deletePackage(pack) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(pack);
+      }, 1000);
+    });
+  }
+
+  // simulate add failed
+  static deletePackageFail(pack) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return reject(`400 Bad Request: Couldn't add package`);
+      }, 1000);
+    });
+  }
+
+  static editPackage(pack) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(pack);
+      }, 1000);
+    });
+  }
+
+  // simulate add failed
+  static editPackageFail(pack) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         return reject(`400 Bad Request: Couldn't add package`);

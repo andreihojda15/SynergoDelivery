@@ -48,7 +48,7 @@ export default class GenericService {
     return await response.json();
   }
 
-  static async delete(relativePath, data) {
+  static async delete(relativePath) {
     const response = await fetch(`${apiUrl}/${relativePath}`,
       {
         crossDomain: true,
@@ -58,7 +58,6 @@ export default class GenericService {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'DELETE'
         },
-        body: JSON.stringify(data),
       });
     return await response.json();
   }

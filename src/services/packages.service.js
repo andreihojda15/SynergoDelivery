@@ -154,6 +154,10 @@ export default class PackagesService {
     });
   }
 
+  static managePackages(data) {
+    return GenericService.put(`cars/managePackages/${data.car.id}?packageId=${data.pack.id}`);
+  }
+  
   static deletePackage(pack) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

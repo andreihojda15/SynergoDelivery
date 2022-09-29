@@ -16,20 +16,6 @@ export const addPackageToCar = createAsyncThunk(
   }
 );
 
-export const removeFromCar = createAsyncThunk(
-  "removeFromCar",
-  async (data, { rejectWithValue, fulfillWithValue }) => {
-    try {
-      const response = await CarsService.removeFromCar(data);
-      console.log(`--- successful response: ${JSON.stringify(response)}`);
-      return fulfillWithValue(response);
-    } catch (err) {
-      console.log(`--- error response: ${JSON.stringify(err)}`);
-      return rejectWithValue(err);
-    }
-  }
-);
-
 export const addCarToDriver = createAsyncThunk(
   "addCarToDriver",
   async (data, { rejectWithValue, fulfillWithValue }) => {

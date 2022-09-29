@@ -27,6 +27,9 @@ class Header extends React.Component {
               <Link className="link" to="/drivers" >
                 Drivers
               </Link>
+              <Link className="link" to="/customers">
+                Customers
+              </Link>
             </div>
           </Container>
         </Navbar>

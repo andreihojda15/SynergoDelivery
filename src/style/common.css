@@ -4,6 +4,10 @@
   height: 100px;
 }
 
+.buttonColumn {
+  width: 10rem;
+}
+
 .cardTable {
   z-index: 0;
   margin: 2rem 0px;

@@ -212,7 +212,7 @@ class Packages extends Component {
                           <td>{pack.deliveryAddress}</td>
                           <td>{assignedToCar}</td>
                           <td>{packageStatus}</td>
-                          <td>
+                          <td className="buttonColumn">
                             <Button variant="info"
                               onClick={() => {
                                 this.handleEdit(pack);

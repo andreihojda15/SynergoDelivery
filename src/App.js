@@ -8,6 +8,7 @@ import Footer from "./components/layout/Footer";
 import Packages from "./components/packages/Package";
 import Cars from "./components/cars/Cars";
 import Drivers from "./components/drivers/Drivers";
+import Customers from "./components/customers/Customers";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NotFound from "./components/notFound/NotFound";
 
@@ -25,6 +26,7 @@ function App() {
               </Route> */}
             <Route path="/cars" element={<Cars />} />
             <Route path="/drivers" element={<Drivers />} />
+            <Route path="/customers" element={<Customers />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Content>

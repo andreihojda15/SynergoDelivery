@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+
 import PropTypes from "prop-types";
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 import { connect } from "react-redux";
@@ -12,11 +13,17 @@ import {
   addPackage,
   getPackages,
   clearMessages,
+  deletePackage,
+  editPackage,
 } from "../../redux/packages.slice";
+import AddPackage from "../modal/AddPackage";
+import DeletePackage from "../modal/DeletePackage";
+import EditPackage from "../modal/EditPackage";
+//import { nanoid } from "nanoid";
 
 /**
  * Package model:
- *  id
+ *  guid
  *  senderName
  *  senderPhoneNumber
  *  departureAddress
@@ -25,7 +32,7 @@ import {
  *  deliveryAddress
  *  deliveryDate // can be undefined
  *  recipientName
- *  recipientPhone
+ *  recipientPhoneNumber
  *  carId // can be undefined
  *
  * Derived properties:
@@ -52,10 +59,41 @@ class Packages extends Component {
   constructor(props) {
     super(props);
 
+    this.props._getPackages();
+
     this.state = {
+      packagef: true,
+      first: false,
+      showAdd: false,
+      showDel: false,
+      showEdit: false,
+      packSelect: undefined,
       errorMessage: undefined,
     };
   }
+
+  handleAdd = () => {
+    this.setState({
+      showAdd: true,
+    });
+  };
+
+  handleDelete = (pack) => {
+    this.setState({
+      showDel: true,
+      packSelect: pack,
+    });
+    //debugger;
+  };
+
+  handleEdit = (pack) => {
+    //debugger;
+    this.setState({
+      showEdit: true,
+      packSelect: pack,
+    });
+    //debugger;
+  };
 
   componentDidMount() {
     this.retrievePackages();
@@ -114,6 +152,8 @@ class Packages extends Component {
               }}
             >
               <p>List of Packages</p>
+
+              
             </Card.Header>
             <Card.Body style={{ textAlign: "center" }} className="cardBody">
               {this.state.errorMessage ? (
@@ -139,40 +179,60 @@ class Packages extends Component {
                       <th>Recipient Adress</th>
                       <th>Assigned to a car</th>
                       <th>Package Status</th>
+
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {this.props.packages.map((p, i) => {
+                    {this.props.packages.map((pack, i) => {
                       let packageStatus;
                       let assignedToCar;
                       if (
-                        p.deliveryDate === undefined &&
-                        p.carId === undefined
+                        pack.deliveryDate === undefined &&
+                        pack.carID === undefined
                       ) {
                         packageStatus = "sent";
                         assignedToCar = "no";
                       }
-                      if (p.deliveryDate === undefined && p.carId) {
+                      if (pack.deliveryDate === undefined && pack.carID) {
                         packageStatus = "in delivery";
                         assignedToCar = "yes";
                       }
-                      if (p.deliveryDate) {
+                      if (pack.deliveryDate) {
                         packageStatus = "delivered";
                         assignedToCar = "no";
                       }
+
                       return (
-                        <tr key={p.id}>
+                        <tr key={pack.id}>
                           <td>{i + 1}</td>
-                          <td>{p.awb}</td>
-                          <td>{p.senderName}</td>
-                          <td>{p.senderPhoneNumber}</td>
-                          <td>{p.departureAddress}</td>
-                          <td>{new Date(p.departureDate[0], p.departureDate[1], p.departureDate[2]).toLocaleDateString()}</td>
-                          <td>{p.recipientName}</td>
-                          <td>{p.recipientPhone}</td>
-                          <td>{p.deliveryAddress}</td>
+                          <td>{pack.awb}</td>
+                          <td>{pack.senderName}</td>
+                          <td>{pack.senderPhoneNumber}</td>
+                          <td>{pack.departureAdress}</td>
+                          <td>{new Date(pack.departureDate[0], pack.departureDate[1], pack.departureDate[2]).toLocaleDateString()}</td>
+                          <td>{pack.recipientName}</td>
+                          <td>{pack.recipientPhoneNumber}</td>
+                          <td>{pack.deliveryAdress}</td>
                           <td>{assignedToCar}</td>
                           <td>{packageStatus}</td>
+                          <td>
+                            <Button
+                              onClick={() => {
+                                this.handleEdit(pack);
+                              }}
+                            >
+                              Edit
+                            </Button>
+                            &nbsp;
+                            <Button
+                              onClick={() => {
+                                this.handleDelete(pack);
+                              }}
+                            >
+                              &#10006;
+                            </Button>
+                          </td>
                         </tr>
                       );
                     })}
@@ -180,6 +240,63 @@ class Packages extends Component {
                 </Table>
               )}
             </Card.Body>
+            <Card.Footer className="cardFooter">
+            <Button
+                variant="success"
+                onClick={this.handleAdd}
+              >
+                &#10010;
+              </Button>
+            </Card.Footer>
+            {this.state.showEdit && (
+              <EditPackage
+                handleClose={() => {
+                  this.setState({ showEdit: false, packSelect: undefined });
+                }}
+                pack={this.state.packSelect}
+                handleSave={(pack) => {
+                  this.props._editPackage(pack).then((response) => {
+                    if (!response.error) {
+                      this.setState({ showEdit: false, packSelect: undefined });
+                    }
+                  });
+                }}
+              />
+            )}
+            {this.state.showDel && (
+              <DeletePackage
+                show={this.state.showDel}
+                handleClose={() => {
+                  this.setState({ showDel: false, packSelect: undefined });
+                }}
+                pack={this.state.packSelect}
+                handleSave={(pack) => {
+                  this.props._deletePackage(pack).then((response) => {
+                    if (!response.error) {
+                      this.setState({ showDel: false, packSelect: undefined });
+                    }
+                  });
+                }}
+              />
+            )}
+            {this.state.showAdd && (
+              <AddPackage
+                handleClose={() => {
+                 
+                  this.setState({ showAdd: false });
+                }}
+                handleSave={(pack) => {
+                  debugger
+                  this.props._addPackage(pack).then((response) => {
+                    debugger
+                    if (!response.error) {
+                      
+                      this.setState({ showAdd: false });
+                    }
+                  });
+                }}
+              />
+            )}
           </Card>
         )}
         <ToastContainer theme="dark" />
@@ -201,6 +318,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     _addPackage: (pack) => {
       return dispatch(addPackage(pack));
+    },
+    _deletePackage: (pack) => {
+      return dispatch(deletePackage(pack));
+    },
+    _editPackage: (pack) => {
+      return dispatch(editPackage(pack));
     },
     _clearMessages: () => {
       return dispatch(clearMessages());

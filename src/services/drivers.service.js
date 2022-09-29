@@ -84,7 +84,15 @@ export default class DriversService {
 
   // simulate add
   static addDriver(driver) {
-        return GenericService.post('drivers', driver);  
+    return new Promise((resolve, reject) => {
+      let addedDriver;
+      try {
+        addedDriver = GenericService.post('drivers', driver);
+      } catch (e) {
+        reject(e);
+      }  
+        resolve(addedDriver);
+    })
   }
 
   // simulate add failed
@@ -112,7 +120,15 @@ export default class DriversService {
 
   // simulate delete
   static deleteDriver(driver) {
-    return GenericService.delete(`drivers/${driver.id}`);
+    return new Promise((resolve, reject) => {
+      let deletedDriver;
+      try {
+        deletedDriver = GenericService.delete(`drivers/${driver.id}`);
+      } catch (e) {
+        reject(e);
+      }
+      resolve(deletedDriver);
+    })
   }
 
   // simulate delete failed

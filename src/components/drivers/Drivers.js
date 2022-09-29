@@ -7,7 +7,6 @@ import Spinner from "react-bootstrap/Spinner";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import uuid4 from "uuid4";
 import { getCars } from "../../redux/cars.slice";
 import { addCarToDriver } from "../../redux/common.thunks";
 import {
@@ -174,7 +173,6 @@ class Drivers extends Component {
             <Card bg="dark" text="white" className="cardTable">
               <Card.Header style={{ textAlign: "center" }}>
                 List of Drivers
-
               </Card.Header>
               {this.state.showAddOrEditModal && (
                 <AddOrEditDrivers
@@ -182,7 +180,6 @@ class Drivers extends Component {
                   handleClose={this.onCloseAddOrEditModal}
                   driver={
                     this.state.driverSelectedForEdit ?? {
-                      
                       name: "",
                       phoneNumber: "",
                       status: "",
@@ -309,7 +306,6 @@ class Drivers extends Component {
               )}
             </Card>
           </>
-
         )}
         <ToastContainer theme="dark" />
       </>

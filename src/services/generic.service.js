@@ -27,7 +27,7 @@ export default class GenericService {
         },
         body: JSON.stringify(data),
       });
-    if(response.status === 500) {
+    if (response.status === 500) {
       return Promise.reject('500');
     }
     return await response.json();

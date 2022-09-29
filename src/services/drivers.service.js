@@ -90,10 +90,8 @@ export default class DriversService {
         addedDriver = GenericService.post('drivers', driver);
       } catch (e) {
         reject(e);
-      }
-      setTimeout(() => {
+      }  
         resolve(addedDriver);
-      }, 1000);
     })
   }
 
@@ -108,11 +106,7 @@ export default class DriversService {
 
   // simulate edit
   static editDriver(driver) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(driver);
-      }, 1000);
-    });
+    return GenericService.put(`drivers/${driver.id}`, driver)
   }
 
   // simulate edit failed
@@ -133,9 +127,7 @@ export default class DriversService {
       } catch (e) {
         reject(e);
       }
-      setTimeout(() => {
-        resolve(deletedDriver);
-      }, 1000);
+      resolve(deletedDriver);
     })
   }
 

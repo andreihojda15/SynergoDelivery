@@ -114,11 +114,11 @@ class AddOrEditDrivers extends Component {
 
 AddOrEditDrivers.propTypes = {
 	driver: PropTypes.exact({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.number,
 		name: PropTypes.string,
 		phoneNumber: PropTypes.string,
 		status: PropTypes.string,
-		carId: PropTypes.string,
+		carId: PropTypes.number,
 	}),
 	handleClose: PropTypes.func,
 	handleSave: PropTypes.func,

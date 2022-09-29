@@ -266,6 +266,7 @@ class AddPackage extends Component {
     );
   }
 }
+
 const mapStateToProps = (store) => {
   return {
     ...store.drivers,

@@ -83,16 +83,13 @@ class Packages extends Component {
       showDel: true,
       packSelect: pack,
     });
-    //debugger;
   };
 
   handleEdit = (pack) => {
-    //debugger;
     this.setState({
       showEdit: true,
       packSelect: pack,
     });
-    //debugger;
   };
 
   componentDidMount() {

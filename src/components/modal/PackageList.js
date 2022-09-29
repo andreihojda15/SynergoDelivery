@@ -86,7 +86,6 @@ class PackageList extends React.Component {
               </thead>
               <tbody>
                 {this.props.availablePackages.map((p, i) => {
-                  debugger
                   return (
                     <tr key={p.id}>
                       <td>{i + 1}</td>

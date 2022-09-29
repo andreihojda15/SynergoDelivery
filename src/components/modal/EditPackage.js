@@ -1,13 +1,11 @@
+import moment from "moment";
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-//import { connect } from "react-redux";
-//import { addPackage, editPackage } from "../../redux/packages.slice";
-//import { nanoid } from "nanoid";
+import "../../style/common.css";
 
-class EditePackage extends Component {
-  // TO DO add state object
+class EditPackage extends Component {
   constructor(props) {
     super(props);
 
@@ -18,13 +16,16 @@ class EditePackage extends Component {
     };
   }
 
+  componentDidMount() {
+  }
+
   render() {
     return (
       <Modal show={true} backdrop={"static"} onHide={this.props.handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header className="modalHeader" closeButton>
           <Modal.Title>Edit Package</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="modalBody">
           <Form>
             <Form.Group className="mb-3" controlId="formAWB">
               <Form.Label>AWB</Form.Label>
@@ -62,7 +63,7 @@ class EditePackage extends Component {
                   this.setState({
                     pack: {
                       ...this.state.pack,
-                      senderPhoneNumber: e.target.value,
+                      senderPhone: e.target.value,
                     },
                   })
                 }
@@ -72,13 +73,13 @@ class EditePackage extends Component {
               <Form.Label>Departure Address</Form.Label>
               <Form.Control
                 type="text"
-                value={this.state.pack.departureAdress}
+                value={this.state.pack.departureAddress}
                 placeholder="Departure"
                 onChange={(e) =>
                   this.setState({
                     pack: {
                       ...this.state.pack,
-                      departureAdress: e.target.value,
+                      departureAddress: e.target.value,
                     },
                   })
                 }
@@ -88,17 +89,15 @@ class EditePackage extends Component {
               <Form.Label>Departure Date</Form.Label>
               <Form.Control
                 type="date"
-                value={this.state.pack.departureDate.value}
-                placeholder="Date"
-                onChange={(e) =>
-                  this.setState({
+                value={moment(`${this.state.pack.departureDate[0]}-${this.state.pack.departureDate[1]}-${this.state.pack.departureDate[2]}`, 'YYYY-M-D', true).format('YYYY-MM-DD')}
+                onChange={(e) => {
+                  return this.setState({
                     pack: {
                       ...this.state.pack,
-                      departureDate: new Date(
-                        e.target.value
-                      ).toLocaleDateString(),
+                      departureDate: moment(e.target.value, 'YYYY-MM-DD', true).format('YYYY-MM-DD').split('-'),
                     },
                   })
+                }
                 }
               />
             </Form.Group>
@@ -119,13 +118,13 @@ class EditePackage extends Component {
               <Form.Label>Recipient Phone</Form.Label>
               <Form.Control
                 type="text"
-                value={this.state.pack.recipientPhoneNumber}
+                value={this.state.pack.recipientPhone}
                 placeholder="Phone"
                 onChange={(e) =>
                   this.setState({
                     pack: {
                       ...this.state.pack,
-                      recipientPhoneNumber: e.target.value,
+                      recipientPhone: e.target.value,
                     },
                   })
                 }
@@ -135,13 +134,13 @@ class EditePackage extends Component {
               <Form.Label>Recipient Address</Form.Label>
               <Form.Control
                 type="text"
-                value={this.state.pack.deliveryAdress}
+                value={this.state.pack.deliveryAddress}
                 placeholder="Address"
                 onChange={(e) =>
                   this.setState({
                     pack: {
                       ...this.state.pack,
-                      deliveryAdress: e.target.value,
+                      deliveryAddress: e.target.value,
                     },
                   })
                 }
@@ -149,7 +148,7 @@ class EditePackage extends Component {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="modalFooter">
           <Button variant="primary" onClick={this.props.handleClose}>
             Close
           </Button>
@@ -165,4 +164,4 @@ class EditePackage extends Component {
   }
 }
 
-export default EditePackage;
+export default EditPackage;

@@ -86,6 +86,7 @@ class PackageList extends React.Component {
               </thead>
               <tbody>
                 {this.props.availablePackages.map((p, i) => {
+                  debugger
                   return (
                     <tr key={p.id}>
                       <td>{i + 1}</td>
@@ -93,7 +94,7 @@ class PackageList extends React.Component {
                       <td>{p.senderName}</td>
                       <td>{p.senderPhoneNumber}</td>
                       <td>{p.departureAddress}</td>
-                      <td>{p.departureDate}</td>
+                      <td>{new Date(p.departureDate).toLocaleDateString()}</td>
                       <td>{p.recipientName}</td>
                       <td>{p.recipientPhone}</td>
                       <td>{p.deliveryAddress}</td>

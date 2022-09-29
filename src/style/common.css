@@ -21,7 +21,7 @@
 }
 
 .tableData {
-  width: 60vw;
+  width: 70vw;
   height: 20vh;
 }
 
@@ -40,7 +40,6 @@
 }
 
 .errorDiv, .errorText {
-  font-size: 1.1rem;
   font-weight: bold;
   color: rgb(252, 69, 69);
 }

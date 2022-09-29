@@ -146,6 +146,24 @@ class EditPackage extends Component {
                 }
               />
             </Form.Group>
+            <Form.Group className="mb-3" controlId="formDepDate">
+              <Form.Label>Delivery Date</Form.Label>
+              <Form.Control
+                type="date"
+                min={moment(new Date()).format('YYYY-MM-DD')}
+                placeholder="Date"
+                name="deliveryDate"
+                value={moment(`${this.state.pack.deliveryDate[0]}-${this.state.pack.deliveryDate[1]}-${this.state.pack.deliveryDate[2]}`, 'YYYY-M-D', true).format('YYYY-MM-DD')}
+                onChange={(e) =>
+                  this.setState({
+                    pack: {
+                      ...this.state.pack,
+                      deliveryDate: moment(e.target.value, 'YYYY-MM-DD', true).format('YYYY-MM-DD').split('-'),
+                    },
+                  })
+                }
+              />
+            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer className="modalFooter">

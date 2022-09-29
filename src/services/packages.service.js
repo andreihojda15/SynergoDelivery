@@ -143,7 +143,7 @@ export default class PackagesService {
       try {
         addedPackage = GenericService.post(`packages`, {
           ...pack,
-          departureDate: pack.departureDate.map(element => parseInt(element))
+          departureDate: pack.departureDate.map(element => parseInt(element)),
         });
         resolve(addedPackage);
       } catch (e) {
@@ -192,7 +192,8 @@ export default class PackagesService {
       try {
         editedPackage = GenericService.put(`packages/${pack.id}`, {
           ...pack,
-          departureDate: pack.departureDate.map(element => parseInt(element))
+          departureDate: pack.departureDate.map(element => parseInt(element)),
+          deliveryDate: pack.deliveryDate.map(element => parseInt(element)),
         });
         resolve(editedPackage);
       } catch (e) {

@@ -213,7 +213,9 @@ class Packages extends Component {
                           <td>{assignedToCar}</td>
                           <td>{packageStatus}</td>
                           <td className="buttonColumn">
-                            <Button variant="info"
+                            <Button
+                              variant="info"
+                              style={{ marginTop: 5 }}
                               onClick={() => {
                                 this.handleEdit(pack);
                               }}
@@ -222,6 +224,7 @@ class Packages extends Component {
                             </Button>
                             &nbsp;
                             <Button
+                              style={{ marginTop: 5 }}
                               onClick={() => {
                                 this.handleDelete(pack);
                               }}

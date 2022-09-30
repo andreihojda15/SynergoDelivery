@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CarsService from "../services/cars.service";
-import DriversService from "../services/drivers.service";
 import { addCarToDriver, addPackageToCar } from "./common.thunks";
 
 // First, create the thunk
@@ -20,9 +19,9 @@ export const getCars = createAsyncThunk(
 
 export const getAvailableCars = createAsyncThunk(
   "getAvailableCars",
-  async (id, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response = await DriversService.getAvailableCars(id);
+      const response = await CarsService.getAvailableCars();
       console.log(`--- successful response: ${JSON.stringify(response)}`);
       return fulfillWithValue(response);
     } catch (err) {
@@ -80,6 +79,7 @@ const carsSlice = createSlice({
     isLoading: false,
     isLoadingList: false,
     isLoadingDriverToCar: false,
+    isLoadingAvailableCars: false,
     isEditingCar: false,
     isDeletingCar: false,
     cars: [],
@@ -126,7 +126,7 @@ const carsSlice = createSlice({
 
     builder.addCase(getAvailableCars.pending, (state, action) => {
       console.log("--- get available cars pending...");
-      state.isLoading = true;
+      state.isLoadingAvailableCars = true;
       state.availableCars = [];
       state.errorMessage = "";
       state.successMessage = "";
@@ -134,19 +134,19 @@ const carsSlice = createSlice({
 
     builder.addCase(getAvailableCars.fulfilled, (state, action) => {
       console.log("--- get available cars fulfilled...");
-      state.isLoading = false;
-      state.isError = false;
+      state.isLoadingAvailableCars = false;
+      // state.isError = false;
       state.availableCars = action.payload || [];
       debugger
-      state.successMessage =
-        action.payload.length === 0
-          ? "No car found."
-          : "Successfully retrieved cars.";
+      // state.successMessage =
+        // action.payload.length === 0
+          // ? "No car found."
+          // : "Successfully retrieved cars.";
     });
 
     builder.addCase(getAvailableCars.rejected, (state, action) => {
       console.log("--- get available cars rejected...");
-      state.isLoading = false;
+      state.isLoadingAvailableCars = false;
       state.isError = true;
       state.availableCars = [];
       state.errorMessage = "Unable to retrieve packages";

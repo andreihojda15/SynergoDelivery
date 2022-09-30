@@ -11,12 +11,7 @@ class AvailableCars extends Component {
   constructor(props) {
     super(props);
 
-    if (this.props.availableCars.length === 0)
-      this.props._getAvailableCars(this.props.driver.id);
-    // debugger
-    // this.state = {
-    //   cars: [...this.props.],
-    // }
+    this.props._getAvailableCars();
   }
 
   // componentDidUpdate(prevProps) {
@@ -38,7 +33,7 @@ class AvailableCars extends Component {
           <ModalTitle>Available Cars</ModalTitle>
         </ModalHeader>
         <ModalBody style={{ display: "flex", justifyContent: 'center' }} className="modalBody">
-          {this.props.isLoading ? (
+          {this.props.isLoadingAvailableCars ? (
             <Spinner className="spinner" animation="border" variant="info" />
           ) : this.props.availableCars.length !== 0 ? (
             <Table
@@ -88,11 +83,10 @@ const mapStateToProps = (store) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    _getAvailableCars: (id) => {
-      return dispatch(getAvailableCars(id));
+    _getAvailableCars: () => {
+      return dispatch(getAvailableCars());
     },
   };
 };
 
-// export default AvailableCars;
 export default connect(mapStateToProps, mapDispatchToProps)(AvailableCars);

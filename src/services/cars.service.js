@@ -74,6 +74,10 @@ export default class CarsService {
     })
   }
 
+  static getAvailableCars() {
+    return GenericService.get(`drivers/availableCars`);
+  }
+
   // simulate fail
   static getCarsFail() {
     return new Promise((resolve, reject) => {

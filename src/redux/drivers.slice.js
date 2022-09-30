@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import DriversService from '../services/drivers.service'
-import { addCarToDriver } from './common.thunks'
 
 export const getDrivers = createAsyncThunk(
 	'getDrivers',
@@ -15,6 +14,20 @@ export const getDrivers = createAsyncThunk(
 		}
 	}
 )
+
+export const addCarToDriver = createAsyncThunk(
+  "addCarToDriver",
+  async (data, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const res = await DriversService.addCarToDriver(data);
+      console.log(`Added successfuly`);
+      return fulfillWithValue(res);
+    } catch (err) {
+      console.log(`Error: ${JSON.stringify(err)}`);
+      return rejectWithValue(err);
+    }
+  }
+);
 
 export const addDriver = createAsyncThunk(
 	"addDriver",
@@ -174,11 +187,11 @@ const driversSlice = createSlice({
 			console.log("--- add car to driver fulfilled...");
 			state.isLoadingDriverToCar = false;
 			let indexOfUpdatedDriver = state.drivers.findIndex(
-				(driver) => driver.id === action.payload.driver.id
+				(driver) => driver.id === action.payload.driverId
 			);
 			if (indexOfUpdatedDriver !== -1) {
-				state.drivers.splice(indexOfUpdatedDriver, 1, action.payload.driver);
-				state.successMessage = `Successfully added car to driver ${action.payload.driver.name}.`;
+				state.drivers.splice(indexOfUpdatedDriver, 1, action.payload.driverId);
+				state.successMessage = `Successfully added car to driver.`;
 			}
 		});
 

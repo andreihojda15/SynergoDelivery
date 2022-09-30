@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 import { connect } from "react-redux";
 import { getAvailableCars } from "../../redux/cars.slice";
+import { addCarToDriver } from "../../redux/drivers.slice";
 
 class AvailableCars extends Component {
 
@@ -23,7 +24,7 @@ class AvailableCars extends Component {
   // }
 
   handleAssign = (car) => {
-    return this.props.addCarToDriver({ car, driver: this.props.driver });
+    return this.props._addCarToDriver({ carId: car.id, driverId: this.props.driver.id });
   }
 
   render() {
@@ -86,6 +87,9 @@ const mapDispatchToProps = (dispatch) => {
     _getAvailableCars: () => {
       return dispatch(getAvailableCars());
     },
+    _addCarToDriver: (data) => {
+      return dispatch(addCarToDriver(data));
+    }
   };
 };
 

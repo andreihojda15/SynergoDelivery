@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCars } from "../../redux/cars.slice";
-import { addCarToDriver } from "../../redux/common.thunks";
+import { addCarToDriver } from "../../redux/drivers.slice";
 import {
   addDriver, clearMessages, deleteDriver, editDriver, getDrivers
 } from '../../redux/drivers.slice';

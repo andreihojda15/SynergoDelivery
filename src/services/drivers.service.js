@@ -139,20 +139,15 @@ export default class DriversService {
 
   static addCarToDriver(data) {
     return new Promise((resolve, reject) => {
-      let modified = {
-        car: {
-          ...data.car,
-          status: 'Available',
-        },
-        driver: {
-          ...data.driver,
-          carId: data.car.id,
-        },
-      };
-      setTimeout(() => {
-        resolve(modified);
-      }, 1000);
+      let modifiedDriver;
+      try {
+        modifiedDriver = GenericService.put(`drivers/manageDriver/${data.driverId}?carId=${data.carId}`);
+      } catch (e) {
+        reject(e);
+      }
+      resolve(modifiedDriver);
     });
   }
+
 }
 

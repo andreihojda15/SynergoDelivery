@@ -69,6 +69,7 @@ export default class DriversService {
   static getDrivers() {
     return GenericService.get('drivers');
   }
+
   static getAvailableCars(id) {
     return GenericService.get(`drivers/availableCars/${id}`);
   }
@@ -90,8 +91,8 @@ export default class DriversService {
         addedDriver = GenericService.post('drivers', driver);
       } catch (e) {
         reject(e);
-      }  
-        resolve(addedDriver);
+      }
+      resolve(addedDriver);
     })
   }
 

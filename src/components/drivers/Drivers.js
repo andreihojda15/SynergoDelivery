@@ -7,7 +7,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getCars } from "../../redux/cars.slice";
+import { getAvailableCars, getCars } from "../../redux/cars.slice";
 import { addCarToDriver } from "../../redux/common.thunks";
 import {
   addDriver, clearMessages, deleteDriver, editDriver, getDrivers
@@ -113,11 +113,12 @@ class Drivers extends Component {
     this.retrieveDrivers();
   }
 
-  getAvailableCars = () => {
-    return this.props.cars.filter((car) => {
-      return car.status === 'Not Available';
-    })
-  }
+  // getAvailableCars = () => {
+  //   // return this.props.cars.filter((car) => {
+  //   //   return car.status === 'Not Available';
+  //   // })
+  //   return this.props._getAvailableCars(this.state.driverSelectedForAssign?.id);
+  // }
 
   onAvailableCars = (driver) => {
     this.setState({
@@ -163,7 +164,6 @@ class Drivers extends Component {
   };
 
   render() {
-    console.log(`--- render: ${this.state.showAddOrEditModal}`);
     return (
       <>
         {this.props.isLoading ? (
@@ -298,7 +298,8 @@ class Drivers extends Component {
               {this.state.showAvailableCarsModal && (
                 <AvailableCars
                   handleClose={this.onCloseAvailableCarsModal}
-                  getAvailableCars={this.getAvailableCars}
+                  // cars={this.props.availableCars}
+                  // getAvailableCars={this.props._getAvailableCars}
                   driver={this.state.driverSelectedForAssign}
                   addCarToDriver={this.assignCarToDriver}
                   isLoading={this.props.isLoadingDriverToCar}
@@ -343,6 +344,9 @@ const mapDispatchToProps = (dispatch) => {
     _addCarToDriver: (data) => {
       return dispatch(addCarToDriver(data));
     },
+    // _getAvailableCars: (id) => {
+    //   return dispatch(getAvailableCars(id));
+    // },
   };
 };
 

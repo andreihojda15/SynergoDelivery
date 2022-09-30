@@ -3,25 +3,29 @@ import { ModalBody, ModalHeader, ModalTitle, Table } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
+import { connect } from "react-redux";
+import { getAvailableCars } from "../../redux/cars.slice";
 
 class AvailableCars extends Component {
 
   constructor(props) {
     super(props);
 
-    let availableCars = this.props.getAvailableCars();
-    this.state = {
-      cars: [...availableCars],
-    }
+    if (this.props.availableCars.length === 0)
+      this.props._getAvailableCars(this.props.driver.id);
+    // debugger
+    // this.state = {
+    //   cars: [...this.props.],
+    // }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.isLoading && !this.props.isLoading) {
-      this.setState({
-        cars: [...this.props.getAvailableCars()],
-      });
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.isLoading && !this.props.isLoading) {
+  //     // this.setState({
+  //     //   cars: [...this.props.getAvailableCars()],
+  //     // });
+  //   }
+  // }
 
   handleAssign = (car) => {
     return this.props.addCarToDriver({ car, driver: this.props.driver });
@@ -29,14 +33,14 @@ class AvailableCars extends Component {
 
   render() {
     return (
-      <Modal style={{ marginTop: "100px" }} backdrop={"static"} show={this.props.driver.carId === undefined} onHide={this.props.handleClose}>
+      <Modal style={{ marginTop: "100px" }} backdrop={"static"} show={this.props.driver.carId === null} onHide={this.props.handleClose}>
         <ModalHeader className="modalHeader" closeButton>
           <ModalTitle>Available Cars</ModalTitle>
         </ModalHeader>
         <ModalBody style={{ display: "flex", justifyContent: 'center' }} className="modalBody">
           {this.props.isLoading ? (
             <Spinner className="spinner" animation="border" variant="info" />
-          ) : this.state.cars.length !== 0 ? (
+          ) : this.props.availableCars.length !== 0 ? (
             <Table
               className="tableList"
               striped
@@ -56,7 +60,7 @@ class AvailableCars extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.cars.map((c, i) => {
+                {this.props.availableCars.map((c, i) => {
                   return (
                     <tr key={c.id}>
                       <td>{i + 1}</td>
@@ -76,4 +80,19 @@ class AvailableCars extends Component {
   }
 }
 
-export default AvailableCars;
+const mapStateToProps = (store) => {
+  return {
+    ...store.cars,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    _getAvailableCars: (id) => {
+      return dispatch(getAvailableCars(id));
+    },
+  };
+};
+
+// export default AvailableCars;
+export default connect(mapStateToProps, mapDispatchToProps)(AvailableCars);

@@ -186,11 +186,12 @@ const driversSlice = createSlice({
 		builder.addCase(addCarToDriver.fulfilled, (state, action) => {
 			console.log("--- add car to driver fulfilled...");
 			state.isLoadingDriverToCar = false;
+			
 			let indexOfUpdatedDriver = state.drivers.findIndex(
-				(driver) => driver.id === action.payload.driverId
+				(driver) => driver.id === action.payload.id
 			);
 			if (indexOfUpdatedDriver !== -1) {
-				state.drivers.splice(indexOfUpdatedDriver, 1, action.payload.driverId);
+				state.drivers.splice(indexOfUpdatedDriver, 1, action.payload);
 				state.successMessage = `Successfully added car to driver.`;
 			}
 		});

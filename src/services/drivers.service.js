@@ -141,7 +141,7 @@ export default class DriversService {
     return new Promise((resolve, reject) => {
       let modifiedDriver;
       try {
-        modifiedDriver = GenericService.put(`drivers/manageDriver/${data.driverId}?carId=${data.carId}`);
+        modifiedDriver = GenericService.put(`drivers/manageDriver/${data.driver.id}?carId=${data.car.id}`);
       } catch (e) {
         reject(e);
       }

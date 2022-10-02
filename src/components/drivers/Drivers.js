@@ -216,8 +216,8 @@ class Drivers extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {this.props.drivers.map((driver, i) => (
-                          <tr key={driver.id}>
+                        {this.props.drivers.map((driver, i) => {
+                          return <tr key={driver.id}>
                             <td>{i + 1}</td>
                             <td>{driver.name}</td>
                             <td>{driver.phoneNumber}</td>
@@ -227,6 +227,7 @@ class Drivers extends Component {
                                   <Button
                                     size="sm"
                                     variant="primary"
+                                    onClick={() => this.props._addCarToDriver({ car: this.props.cars.find(car => car.id === driver.carId), driver })}
                                   >
                                     Available
                                   </Button>
@@ -265,7 +266,7 @@ class Drivers extends Component {
                               </Button>
                             </td>
                           </tr>
-                        ))}
+                        })}
                       </tbody>
                     </Table>
                   </>

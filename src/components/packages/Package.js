@@ -83,16 +83,13 @@ class Packages extends Component {
       showDel: true,
       packSelect: pack,
     });
-    //debugger;
   };
 
   handleEdit = (pack) => {
-    //debugger;
     this.setState({
       showEdit: true,
       packSelect: pack,
     });
-    //debugger;
   };
 
   componentDidMount() {
@@ -286,9 +283,7 @@ class Packages extends Component {
                   this.setState({ showAdd: false });
                 }}
                 handleSave={(pack) => {
-                  debugger
                   this.props._addPackage(pack).then((response) => {
-                    debugger
                     if (!response.error) {
                       
                       this.setState({ showAdd: false });

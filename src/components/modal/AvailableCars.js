@@ -24,7 +24,7 @@ class AvailableCars extends Component {
   // }
 
   handleAssign = (car) => {
-    return this.props._addCarToDriver({ carId: car.id, driverId: this.props.driver.id });
+    return this.props._addCarToDriver({ car, driver: this.props.driver });
   }
 
   render() {

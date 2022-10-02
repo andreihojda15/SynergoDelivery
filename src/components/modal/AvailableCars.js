@@ -15,21 +15,13 @@ class AvailableCars extends Component {
     this.props._getAvailableCars();
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.isLoading && !this.props.isLoading) {
-  //     // this.setState({
-  //     //   cars: [...this.props.getAvailableCars()],
-  //     // });
-  //   }
-  // }
-
   handleAssign = (car) => {
-    return this.props._addCarToDriver({ car, driver: this.props.driver });
+    return this.props._addCarToDriver({ car, driver: this.props.driver }).then(res => this.props.handleClose());
   }
 
   render() {
     return (
-      <Modal style={{ marginTop: "100px" }} backdrop={"static"} show={this.props.driver.carId === null} onHide={this.props.handleClose}>
+      <Modal style={{ marginTop: "100px" }} backdrop={"static"} show={true} onHide={this.props.handleClose}>
         <ModalHeader className="modalHeader" closeButton>
           <ModalTitle>Available Cars</ModalTitle>
         </ModalHeader>
@@ -89,7 +81,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     _addCarToDriver: (data) => {
       return dispatch(addCarToDriver(data));
-    }
+    },
   };
 };
 

@@ -161,5 +161,4 @@ PackageList.propTypes = {
   handleClose: PropTypes.func.isRequired,
 };
 
-// export default PackageList;
 export default connect(mapStateToProps, mapDispatchToProps)(PackageList);

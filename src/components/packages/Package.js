@@ -19,7 +19,7 @@ import {
 import AddPackage from "../modal/AddPackage";
 import DeletePackage from "../modal/DeletePackage";
 import EditPackage from "../modal/EditPackage";
-//import { nanoid } from "nanoid";
+import moment from "moment";
 
 /**
  * Package model:
@@ -206,7 +206,7 @@ class Packages extends Component {
                           <td>{pack.senderName}</td>
                           <td>{pack.senderPhoneNumber}</td>
                           <td>{pack.departureAddress}</td>
-                          <td>{new Date(pack.departureDate[0], pack.departureDate[1] - 1, pack.departureDate[2]).toLocaleDateString()}</td>
+                          <td>{moment(pack.departureDate, 'YYYY-M-D', true).format('YYYY-MM-DD')}</td>
                           <td>{pack.recipientName}</td>
                           <td>{pack.recipientPhone}</td>
                           <td>{pack.deliveryAddress}</td>

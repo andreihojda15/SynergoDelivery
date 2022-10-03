@@ -139,9 +139,16 @@ export default class PackagesService {
 
   static addPackage(pack) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(pack);
-      }, 1000);
+      let addedPackage;
+      try {
+        addedPackage = GenericService.post(`packages`, {
+          ...pack,
+          departureDate: pack.departureDate.map(element => parseInt(element)),
+        });
+        resolve(addedPackage);
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 
@@ -157,12 +164,16 @@ export default class PackagesService {
   static managePackages(data) {
     return GenericService.put(`cars/managePackages/${data.car.id}?packageId=${data.pack.id}`);
   }
-  
+
   static deletePackage(pack) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(pack);
-      }, 1000);
+      let deletedPackage;
+      try {
+        deletedPackage = GenericService.delete(`packages/${pack.id}`);
+        resolve(deletedPackage);
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 
@@ -177,9 +188,17 @@ export default class PackagesService {
 
   static editPackage(pack) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(pack);
-      }, 1000);
+      let editedPackage;
+      try {
+        editedPackage = GenericService.put(`packages/${pack.id}`, {
+          ...pack,
+          departureDate: pack.departureDate.map(element => parseInt(element)),
+          deliveryDate: pack.deliveryDate.map(element => parseInt(element)),
+        });
+        resolve(editedPackage);
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 

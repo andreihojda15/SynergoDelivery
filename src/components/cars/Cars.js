@@ -233,7 +233,7 @@ class Cars extends React.Component {
                       <PackageList
                         car={
                           this.state.carSelectedForManage ?? {
-                            id: Math.round(Math.random()*100),
+                            id: Math.round(Math.random() * 100),
                             registrationNumber: "",
                             status: "",
                           }
@@ -271,13 +271,22 @@ class Cars extends React.Component {
                             <td>
                               <Button
                                 size="sm"
-                                variant="primary"
+                                variant="info"
                                 style={{ marginTop: 5 }}
                                 onClick={() => {
                                   this.onEditCar(car);
                                 }}
                               >
                                 Edit
+                              </Button>
+                              &nbsp;{" "}
+                              <Button
+                                style={{ marginTop: 5 }}
+                                size="sm"
+                                variant="info"
+                                onClick={() => this.onManagePackages(car)}
+                              >
+                                Manage packages
                               </Button>{" "}
                               &nbsp;{" "}
                               <Button
@@ -289,15 +298,6 @@ class Cars extends React.Component {
                                 }}
                               >
                                 Delete
-                              </Button>
-                              &nbsp;{" "}
-                              <Button
-                                style={{ marginTop: 5 }}
-                                size="sm"
-                                variant="info"
-                                onClick={() => this.onManagePackages(car)}
-                              >
-                                Manage packages
                               </Button>
                             </td>
                           </tr>

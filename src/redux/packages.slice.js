@@ -237,7 +237,6 @@ const packagesSlice = createSlice({
     });
 
     builder.addCase(deletePackage.fulfilled, (state, action) => {
-      //debugger;
       console.log("--- delete package fulfilled...");
       state.isDelPackage = false;
       let indexOfUpdatedPack = state.packages.findIndex(
@@ -263,7 +262,6 @@ const packagesSlice = createSlice({
     });
 
     builder.addCase(editPackage.fulfilled, (state, action) => {
-      //debugger;
       console.log("--- edit package fulfilled...");
       state.isEditingPackage = false;
       let indexOfUpdatedPack = state.packages.findIndex(

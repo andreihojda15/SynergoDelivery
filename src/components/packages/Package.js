@@ -83,16 +83,13 @@ class Packages extends Component {
       showDel: true,
       packSelect: pack,
     });
-    //debugger;
   };
 
   handleEdit = (pack) => {
-    //debugger;
     this.setState({
       showEdit: true,
       packSelect: pack,
     });
-    //debugger;
   };
 
   componentDidMount() {
@@ -153,7 +150,7 @@ class Packages extends Component {
             >
               <p>List of Packages</p>
 
-              
+
             </Card.Header>
             <Card.Body style={{ textAlign: "center" }} className="cardBody">
               {this.state.errorMessage ? (
@@ -202,22 +199,23 @@ class Packages extends Component {
                         packageStatus = "delivered";
                         assignedToCar = "no";
                       }
-
                       return (
                         <tr key={pack.id}>
                           <td>{i + 1}</td>
                           <td>{pack.awb}</td>
                           <td>{pack.senderName}</td>
                           <td>{pack.senderPhoneNumber}</td>
-                          <td>{pack.departureAdress}</td>
-                          <td>{new Date(pack.departureDate[0], pack.departureDate[1], pack.departureDate[2]).toLocaleDateString()}</td>
+                          <td>{pack.departureAddress}</td>
+                          <td>{new Date(pack.departureDate[0], pack.departureDate[1] - 1, pack.departureDate[2]).toLocaleDateString()}</td>
                           <td>{pack.recipientName}</td>
-                          <td>{pack.recipientPhoneNumber}</td>
-                          <td>{pack.deliveryAdress}</td>
+                          <td>{pack.recipientPhone}</td>
+                          <td>{pack.deliveryAddress}</td>
                           <td>{assignedToCar}</td>
                           <td>{packageStatus}</td>
-                          <td>
+                          <td className="buttonColumn">
                             <Button
+                              variant="info"
+                              style={{ marginTop: 5 }}
                               onClick={() => {
                                 this.handleEdit(pack);
                               }}
@@ -226,6 +224,7 @@ class Packages extends Component {
                             </Button>
                             &nbsp;
                             <Button
+                              style={{ marginTop: 5 }}
                               onClick={() => {
                                 this.handleDelete(pack);
                               }}
@@ -241,7 +240,7 @@ class Packages extends Component {
               )}
             </Card.Body>
             <Card.Footer className="cardFooter">
-            <Button
+              <Button
                 variant="success"
                 onClick={this.handleAdd}
               >
@@ -253,6 +252,7 @@ class Packages extends Component {
                 handleClose={() => {
                   this.setState({ showEdit: false, packSelect: undefined });
                 }}
+                _getPackages={this.props._getPackages}
                 pack={this.state.packSelect}
                 handleSave={(pack) => {
                   this.props._editPackage(pack).then((response) => {
@@ -282,15 +282,12 @@ class Packages extends Component {
             {this.state.showAdd && (
               <AddPackage
                 handleClose={() => {
-                 
                   this.setState({ showAdd: false });
                 }}
+                show={this.state.showAdd}
                 handleSave={(pack) => {
-                  debugger
                   this.props._addPackage(pack).then((response) => {
-                    debugger
                     if (!response.error) {
-                      
                       this.setState({ showAdd: false });
                     }
                   });
@@ -334,7 +331,7 @@ const mapDispatchToProps = (dispatch) => {
 Packages.propTypes = {
   packages: PropTypes.arrayOf(
     PropTypes.exact({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.number,
       senderName: PropTypes.string,
       senderPhoneNumber: PropTypes.string,
       departureAddress: PropTypes.string,

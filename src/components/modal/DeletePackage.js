@@ -18,10 +18,10 @@ class DeletePackage extends Component {
   render() {
     return (
         <Modal show={this.props.show} onHide={this.props.handleClose}>
-          <Modal.Header closeButton>
+          <Modal.Header className="modalHeader" closeButton>
             <Modal.Title>Delete Package</Modal.Title>
           </Modal.Header>
-          <Modal.Footer>
+          <Modal.Footer className="modalFooter">
           <Button variant="primary" onClick={()=>{this.props.handleSave(this.state.pack)}}>
             Delete
           </Button>

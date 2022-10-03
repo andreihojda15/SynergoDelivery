@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCars } from "../../redux/cars.slice";
-import { addCarToDriver } from "../../redux/common.thunks";
+import { addCarToDriver } from "../../redux/drivers.slice";
 import {
   addDriver, clearMessages, deleteDriver, editDriver, getDrivers
 } from '../../redux/drivers.slice';
@@ -113,12 +113,6 @@ class Drivers extends Component {
     this.retrieveDrivers();
   }
 
-  getAvailableCars = () => {
-    return this.props.cars.filter((car) => {
-      return car.status === 'Not Available';
-    })
-  }
-
   onAvailableCars = (driver) => {
     this.setState({
       showAvailableCarsModal: true,
@@ -163,7 +157,6 @@ class Drivers extends Component {
   };
 
   render() {
-    console.log(`--- render: ${this.state.showAddOrEditModal}`);
     return (
       <>
         {this.props.isLoading ? (
@@ -223,8 +216,8 @@ class Drivers extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {this.props.drivers.map((driver, i) => (
-                          <tr key={driver.id}>
+                        {this.props.drivers.map((driver, i) => {
+                          return <tr key={driver.id}>
                             <td>{i + 1}</td>
                             <td>{driver.name}</td>
                             <td>{driver.phoneNumber}</td>
@@ -234,6 +227,7 @@ class Drivers extends Component {
                                   <Button
                                     size="sm"
                                     variant="primary"
+                                    onClick={() => this.props._addCarToDriver({ car: this.props.cars.find(car => car.id === driver.carId), driver })}
                                   >
                                     Available
                                   </Button>
@@ -272,7 +266,7 @@ class Drivers extends Component {
                               </Button>
                             </td>
                           </tr>
-                        ))}
+                        })}
                       </tbody>
                     </Table>
                   </>
@@ -298,7 +292,6 @@ class Drivers extends Component {
               {this.state.showAvailableCarsModal && (
                 <AvailableCars
                   handleClose={this.onCloseAvailableCarsModal}
-                  getAvailableCars={this.getAvailableCars}
                   driver={this.state.driverSelectedForAssign}
                   addCarToDriver={this.assignCarToDriver}
                   isLoading={this.props.isLoadingDriverToCar}

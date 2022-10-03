@@ -69,9 +69,6 @@ export default class DriversService {
   static getDrivers() {
     return GenericService.get('drivers');
   }
-  static getAvailableCars(id) {
-    return GenericService.get(`drivers/availableCars/${id}`);
-  }
 
   // simulate fail
   static getDriversFail() {
@@ -90,8 +87,8 @@ export default class DriversService {
         addedDriver = GenericService.post('drivers', driver);
       } catch (e) {
         reject(e);
-      }  
-        resolve(addedDriver);
+      }
+      resolve(addedDriver);
     })
   }
 
@@ -142,20 +139,15 @@ export default class DriversService {
 
   static addCarToDriver(data) {
     return new Promise((resolve, reject) => {
-      let modified = {
-        car: {
-          ...data.car,
-          status: 'Available',
-        },
-        driver: {
-          ...data.driver,
-          carId: data.car.id,
-        },
-      };
-      setTimeout(() => {
-        resolve(modified);
-      }, 1000);
+      let modifiedDriver;
+      try {
+        modifiedDriver = GenericService.put(`drivers/manageDriver/${data.driver.id}?carId=${data.car.id}`);
+      } catch (e) {
+        reject(e);
+      }
+      resolve(modifiedDriver);
     });
   }
+
 }
 

@@ -10,59 +10,43 @@ export default class CustomersService {
 
   static getCustomersFail() {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject("500 Internal Server Error");
-      }, 1000);
+      reject("500 Internal Server Error");
     });
   }
 
-  static addCustomer(customer){
+  static addCustomer(customer) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(customer);
-      }, 1000);
+      resolve(GenericService.post('customers',customer));
     });
   }
 
-  static addCustomerFail(customer){
+  static addCustomerFail(customer) {
     return new Promise((reject) => {
-      setTimeout(() => {
-        return reject(`400 Bad Request: Couldn't add driver`);
-      }, 1000);
+      return reject(`400 Bad Request: Couldn't add driver`);
     });
   }
 
-  static editCustomer(customer){
+  static editCustomer(customer) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve(customer);
-      }, 1000);
+      return resolve(GenericService.put(`customers/${customer.id}`,customer));
     });
   }
 
-  static editCustomerFail(customer){
+  static editCustomerFail(customer) {
     return new Promise((reject) => {
-      setTimeout(() => {
-        return reject(`400 Bad Request: Couldn't add driver`);
-      }, 1000);
+      return reject(`400 Bad Request: Couldn't add driver`);
     });
   }
 
-  static deleteCustomer(customer){
+  static deleteCustomer(customer) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        //console.log(customer);
-        GenericService.delete(`customers/${customer.id}`);
-        return resolve(customer);
-      }, 1000);
+      return resolve(GenericService.delete(`customers/${customer.id}`));
     });
   }
 
-  static deleteCustomerFail(customer){
+  static deleteCustomerFail(customer) {
     return new Promise((reject) => {
-      setTimeout(() => {
-        return reject(`400 Bad Request: Couldn't add driver`);
-      }, 1000);
+      return reject(`400 Bad Request: Couldn't add driver`);
     });
   }
 

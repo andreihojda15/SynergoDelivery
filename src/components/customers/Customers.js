@@ -11,7 +11,6 @@ import Spinner from "react-bootstrap/Spinner";
 import { Button } from "react-bootstrap";
 import DeleteCustomer from "../../components/modal/DeleteCustomer";
 import AddOrEditCustomer from "../../components/modal/AddOrEditCustomer";
-import uuid4 from "uuid4";
 
 class Customers extends Component {
 
@@ -197,11 +196,9 @@ class Customers extends Component {
                 }}
                 customer={
                   this.state.customerSelectedForEdit ?? {
-                    id: uuid4(),
                     name: "",
                     address: "",
                     phoneNumber: "",
-                    status: "",
                   }
                 }
                 title={this.state.customerSelectedForEdit ? "Edit customer" : "Add customer"}

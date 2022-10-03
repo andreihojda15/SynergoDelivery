@@ -39,7 +39,7 @@ class DeleteCar extends React.Component {
 							<Button
 								variant="primary"
 								onClick={() => {
-									return this.props._deleteCar(this.state.car);
+									return this.props.handleSave(this.state.car);
 								}}
 							>
 								Delete

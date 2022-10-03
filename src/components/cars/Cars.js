@@ -321,7 +321,6 @@ class Cars extends React.Component {
                     this.props._deleteCar(car).then((response) => {
                       if (!response.error) {
                         this.onDeleteModal();
-                        // this.setState({ showDeleteCar: false, carSelectedForDelete: undefined })
                       }
                     })
 

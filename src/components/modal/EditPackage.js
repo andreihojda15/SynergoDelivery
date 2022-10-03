@@ -86,11 +86,11 @@ class EditPackage extends Component {
               senderName: this.state.pack.senderName,
               senderPhoneNumber: this.state.pack.senderPhoneNumber,
               departureAddress: this.state.pack.departureAddress,
-              departureDate: moment(this.state.pack.departureDate.join('-'), 'YYYY-M-D', true).format('YYYY-MM-DD'),
+              departureDate: moment(this.state.pack.departureDate, 'YYYY-M-D', true).format('YYYY-MM-DD'),
               recipientName: this.state.pack.recipientName,
               recipientPhone: this.state.pack.recipientPhone,
               deliveryAddress: this.state.pack.deliveryAddress,
-              deliveryDate: moment(this.state.pack.deliveryDate.join('-'), 'YYYY-M-D', true).format('YYYY-MM-DD'),
+              deliveryDate: moment(this.state.pack.deliveryDate, 'YYYY-M-D', true).format('YYYY-MM-DD'),
             }}
             validationSchema={packageSchema}
             onSubmit={(values) => {
